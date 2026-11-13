@@ -1,130 +1,368 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Video Website</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#101010;color:white;font-family:Arial}
-header{background:#202020;padding:18px;display:flex;justify-content:space-between;align-items:center}
-h2{margin:0;color:#ff3030}
-input,button{padding:12px;border:0;border-radius:8px}
-button{background:#ff3030;color:white;font-weight:bold}
-main{padding:18px;max-width:900px;margin:auto}
-.search{width:100%;margin:15px 0;background:#292929;color:white}
-.upload{background:#202020;padding:18px;border-radius:12px;margin-bottom:20px}
-video{width:100%;border-radius:12px;background:black}
-.card{background:#202020;padding:12px;border-radius:12px;margin:15px 0}
-.card h3{margin:10px 0}
-a{color:white}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Video Website</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--bg:#0f0f0f;--panel:#1b1b1b;--panel2:#252525;--text:#f5f5f5;--muted:#aaa;--accent:#ff3030;}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding-bottom:76px}
+    button,input{font:inherit}
+    button{cursor:pointer;border:0}
+    .topbar{height:62px;position:sticky;top:0;z-index:5;background:#151515;display:flex;align-items:center;gap:12px;padding:0 14px;border-bottom:1px solid #292929}
+    .brand{font-weight:800;font-size:18px;white-space:nowrap}.brand b{color:var(--accent)}
+    .search-wrap{flex:1;display:flex;min-width:0;max-width:620px;margin:auto}
+    .search-wrap input{width:100%;min-width:0;background:#262626;color:white;border:1px solid #3b3b3b;border-radius:22px 0 0 22px;padding:11px 14px;outline:none}
+    .search-wrap button{background:#303030;color:white;padding:0 16px;border-radius:0 22px 22px 0}
+    .icon-btn{width:40px;height:40px;border-radius:50%;background:transparent;color:white;font-size:21px;display:grid;place-items:center;flex-shrink:0}
+    .icon-btn:active,.nav-item:active{background:#333}
+    main{max-width:1000px;margin:0 auto;padding:16px 14px}
+    .section-title{font-size:20px;margin:8px 0 16px}
+    .upload-panel,.auth-panel,.empty{background:var(--panel);border:1px solid #2d2d2d;border-radius:16px;padding:16px;margin:12px 0}
+    .upload-panel{display:none}
+    .upload-panel.open{display:block}
+    .upload-panel h3,.auth-panel h3{margin:0 0 12px}
+    .field{width:100%;background:#101010;color:white;border:1px solid #444;border-radius:9px;padding:12px;margin:6px 0}
+    .primary{background:var(--accent);color:white;font-weight:700;border-radius:9px;padding:11px 16px;margin:6px 6px 6px 0}
+    .secondary{background:#333;color:white;border-radius:9px;padding:11px 16px;margin:6px 6px 6px 0}
+    .hint{font-size:13px;color:var(--muted);line-height:1.45}
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .video-card{background:var(--panel);border-radius:14px;overflow:hidden;border:1px solid #292929}
+    .video-card video{width:100%;aspect-ratio:16/9;background:#000;display:block}
+    .video-info{padding:12px}.video-info h3{font-size:15px;margin:0 0 7px;overflow-wrap:anywhere}.video-info p{font-size:12px;color:var(--muted);margin:0}
+    .page{display:none}.page.active{display:block}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:66px;background:#171717;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:6;padding-bottom:env(safe-area-inset-bottom)}
+    .nav-item{flex:1;height:100%;background:transparent;color:#aaa;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px}
+    .nav-item span:first-child{font-size:21px}.nav-item.active{color:white}.nav-item.active span:last-child{font-weight:700}
+    .profile-email{color:var(--muted);overflow-wrap:anywhere}
+    .notification-pop{display:none;position:fixed;right:12px;top:58px;z-index:10;background:#252525;border:1px solid #444;padding:14px;border-radius:12px;width:min(290px,calc(100vw - 24px));box-shadow:0 8px 28px #0009}
+    .notification-pop.open{display:block}
+    @media(max-width:480px){.brand{font-size:15px}.topbar{gap:5px;padding:0 8px}.search-wrap input{padding:10px 9px}.search-wrap button{padding:0 11px}.icon-btn{width:36px;height:36px}}
+  </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="brand"><b>▶</b> MyVideos</div>
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="वीडियो खोजें..." oninput="renderVideos()" aria-label="Search videos">
+      <button aria-label="Search">⌕</button>
+    </div>
+    <button class="icon-btn" onclick="toggleNotifications()" aria-label="Notifications">🔔</button>
+    <button class="icon-btn" onclick="toggleUpload()" aria-label="Upload video">＋</button>
+  </header>
 
-<header>
-<h2>My Video Website</h2>
-<span>🎬 Videos</span>
-</header>
+  <div id="notificationPop" class="notification-pop">अभी कोई नई notification नहीं है।</div>
 
-<main>
-<h2>Welcome to My Video Website</h2>
+  <main>
+    <section id="homePage" class="page active">
+      <h2 class="section-title">होम</h2>
+      <div id="uploadPanel" class="upload-panel">
+        <h3>वीडियो अपलोड करें</h3>
+        <input class="field" id="videoTitle" type="text" placeholder="वीडियो का नाम">
+        <input class="field" id="videoFile" type="file" accept="video/*">
+        <button class="primary" onclick="uploadLocalVideo()">अपलोड करें</button>
+        <p class="hint">अभी यह केवल इस ब्राउज़र में वीडियो का preview दिखाता है। सभी लोगों के लिए ऑनलाइन सेव करने वाला upload अगला backend step है। केवल वही वीडियो डालें जिनके अधिकार और सहमति आपके पास हों।</p>
+      </div>
+      <div id="authPanel" class="auth-panel">
+        <h3>Login / Sign Up</h3>
+        <input class="field" id="email" type="email" placeholder="Email address" autocomplete="email">
+        <input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
+        <button class="primary" onclick="signUp()">Sign Up</button>
+        <button class="secondary" onclick="login()">Login</button>
+        <p id="authMessage" class="hint">वीडियो अपलोड करने के लिए लॉगिन करें।</p>
+      </div>
+      <h2 class="section-title">आपके लिए वीडियो</h2>
+      <div id="videos" class="video-grid"></div>
+      <div id="emptyHome" class="empty hint">अभी कोई वीडियो नहीं है। अपलोड बटन दबाकर वीडियो चुनें।</div>
+    </section>
 
-<input class="search" id="search"
-placeholder="Search videos..." oninput="showVideos()">
+    <section id="subscribedPage" class="page">
+      <h2 class="section-title">Subscribed</h2>
+      <div class="empty">आपके subscribed channels के वीडियो यहाँ दिखाई देंगे।</div>
+    </section>
 
-<div class="upload">
-<h3>⬆️ Upload Your Video</h3>
-<input type="file" id="file" accept="video/*">
-<button onclick="uploadVideo()">Upload</button>
-</div>
+    <section id="profilePage" class="page">
+      <h2 class="section-title">Profile</h2>
+      <div class="auth-panel">
+        <h3>आपकी प्रोफ़ाइल</h3>
+        <p id="profileEmail" class="profile-email">अभी लॉगिन नहीं है</p>
+        <button class="secondary" onclick="logout()">Logout</button>
+      </div>
+      <h3>आपके वीडियो</h3>
+      <p class="hint">आपके अपलोड किए हुए वीडियो यहाँ दिखेंगे।</p>
+    </section>
+  </main>
 
-<h2>All Videos</h2>
-<div id="videos"></div>
-</main>
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="showPage('homePage',this)"><span>⌂</span><span>Home</span></button>
+    <button class="nav-item" onclick="showPage('subscribedPage',this)"><span>▣</span><span>Subscribed</span></button>
+    <button class="nav-item" onclick="showPage('profilePage',this)"><span>◉</span><span>Profile</span></button>
+  </nav>
 
-<script>
-let videoList=[];
+  <script>
+    const SUPABASE_URL = "https://scczyiossqleuzidplxx.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_rvecUf_3ZkeAxnbAJ8iiiw_2mItGPT2";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const localVideos = [];
 
-function uploadVideo(){
- const file=document.getElementById("file").files[0];
- if(!file){alert("Please select a video!");return;}
- if(!file.type.startsWith("video/")){
- alert("Please select a video file!");return;
- }
-
- const url=URL.createObjectURL(file);
- videoList.push({name:file.name,url:url});
- document.getElementById("file").value="";
- showVideos();
- alert("Video added successfully!");
-}
-
-function showVideos(){
- const area=document.getElementById("videos");
- const search=document.getElementById("search").value.toLowerCase();
-
- area.innerHTML="";
-
- videoList.filter(v=>v.name.toLowerCase().includes(search))
- .forEach(v=>{
- const card=document.createElement("div");
- card.className="card";
-
- const title=document.createElement("h3");
- title.textContent=v.name;
-
- const player=document.createElement("video");
- player.src=v.url;
- player.controls=true;
-
- const download=document.createElement("a");
- download.href=v.url;
- download.download=v.name;
- download.textContent="⬇️ Download Video";
-
- card.append(title,player,document.createElement("br"),download);
- area.appendChild(card);
- });
-}
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = "https://scczyiossqleuzidplxx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rvecUf_3ZkeAxnbAJ8iiiw_2mItGPT2";
-
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-</script>
+    function showPage(pageId, button){
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+      button.classList.add('active');
+      document.getElementById('notificationPop').classList.remove('open');
+    }
+    function toggleNotifications(){document.getElementById('notificationPop').classList.toggle('open');}
+    function toggleUpload(){
+      document.getElementById('homePage').classList.add('active');
+      document.getElementById('subscribedPage').classList.remove('active');
+      document.getElementById('profilePage').classList.remove('active');
+      document.getElementById('uploadPanel').classList.toggle('open');
+      document.querySelectorAll('.nav-item').forEach((b,i)=>b.classList.toggle('active',i===0));
+      document.getElementById('uploadPanel').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    async function signUp(){
+      const email=document.getElementById('email').value.trim();
+      const password=document.getElementById('password').value;
+      if(!email||!password){alert('Email और password भरें।');return;}
+      const {error}=await supabaseClient.auth.signUp({email,password});
+      document.getElementById('authMessage').textContent=error?error.message:'Account बन गया। जरूरत हो तो email confirmation पूरा करें।';
+    }
+    async function login(){
+      const email=document.getElementById('email').value.trim();
+      const password=document.getElementById('password').value;
+      if(!email||!password){alert('Email और password भरें।');return;}
+      const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+      document.getElementById('authMessage').textContent=error?error.message:'Login successful!';
+      if(!error) updateProfile(data.user);
+    }
+    async function logout(){
+      const {error}=await supabaseClient.auth.signOut();
+      document.getElementById('authMessage').textContent=error?error.message:'Logout हो गया।';
+      updateProfile(null);
+    }
+    function updateProfile(user){
+      document.getElementById('profileEmail').textContent=user?user.email:'अभी लॉगिन नहीं है';
+      document.getElementById('authPanel').style.display=user?'none':'block';
+    }
+    async function loadSession(){
+      const {data}=await supabaseClient.auth.getSession();
+      updateProfile(data.session?data.session.user:null);
+    }
+    function uploadLocalVideo(){
+      const file=document.getElementById('videoFile').files[0];
+      const title=document.getElementById('videoTitle').value.trim()|| (file?file.name:'');
+      if(!file){alert('पहले वीडियो चुनें।');return;}
+      if(!file.type.startsWith('video/')){alert('कृपया वीडियो फाइल चुनें।');return;}
+      const url=URL.createObjectURL(file);
+      localVideos.unshift({title,url});
+      document.getElementById('videoFile').value='';
+      document.getElementById('videoTitle').value='';
+      renderVideos();
+      alert('Preview तैयार है। यह अभी ऑनलाइन सेव नहीं हुआ है।');
+    }
+    function renderVideos(){
+      const query=document.getElementById('search').value.toLowerCase();
+      const area=document.getElementById('videos');
+      area.innerHTML='';
+      const filtered=localVideos.filter(v=>v.title.toLowerCase().includes(query));
+      document.getElementById('emptyHome').style.display=filtered.length?'none':'block';
+      filtered.forEach(v=>{
+        const card=document.createElement('article');card.className='video-card';
+        const player=document.createElement('video');player.src=v.url;player.controls=true;player.playsInline=true;
+        const info=document.createElement('div');info.className='video-info';
+        const heading=document.createElement('h3');heading.textContent=v.title;
+        const caption=document.createElement('p');caption.textContent='अभी आपके इस ब्राउज़र में';
+        info.append(heading,caption);card.append(player,info);area.append(card);
+      });
+    }
+    loadSession();
+  </script>
 </body>
- <div id="auth">
-  <h2>Login / Sign Up</h2>
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="signUp()">Sign Up</button>
-  <button onclick="login()">Login</button>
-  <button onclick="logout()">Logout</button>
-</div>
+</html>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Video Website</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--bg:#0f0f0f;--panel:#1b1b1b;--panel2:#252525;--text:#f5f5f5;--muted:#aaa;--accent:#ff3030;}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding-bottom:76px}
+    button,input{font:inherit}
+    button{cursor:pointer;border:0}
+    .topbar{height:62px;position:sticky;top:0;z-index:5;background:#151515;display:flex;align-items:center;gap:12px;padding:0 14px;border-bottom:1px solid #292929}
+    .brand{font-weight:800;font-size:18px;white-space:nowrap}.brand b{color:var(--accent)}
+    .search-wrap{flex:1;display:flex;min-width:0;max-width:620px;margin:auto}
+    .search-wrap input{width:100%;min-width:0;background:#262626;color:white;border:1px solid #3b3b3b;border-radius:22px 0 0 22px;padding:11px 14px;outline:none}
+    .search-wrap button{background:#303030;color:white;padding:0 16px;border-radius:0 22px 22px 0}
+    .icon-btn{width:40px;height:40px;border-radius:50%;background:transparent;color:white;font-size:21px;display:grid;place-items:center;flex-shrink:0}
+    .icon-btn:active,.nav-item:active{background:#333}
+    main{max-width:1000px;margin:0 auto;padding:16px 14px}
+    .section-title{font-size:20px;margin:8px 0 16px}
+    .upload-panel,.auth-panel,.empty{background:var(--panel);border:1px solid #2d2d2d;border-radius:16px;padding:16px;margin:12px 0}
+    .upload-panel{display:none}
+    .upload-panel.open{display:block}
+    .upload-panel h3,.auth-panel h3{margin:0 0 12px}
+    .field{width:100%;background:#101010;color:white;border:1px solid #444;border-radius:9px;padding:12px;margin:6px 0}
+    .primary{background:var(--accent);color:white;font-weight:700;border-radius:9px;padding:11px 16px;margin:6px 6px 6px 0}
+    .secondary{background:#333;color:white;border-radius:9px;padding:11px 16px;margin:6px 6px 6px 0}
+    .hint{font-size:13px;color:var(--muted);line-height:1.45}
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .video-card{background:var(--panel);border-radius:14px;overflow:hidden;border:1px solid #292929}
+    .video-card video{width:100%;aspect-ratio:16/9;background:#000;display:block}
+    .video-info{padding:12px}.video-info h3{font-size:15px;margin:0 0 7px;overflow-wrap:anywhere}.video-info p{font-size:12px;color:var(--muted);margin:0}
+    .page{display:none}.page.active{display:block}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:66px;background:#171717;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:6;padding-bottom:env(safe-area-inset-bottom)}
+    .nav-item{flex:1;height:100%;background:transparent;color:#aaa;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px}
+    .nav-item span:first-child{font-size:21px}.nav-item.active{color:white}.nav-item.active span:last-child{font-weight:700}
+    .profile-email{color:var(--muted);overflow-wrap:anywhere}
+    .notification-pop{display:none;position:fixed;right:12px;top:58px;z-index:10;background:#252525;border:1px solid #444;padding:14px;border-radius:12px;width:min(290px,calc(100vw - 24px));box-shadow:0 8px 28px #0009}
+    .notification-pop.open{display:block}
+    @media(max-width:480px){.brand{font-size:15px}.topbar{gap:5px;padding:0 8px}.search-wrap input{padding:10px 9px}.search-wrap button{padding:0 11px}.icon-btn{width:36px;height:36px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><b>▶</b> MyVideos</div>
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="वीडियो खोजें..." oninput="renderVideos()" aria-label="Search videos">
+      <button aria-label="Search">⌕</button>
+    </div>
+    <button class="icon-btn" onclick="toggleNotifications()" aria-label="Notifications">🔔</button>
+    <button class="icon-btn" onclick="toggleUpload()" aria-label="Upload video">＋</button>
+  </header>
 
-<script>
-async function signUp() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const {error} = await supabaseClient.auth.signUp({email, password});
-  alert(error ? error.message : 'Account created! Email check karo.');
-}
-async function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const {error} = await supabaseClient.auth.signInWithPassword({email, password});
-  alert(error ? error.message : 'Login successful!');
-}
-async function logout() {
-  const {error} = await supabaseClient.auth.signOut();
-  alert(error ? error.message : 'Logout successful!');
-}
- </script>
+  <div id="notificationPop" class="notification-pop">अभी कोई नई notification नहीं है।</div>
+
+  <main>
+    <section id="homePage" class="page active">
+      <h2 class="section-title">होम</h2>
+      <div id="uploadPanel" class="upload-panel">
+        <h3>वीडियो अपलोड करें</h3>
+        <input class="field" id="videoTitle" type="text" placeholder="वीडियो का नाम">
+        <input class="field" id="videoFile" type="file" accept="video/*">
+        <button class="primary" onclick="uploadLocalVideo()">अपलोड करें</button>
+        <p class="hint">अभी यह केवल इस ब्राउज़र में वीडियो का preview दिखाता है। सभी लोगों के लिए ऑनलाइन सेव करने वाला upload अगला backend step है। केवल वही वीडियो डालें जिनके अधिकार और सहमति आपके पास हों।</p>
+      </div>
+      <div id="authPanel" class="auth-panel">
+        <h3>Login / Sign Up</h3>
+        <input class="field" id="email" type="email" placeholder="Email address" autocomplete="email">
+        <input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
+        <button class="primary" onclick="signUp()">Sign Up</button>
+        <button class="secondary" onclick="login()">Login</button>
+        <p id="authMessage" class="hint">वीडियो अपलोड करने के लिए लॉगिन करें।</p>
+      </div>
+      <h2 class="section-title">आपके लिए वीडियो</h2>
+      <div id="videos" class="video-grid"></div>
+      <div id="emptyHome" class="empty hint">अभी कोई वीडियो नहीं है। अपलोड बटन दबाकर वीडियो चुनें।</div>
+    </section>
+
+    <section id="subscribedPage" class="page">
+      <h2 class="section-title">Subscribed</h2>
+      <div class="empty">आपके subscribed channels के वीडियो यहाँ दिखाई देंगे।</div>
+    </section>
+
+    <section id="profilePage" class="page">
+      <h2 class="section-title">Profile</h2>
+      <div class="auth-panel">
+        <h3>आपकी प्रोफ़ाइल</h3>
+        <p id="profileEmail" class="profile-email">अभी लॉगिन नहीं है</p>
+        <button class="secondary" onclick="logout()">Logout</button>
+      </div>
+      <h3>आपके वीडियो</h3>
+      <p class="hint">आपके अपलोड किए हुए वीडियो यहाँ दिखेंगे।</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="showPage('homePage',this)"><span>⌂</span><span>Home</span></button>
+    <button class="nav-item" onclick="showPage('subscribedPage',this)"><span>▣</span><span>Subscribed</span></button>
+    <button class="nav-item" onclick="showPage('profilePage',this)"><span>◉</span><span>Profile</span></button>
+  </nav>
+
+  <script>
+    const SUPABASE_URL = "https://scczyiossqleuzidplxx.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_rvecUf_3ZkeAxnbAJ8iiiw_2mItGPT2";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const localVideos = [];
+
+    function showPage(pageId, button){
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+      button.classList.add('active');
+      document.getElementById('notificationPop').classList.remove('open');
+    }
+    function toggleNotifications(){document.getElementById('notificationPop').classList.toggle('open');}
+    function toggleUpload(){
+      document.getElementById('homePage').classList.add('active');
+      document.getElementById('subscribedPage').classList.remove('active');
+      document.getElementById('profilePage').classList.remove('active');
+      document.getElementById('uploadPanel').classList.toggle('open');
+      document.querySelectorAll('.nav-item').forEach((b,i)=>b.classList.toggle('active',i===0));
+      document.getElementById('uploadPanel').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    async function signUp(){
+      const email=document.getElementById('email').value.trim();
+      const password=document.getElementById('password').value;
+      if(!email||!password){alert('Email और password भरें।');return;}
+      const {error}=await supabaseClient.auth.signUp({email,password});
+      document.getElementById('authMessage').textContent=error?error.message:'Account बन गया। जरूरत हो तो email confirmation पूरा करें।';
+    }
+    async function login(){
+      const email=document.getElementById('email').value.trim();
+      const password=document.getElementById('password').value;
+      if(!email||!password){alert('Email और password भरें।');return;}
+      const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+      document.getElementById('authMessage').textContent=error?error.message:'Login successful!';
+      if(!error) updateProfile(data.user);
+    }
+    async function logout(){
+      const {error}=await supabaseClient.auth.signOut();
+      document.getElementById('authMessage').textContent=error?error.message:'Logout हो गया।';
+      updateProfile(null);
+    }
+    function updateProfile(user){
+      document.getElementById('profileEmail').textContent=user?user.email:'अभी लॉगिन नहीं है';
+      document.getElementById('authPanel').style.display=user?'none':'block';
+    }
+    async function loadSession(){
+      const {data}=await supabaseClient.auth.getSession();
+      updateProfile(data.session?data.session.user:null);
+    }
+    function uploadLocalVideo(){
+      const file=document.getElementById('videoFile').files[0];
+      const title=document.getElementById('videoTitle').value.trim()|| (file?file.name:'');
+      if(!file){alert('पहले वीडियो चुनें।');return;}
+      if(!file.type.startsWith('video/')){alert('कृपया वीडियो फाइल चुनें।');return;}
+      const url=URL.createObjectURL(file);
+      localVideos.unshift({title,url});
+      document.getElementById('videoFile').value='';
+      document.getElementById('videoTitle').value='';
+      renderVideos();
+      alert('Preview तैयार है। यह अभी ऑनलाइन सेव नहीं हुआ है।');
+    }
+    function renderVideos(){
+      const query=document.getElementById('search').value.toLowerCase();
+      const area=document.getElementById('videos');
+      area.innerHTML='';
+      const filtered=localVideos.filter(v=>v.title.toLowerCase().includes(query));
+      document.getElementById('emptyHome').style.display=filtered.length?'none':'block';
+      filtered.forEach(v=>{
+        const card=document.createElement('article');card.className='video-card';
+        const player=document.createElement('video');player.src=v.url;player.controls=true;player.playsInline=true;
+        const info=document.createElement('div');info.className='video-info';
+        const heading=document.createElement('h3');heading.textContent=v.title;
+        const caption=document.createElement('p');caption.textContent='अभी आपके इस ब्राउज़र में';
+        info.append(heading,caption);card.append(player,info);area.append(card);
+      });
+    }
+    loadSession();
+  </script>
+</body>
 </html>
