@@ -1,37 +1,190 @@
-<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Surf</title>
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surf</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#101010;color:#fff;font-family:Arial,sans-serif;padding-bottom:70px}header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#101010;position:sticky;top:0;z-index:5;border-bottom:1px solid #292929}.logo{font-size:24px;font-weight:800}.logo b{color:#ff1744}.ib{border:0;background:none;color:#fff;font-size:24px}main{max-width:760px;margin:auto;padding:14px}.page{display:none}.page.active{display:block}nav{position:fixed;bottom:0;left:0;right:0;height:66px;background:#191919;border-top:1px solid #333;display:flex;z-index:8}nav button{flex:1;background:none;border:0;color:#aaa;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav strong{font-size:22px;font-weight:400}nav button.active{color:white}input,textarea{width:100%;padding:12px;margin:7px 0;background:#252525;border:1px solid #444;border-radius:9px;color:white;font-size:15px}.panel{background:#1b1b1b;padding:16px;border-radius:14px;margin-top:14px}.muted{color:#aaa;font-size:13px}.row{display:flex;gap:9px}.row>*{flex:1}.primary{background:#ff1744;color:white;border:0;border-radius:22px;padding:11px 18px;font-weight:bold}.secondary{background:#333;color:white;border:1px solid #555;border-radius:22px;padding:11px 18px}.empty{text-align:center;color:#aaa;padding:55px 12px}.empty strong{display:block;font-size:34px;margin-bottom:10px}.profile-head{display:flex;align-items:center;gap:12px}.avatar{width:58px;height:58px;border-radius:50%;background:#333;object-fit:cover}.banner{width:100%;height:110px;object-fit:cover;background:#303030;border-radius:10px}.profile-actions{display:flex;gap:8px;margin-left:auto}.small-icon{border:0;border-radius:50%;background:#303030;color:white;width:40px;height:40px;font-size:19px}.video-grid{display:grid;grid-template-columns:1fr;gap:18px}.video-card video{width:100%;aspect-ratio:16/9;background:#222;border-radius:11px}.vtitle{font-weight:bold;margin-top:7px}.search{display:none;padding:10px}.search.show{display:block}@media(min-width:620px){.video-grid{grid-template-columns:1fr 1fr}}
-</style></head><body>
-<header><div class="logo">surf<b>.</b></div><button class="ib" id="searchBtn">⌕</button></header><div class="search" id="searchWrap"><input id="searchInput" placeholder="Search videos"></div>
+*{box-sizing:border-box}body{margin:0;background:#101010;color:#fff;font-family:Arial,sans-serif;padding-bottom:70px}
+header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#101010;position:sticky;top:0;z-index:5;border-bottom:1px solid #292929}
+.logo{font-size:24px;font-weight:800}.logo b{color:#ff1744}.ib{border:0;background:none;color:#fff;font-size:24px}
+main{max-width:760px;margin:auto;padding:14px}.page{display:none}.page.active{display:block}
+nav{position:fixed;bottom:0;left:0;right:0;height:66px;background:#191919;border-top:1px solid #333;display:flex;z-index:8}
+nav button{flex:1;background:none;border:0;color:#aaa;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+nav strong{font-size:22px;font-weight:400}nav button.active{color:white}
+input,textarea{width:100%;padding:12px;margin:7px 0;background:#252525;border:1px solid #444;border-radius:9px;color:white;font-size:15px}
+.panel{background:#1b1b1b;padding:16px;border-radius:14px;margin-top:14px}.muted{color:#aaa;font-size:13px}
+.row{display:flex;gap:9px}.row>*{flex:1}.primary{background:#ff1744;color:white;border:0;border-radius:22px;padding:11px 18px;font-weight:bold}
+.secondary{background:#333;color:white;border:1px solid #555;border-radius:22px;padding:11px 18px}
+.empty{text-align:center;color:#aaa;padding:55px 12px}.empty strong{display:block;font-size:34px;margin-bottom:10px}
+.profile-head{display:flex;align-items:center;gap:12px}.avatar{width:58px;height:58px;border-radius:50%;background:#333;object-fit:cover}
+.banner{width:100%;height:110px;object-fit:cover;background:#303030;border-radius:10px}
+.profile-actions{display:flex;gap:8px;margin-left:auto}.small-icon{border:0;border-radius:50%;background:#303030;color:white;width:40px;height:40px;font-size:19px}
+.video-grid{display:grid;grid-template-columns:1fr;gap:18px}.video-card video{width:100%;aspect-ratio:16/9;background:#222;border-radius:11px}
+.vtitle{font-weight:bold;margin-top:7px}.search{display:none;padding:10px}.search.show{display:block}
+@media(min-width:620px){.video-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="logo">surf<b>.</b></div><button class="ib" id="searchBtn">⌕</button></header>
+<div class="search" id="searchWrap"><input id="searchInput" placeholder="Search videos"></div>
 <main>
-<section class="page active" id="home"><div id="videos" class="video-grid"></div><div id="emptyHome" class="empty"><strong>▶</strong>Abhi koi video nahi hai<br><button class="primary" onclick="loadVideos()">↻ Refresh</button></div></section>
+<section class="page active" id="home">
+  <div id="videos" class="video-grid"></div>
+  <div id="emptyHome" class="empty"><strong>▶</strong>Abhi koi video nahi hai<br><button class="primary" onclick="loadVideos()">↻ Refresh</button></div>
+</section>
 <section class="page" id="subscribed"><div class="empty"><strong>▣</strong>Subscribed channels ke videos yahan dikhenge.</div></section>
-<section class="page" id="upload"><h3>Upload video</h3><div class="panel"><input id="videoTitle" placeholder="Video title"><textarea id="videoDescription" rows="3" placeholder="Description (optional)"></textarea><input id="videoFile" type="file" accept="video/*"><button class="primary" style="width:100%" onclick="uploadVideo()">＋ Upload</button><p class="muted" id="uploadMessage"></p></div></section>
+<section class="page" id="upload">
+  <h3>Upload video</h3>
+  <div class="panel">
+    <input id="videoTitle" placeholder="Video title">
+    <textarea id="videoDescription" rows="3" placeholder="Description (optional)"></textarea>
+    <input id="videoFile" type="file" accept="video/*">
+    <button class="primary" style="width:100%" onclick="uploadVideo()">＋ Upload</button>
+    <p class="muted" id="uploadMessage"></p>
+  </div>
+</section>
 <section class="page" id="profile">
-<div id="authPanel" class="panel"><h3>Login / Sign Up</h3><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password"><div class="row"><button class="primary" onclick="login()">Login</button><button class="secondary" onclick="signup()">Sign Up</button></div><p class="muted" id="authMessage"></p></div>
-<div id="profilePanel" hidden><div class="panel"><img id="bannerPreview" class="banner" hidden><div class="profile-head" style="margin-top:12px"><img id="avatarPreview" class="avatar"><div><b id="channelName">My Channel</b><div id="channelUsername" class="muted">@username</div><div id="accountEmail" class="muted"></div></div><div class="profile-actions"><button class="small-icon" onclick="openEdit()">✎</button><button class="small-icon" onclick="openSettings()">⚙</button></div></div></div>
-<div id="editPanel" class="panel" hidden><h3>Edit channel</h3><label>Logo</label><input id="logoFile" type="file" accept="image/*"><label>Banner</label><input id="bannerFile" type="file" accept="image/*"><label>Name</label><input id="editName" placeholder="Channel name"><label>Username</label><input id="editUsername" placeholder="username"><div class="row"><button class="primary" onclick="saveProfile()">Save</button><button class="secondary" onclick="closeEdit()">Close</button></div><p id="editMessage" class="muted"></p></div>
-<div id="settingsPanel" class="panel" hidden><h3>Settings</h3><button class="secondary" onclick="logout()">Log out</button></div><h3>My videos</h3><div id="myVideos" class="video-grid"></div></div></section>
-</main><nav><button class="active" data-page="home"><strong>⌂</strong>Home</button><button data-page="subscribed"><strong>▣</strong>Subscribed</button><button data-page="upload"><strong>＋</strong>Upload</button><button data-page="profile"><strong>○</strong>Profile</button></nav>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-// Apna asli Supabase Project URL aur Publishable Key yahan paste karein.
+  <div id="authPanel" class="panel">
+    <h3>Login / Sign Up</h3><input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <div class="row"><button class="primary" onclick="login()">Login</button><button class="secondary" onclick="signup()">Sign Up</button></div>
+    <p class="muted" id="authMessage"></p>
+  </div>
+  <div id="profilePanel" hidden>
+    <div class="panel">
+      <img id="bannerPreview" class="banner" hidden>
+      <div class="profile-head" style="margin-top:12px">
+        <img id="avatarPreview" class="avatar">
+        <div><b id="channelName">My Channel</b><div id="channelUsername" class="muted">@username</div><div id="accountEmail" class="muted"></div></div>
+        <div class="profile-actions"><button class="small-icon" onclick="openEdit()">✎</button><button class="small-icon" onclick="openSettings()">⚙</button></div>
+      </div>
+    </div>
+    <div id="editPanel" class="panel" hidden>
+      <h3>Edit channel</h3><label>Logo</label><input id="logoFile" type="file" accept="image/*">
+      <label>Banner</label><input id="bannerFile" type="file" accept="image/*">
+      <label>Name</label><input id="editName" placeholder="Channel name">
+      <label>Username</label><input id="editUsername" placeholder="username">
+      <div class="row"><button class="primary" onclick="saveProfile()">Save</button><button class="secondary" onclick="closeEdit()">Close</button></div>
+      <p id="editMessage" class="muted"></p>
+    </div>
+    <div id="settingsPanel" class="panel" hidden><h3>Settings</h3><button class="secondary" onclick="logout()">Log out</button></div>
+    <h3>My videos</h3><div id="myVideos" class="video-grid"></div>
+  </div>
+</section>
+</main>
+<nav>
+  <button class="active" data-page="home"><strong>⌂</strong>Home</button>
+  <button data-page="subscribed"><strong>▣</strong>Subscribed</button>
+  <button data-page="upload"><strong>＋</strong>Upload</button>
+  <button data-page="profile"><strong>○</strong>Profile</button>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Supabase Project URL aur Publishable Key pehle se set hain.
 const SUPABASE_URL="https://scczyiossqleuzidplxx.supabase.co";
 const SUPABASE_KEY="sb_publishable_rvecUf_3ZkeAxnbAJ8iiiw_2mItGPT2";
-const configured=!SUPABASE_URL.startsWith("PASTE_")&&!SUPABASE_KEY.startsWith("PASTE_");
-const sb=configured?supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
-const $=id=>document.getElementById(id);let currentUser=null;
-function setPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='profile')refreshProfile();if(id==='home')loadVideos()}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));$('searchBtn').onclick=()=>$('searchWrap').classList.toggle('show');$('searchInput').oninput=e=>document.querySelectorAll('#videos .video-card').forEach(c=>c.hidden=!c.dataset.title.includes(e.target.value.toLowerCase()));
-async function signup(){if(!sb){$('authMessage').textContent='Supabase URL/Key set karein.';return}let {error}=await sb.auth.signUp({email:$('email').value,password:$('password').value});$('authMessage').textContent=error?error.message:'Account bana. Email check karein.'}
-async function login(){if(!sb){$('authMessage').textContent='Supabase URL/Key set karein.';return}let {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});$('authMessage').textContent=error?error.message:'Login successful';refreshProfile()}
-async function logout(){await sb.auth.signOut();refreshProfile()}
-async function getImage(path){if(!path||!sb)return '';let {data,error}=await sb.storage.from('avatars').createSignedUrl(path,3600);return error?'':data.signedUrl}
-async function refreshProfile(){if(!sb){$('authPanel').hidden=false;$('profilePanel').hidden=true;return}let {data}=await sb.auth.getUser();currentUser=data.user;$('authPanel').hidden=!!currentUser;$('profilePanel').hidden=!currentUser;if(!currentUser)return;let m=currentUser.user_metadata||{};$('channelName').textContent=m.channel_name||'My Channel';$('channelUsername').textContent='@'+(m.username||'username');$('accountEmail').textContent=currentUser.email||'';$('editName').value=m.channel_name||'';$('editUsername').value=m.username||'';let a=await getImage(m.logo_path);$('avatarPreview').src=a||'';let b=await getImage(m.banner_path);$('bannerPreview').hidden=!b;if(b)$('bannerPreview').src=b;loadVideos(true)}
-function openEdit(){$('settingsPanel').hidden=true;$('editPanel').hidden=false}function closeEdit(){$('editPanel').hidden=true}function openSettings(){$('editPanel').hidden=true;$('settingsPanel').hidden=false}
-async function uploadImage(file,kind){if(!file)return null;let ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'');let path=currentUser.id+'/'+kind+'_'+Date.now()+'.'+ext;let {error}=await sb.storage.from('avatars').upload(path,file,{upsert:true,contentType:file.type});if(error)throw error;return path}
-async function saveProfile(){try{$('editMessage').textContent='Saving...';let meta={...(currentUser.user_metadata||{}),channel_name:$('editName').value.trim(),username:$('editUsername').value.trim().replace(/^@/,'')};let logo=await uploadImage($('logoFile').files[0],'logo'),banner=await uploadImage($('bannerFile').files[0],'banner');if(logo)meta.logo_path=logo;if(banner)meta.banner_path=banner;let {error}=await sb.auth.updateUser({data:meta});if(error)throw error;$('editMessage').textContent='Saved!';await refreshProfile();$('editPanel').hidden=true}catch(e){$('editMessage').textContent=e.message||'Save nahi hua'}}
-async function cardFor(v){let c=document.createElement('div');c.className='video-card';c.dataset.title=(v.title||'').toLowerCase();let video=document.createElement('video');video.controls=true;video.preload='metadata';let {data}=await sb.storage.from('Videos').createSignedUrl(v.file_path,3600);if(data?.signedUrl)video.src=data.signedUrl;let t=document.createElement('div');t.className='vtitle';t.textContent=v.title||'Untitled';c.append(video,t);return c}
-async function loadVideos(own=false){if(!sb)return;let target=own?$('myVideos'):$('videos');target.innerHTML='';let q=sb.from('videos').select('*').order('created_at',{ascending:false});if(own&&currentUser)q=q.eq('user_id',currentUser.id);let {data,error}=await q;if(error){if(!own)$('emptyHome').textContent='Videos load nahi hue. Refresh karein.';return}if(!own)$('emptyHome').hidden=!!data?.length;for(let v of data||[])target.append(await cardFor(v))}
-async function uploadVideo(){if(!sb){$('uploadMessage').textContent='Supabase setup karein.';return}let {data}=await sb.auth.getUser();if(!data.user){$('uploadMessage').textContent='Pehle Profile mein login karein.';return}let f=$('videoFile').files[0],title=$('videoTitle').value.trim();if(!f||!title){$('uploadMessage').textContent='Title aur video file chahiye.';return}let path=data.user.id+'/'+Date.now()+'_'+f.name.replace(/[^a-z0-9._-]/gi,'_');$('uploadMessage').textContent='Uploading...';let up=await sb.storage.from('videos').upload(path,f);if(up.error){$('uploadMessage').textContent=up.error.message;return}let ins=await sb.from('videos').insert({title,description:$('videoDescription').value,file_path:path,user_id:data.user.id});$('uploadMessage').textContent=ins.error?ins.error.message:'Upload complete';if(!ins.error){loadVideos();loadVideos(true)}}
-if(sb)sb.auth.onAuthStateChange(()=>setTimeout(refreshProfile,0));refreshProfile();loadVideos();
-</script></body></html>
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const VIDEO_BUCKET="Videos"; // Storage bucket ka exact naam: Videos (capital V)
+const AVATAR_BUCKET="avatars";
+const $=id=>document.getElementById(id);
+let currentUser=null;
+
+function setPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  if(id==='profile')refreshProfile();
+  if(id==='home')loadVideos();
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
+$('searchBtn').onclick=()=>$('searchWrap').classList.toggle('show');
+$('searchInput').oninput=e=>document.querySelectorAll('#videos .video-card').forEach(c=>c.hidden=!c.dataset.title.includes(e.target.value.toLowerCase()));
+
+async function signup(){
+  const {error}=await sb.auth.signUp({email:$('email').value,password:$('password').value});
+  $('authMessage').textContent=error?error.message:'Account bana. Email check karein.';
+}
+async function login(){
+  const {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});
+  $('authMessage').textContent=error?error.message:'Login successful';
+  if(!error)await refreshProfile();
+}
+async function logout(){await sb.auth.signOut();await refreshProfile();}
+async function getImage(path){
+  if(!path)return '';
+  const {data,error}=await sb.storage.from(AVATAR_BUCKET).createSignedUrl(path,3600);
+  return error?'':data.signedUrl;
+}
+async function refreshProfile(){
+  const {data}=await sb.auth.getUser();currentUser=data.user;
+  $('authPanel').hidden=!!currentUser;$('profilePanel').hidden=!currentUser;
+  if(!currentUser)return;
+  const m=currentUser.user_metadata||{};
+  $('channelName').textContent=m.channel_name||'My Channel';
+  $('channelUsername').textContent='@'+(m.username||'username');
+  $('accountEmail').textContent=currentUser.email||'';
+  $('editName').value=m.channel_name||'';$('editUsername').value=m.username||'';
+  const a=await getImage(m.logo_path);$('avatarPreview').src=a||'';
+  const b=await getImage(m.banner_path);$('bannerPreview').hidden=!b;if(b)$('bannerPreview').src=b;
+  await loadVideos(true);
+}
+function openEdit(){$('settingsPanel').hidden=true;$('editPanel').hidden=false;}
+function closeEdit(){$('editPanel').hidden=true;}
+function openSettings(){$('editPanel').hidden=true;$('settingsPanel').hidden=false;}
+
+async function uploadImage(file,kind){
+  if(!file)return null;
+  const ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'');
+  const path=currentUser.id+'/'+kind+'_'+Date.now()+'.'+ext;
+  const {error}=await sb.storage.from(AVATAR_BUCKET).upload(path,file,{upsert:false,contentType:file.type});
+  if(error)throw error;return path;
+}
+async function saveProfile(){
+  try{
+    $('editMessage').textContent='Saving...';
+    const meta={...(currentUser.user_metadata||{}),channel_name:$('editName').value.trim(),username:$('editUsername').value.trim().replace(/^@/,'')};
+    const logo=await uploadImage($('logoFile').files[0],'logo');
+    const banner=await uploadImage($('bannerFile').files[0],'banner');
+    if(logo)meta.logo_path=logo;if(banner)meta.banner_path=banner;
+    const {error}=await sb.auth.updateUser({data:meta});if(error)throw error;
+    $('editMessage').textContent='Saved!';await refreshProfile();$('editPanel').hidden=true;
+  }catch(e){$('editMessage').textContent=e.message||'Save nahi hua';}
+}
+async function cardFor(v){
+  const c=document.createElement('div');c.className='video-card';c.dataset.title=(v.title||'').toLowerCase();
+  const video=document.createElement('video');video.controls=true;video.preload='metadata';
+  const {data,error}=await sb.storage.from(VIDEO_BUCKET).createSignedUrl(v.file_path,3600);
+  if(!error&&data?.signedUrl)video.src=data.signedUrl;
+  const t=document.createElement('div');t.className='vtitle';t.textContent=v.title||'Untitled';c.append(video,t);return c;
+}
+async function loadVideos(own=false){
+  const target=own?$('myVideos'):$('videos');target.innerHTML='';
+  let q=sb.from('videos').select('*').order('created_at',{ascending:false});
+  if(own&&currentUser)q=q.eq('user_id',currentUser.id);
+  const {data,error}=await q;
+  if(error){if(!own){$('emptyHome').hidden=false;$('emptyHome').textContent='Videos load nahi hue: '+error.message;}return;}
+  if(!own)$('emptyHome').hidden=!!data?.length;
+  for(const v of data||[])target.append(await cardFor(v));
+}
+async function uploadVideo(){
+  const {data}=await sb.auth.getUser();
+  if(!data.user){$('uploadMessage').textContent='Pehle Profile mein login karein.';return;}
+  const f=$('videoFile').files[0],title=$('videoTitle').value.trim();
+  if(!f||!title){$('uploadMessage').textContent='Title aur video file chahiye.';return;}
+  const safeName=f.name.replace(/[^a-z0-9._-]/gi,'_');
+  const path=data.user.id+'/'+Date.now()+'_'+safeName;
+  $('uploadMessage').textContent='Uploading...';
+  const up=await sb.storage.from(VIDEO_BUCKET).upload(path,f,{upsert:false,contentType:f.type});
+  if(up.error){$('uploadMessage').textContent=up.error.message;return;}
+  const ins=await sb.from('videos').insert({title,description:$('videoDescription').value,file_path:path,user_id:data.user.id});
+  if(ins.error){$('uploadMessage').textContent='File upload ho gaya, lekin database save nahi hua: '+ins.error.message;return;}
+  $('uploadMessage').textContent='Upload complete';
+  $('videoTitle').value='';$('videoDescription').value='';$('videoFile').value='';
+  await loadVideos();await loadVideos(true);
+}
+sb.auth.onAuthStateChange(()=>setTimeout(refreshProfile,0));
+refreshProfile();loadVideos();
+</script>
+</body>
+</html>
