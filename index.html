@@ -100,4 +100,31 @@ const supabaseClient = supabase.createClient(
 );
 </script>
 </body>
+ <div id="auth">
+  <h2>Login / Sign Up</h2>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="signUp()">Sign Up</button>
+  <button onclick="login()">Login</button>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+async function signUp() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const {error} = await supabaseClient.auth.signUp({email, password});
+  alert(error ? error.message : 'Account created! Email check karo.');
+}
+async function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const {error} = await supabaseClient.auth.signInWithPassword({email, password});
+  alert(error ? error.message : 'Login successful!');
+}
+async function logout() {
+  const {error} = await supabaseClient.auth.signOut();
+  alert(error ? error.message : 'Logout successful!');
+}
+ </script>
 </html>
