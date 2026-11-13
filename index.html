@@ -1,12 +1,94 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Video Website</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Video Website</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101010;color:white;font-family:Arial}
+header{background:#202020;padding:18px;display:flex;justify-content:space-between;align-items:center}
+h2{margin:0;color:#ff3030}
+input,button{padding:12px;border:0;border-radius:8px}
+button{background:#ff3030;color:white;font-weight:bold}
+main{padding:18px;max-width:900px;margin:auto}
+.search{width:100%;margin:15px 0;background:#292929;color:white}
+.upload{background:#202020;padding:18px;border-radius:12px;margin-bottom:20px}
+video{width:100%;border-radius:12px;background:black}
+.card{background:#202020;padding:12px;border-radius:12px;margin:15px 0}
+.card h3{margin:10px 0}
+a{color:white}
+</style>
 </head>
 <body>
-  <h1>My Video Website</h1>
-  <p>Welcome to my video sharing website!</p>
+
+<header>
+<h2>My Video Website</h2>
+<span>🎬 Videos</span>
+</header>
+
+<main>
+<h2>Welcome to My Video Website</h2>
+
+<input class="search" id="search"
+placeholder="Search videos..." oninput="showVideos()">
+
+<div class="upload">
+<h3>⬆️ Upload Your Video</h3>
+<input type="file" id="file" accept="video/*">
+<button onclick="uploadVideo()">Upload</button>
+</div>
+
+<h2>All Videos</h2>
+<div id="videos"></div>
+</main>
+
+<script>
+let videoList=[];
+
+function uploadVideo(){
+ const file=document.getElementById("file").files[0];
+ if(!file){alert("Please select a video!");return;}
+ if(!file.type.startsWith("video/")){
+ alert("Please select a video file!");return;
+ }
+
+ const url=URL.createObjectURL(file);
+ videoList.push({name:file.name,url:url});
+ document.getElementById("file").value="";
+ showVideos();
+ alert("Video added successfully!");
+}
+
+function showVideos(){
+ const area=document.getElementById("videos");
+ const search=document.getElementById("search").value.toLowerCase();
+
+ area.innerHTML="";
+
+ videoList.filter(v=>v.name.toLowerCase().includes(search))
+ .forEach(v=>{
+ const card=document.createElement("div");
+ card.className="card";
+
+ const title=document.createElement("h3");
+ title.textContent=v.name;
+
+ const player=document.createElement("video");
+ player.src=v.url;
+ player.controls=true;
+
+ const download=document.createElement("a");
+ download.href=v.url;
+ download.download=v.name;
+ download.textContent="⬇️ Download Video";
+
+ card.append(title,player,document.createElement("br"),download);
+ area.appendChild(card);
+ });
+}
+</script>
+
 </body>
 </html>
