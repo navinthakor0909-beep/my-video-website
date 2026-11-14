@@ -23,7 +23,8 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),VIDEO_BUCKET="Videos",
 let currentUser=null,currentVideo=null,currentVideoPath=null,currentVideoChannel=null,currentReaction=null;
 const fallbackAvatar='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect width="80" height="80" fill="%23333"/%3E%3Ccircle cx="40" cy="29" r="15" fill="%23888"/%3E%3Cpath d="M12 78c2-20 54-20 56 0" fill="%23888"/%3E%3C/svg%3E';
 function timeAgo(value){if(!value)return 'just now';let sec=Math.max(0,Math.floor((Date.now()-new Date(value).getTime())/1000));if(sec<60)return sec+' sec ago';if(sec<3600)return Math.floor(sec/60)+' min ago';if(sec<86400)return Math.floor(sec/3600)+' hr ago';if(sec<2592000)return Math.floor(sec/86400)+' days ago';if(sec<31536000)return Math.floor(sec/2592000)+' months ago';return Math.floor(sec/31536000)+' years ago'}
-function setPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));$('searchWrap').classList.remove('show');try{sessionStorage.setItem('surf_last_page',id);if(id==='watch'&&currentVideo?.id)sessionStorage.setItem('surf_last_video',currentVideo.id)}catch(e){}if(id==='profile')refreshProfile();if(id==='home')loadVideos();if(id==='subscribed')loadSubscribedVideos();if(id==='watch')$('watchPlayer').pause()}
+function setPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));$('searchWrap').classList.remove('show');try{sessionStorage.setItem('surf_last_page',id);if(id==='watch'&&currentVideo?.id)sessionStorage.setItem('surf_last_video',currentVideo.id)}catch(e){}if(id==='profile')refreshProfile();if(id==='home')loadVideos();if(id==='subscribed')loadSubscribedVideos();
+                     if(id==='admin')loadAdminReports();if(id==='watch')$('watchPlayer').pause()}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));$('searchBtn').onclick=()=>$('searchWrap').classList.toggle('show');$('searchInput').oninput=e=>document.querySelectorAll('#videos .video-card').forEach(c=>c.hidden=!c.dataset.title.includes(e.target.value.toLowerCase()));
 async function signup(){let {error}=await sb.auth.signUp({email:$('email').value,password:$('password').value});$('authMessage').textContent=error?error.message:'Account bana. Email check karein.'}
 async function login(){let {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});$('authMessage').textContent=error?error.message:'Login successful';if(!error)await refreshProfile()}
@@ -70,6 +71,61 @@ async function deleteCurrentVideo(){if(!currentUser||!currentVideo||currentUser.
   }else{
     alert('Report submit ho gaya.');
   }
+  }
+  async function loadAdminReports(){
+  const box=$('adminReports');
+  if(!currentUser){
+    box.textContent='Admin login karein.';
+    return;
+  }
+
+  const {data:admin,error:adminError}=await sb
+    .from('admin_users')
+    .select('user_id')
+    .eq('user_id',currentUser.id)
+    .maybeSingle();
+
+  if(adminError||!admin){
+    box.textContent='Aap admin nahi hain.';
+    return;
+  }
+
+  const {data:reports,error}=await sb
+    .from('video_reports')
+    .select('id,video_id,reason,created_at,videos(title)')
+    .order('created_at',{ascending:false});
+
+  if(error){
+    box.textContent='Error: '+error.message;
+    return;
+  }
+
+  if(!reports.length){
+    box.textContent='Abhi koi report nahi hai.';
+    return;
+  }
+
+  box.innerHTML='';
+  reports.forEach(r=>{
+    const div=document.createElement('div');
+    div.style.padding='12px';
+    div.style.borderBottom='1px solid #555';
+    const title=r.videos?.title||'Video nahi mila';
+    div.innerHTML='';
+    const heading=document.createElement('h3');
+    heading.textContent=title;
+    const reason=document.createElement('p');
+    reason.textContent='Reason: '+r.reason;
+    const btn=document.createElement('button');
+    btn.textContent='Delete Report';
+    btn.onclick=async()=>{
+      const {error}=await sb.from('video_reports').delete().eq('id',r.id);
+      if(error)alert(error.message);
+      else loadAdminReports();
+    };
+    div.append(heading,reason,btn);
+    box.appendChild(div);
+  });
   }
 async function downloadCurrentVideo(){if(!currentVideoPath)return;try{let {data,error}=await sb.storage.from(VIDEO_BUCKET).createSignedUrl(currentVideoPath,3600,{download:true});if(error)throw error;let a=document.createElement('a');a.href=data.signedUrl;a.download='surf-video';document.body.appendChild(a);a.click();a.remove()}catch(e){alert('Download nahi ho saka: '+e.message)}}
 async function uploadVideo(){if(!currentUser){$('uploadMessage').textContent='Pehle Profile mein login karein.';return}let f=$('videoFile').files[0],title=$('videoTitle').value.trim(),image=$('thumbnailFile').files[0];if(!f||!title){$('uploadMessage').textContent='Title aur video file chahiye.';return}let stamp=Date.now(),path=currentUser.id+'/'+stamp+'_'+f.name.replace(/[^a-z0-9._-]/gi,'_');$('uploadMessage').textContent='Video uploading...';let up=await sb.storage.from(VIDEO_BUCKET).upload(path,f,{upsert:false,contentType:f.type});if(up.error){$('uploadMessage').textContent=up.error.message;return}let thumbPath=null;if(image){let ip=currentUser.id+'/'+stamp+'_thumb_'+image.name.replace(/[^a-z0-9._-]/gi,'_');let iu=await sb.storage.from(VIDEO_BUCKET).upload(ip,image,{upsert:false,contentType:image.type});if(iu.error){$('uploadMessage').textContent='Video upload hua, thumbnail upload nahi hua: '+iu.error.message;return}thumbPath=ip}let ins=await sb.from('videos').insert({title,file_path:path,user_id:currentUser.id,thumbnail_path:thumbPath});if(ins.error){$('uploadMessage').textContent='File upload ho gaya, lekin database save nahi hua: '+ins.error.message;return}$('uploadMessage').textContent='Upload complete';$('videoTitle').value='';$('thumbnailFile').value='';$('videoFile').value='';await loadVideos();await loadVideos(true);setPage('home')}
