@@ -44,6 +44,29 @@ async function toggleSubscribe(){if(!currentUser){alert('Subscribe karne ke liye
 function toggleVideoSettings(){$('videoSettingsPanel').hidden=!$('videoSettingsPanel').hidden;$('videoSettingsMessage').textContent=''}
 async function saveVideoTitle(){if(!currentUser||!currentVideo||currentUser.id!==currentVideo.user_id)return;let title=$('editVideoTitle').value.trim();if(!title){$('videoSettingsMessage').textContent='Title likho.';return}let {error}=await sb.from('videos').update({title}).eq('id',currentVideo.id).eq('user_id',currentUser.id);if(error){$('videoSettingsMessage').textContent='Title change nahi hua: '+error.message;return}currentVideo.title=title;$('watchTitle').textContent=title;$('videoSettingsMessage').textContent='Title update ho gaya.';await loadVideos();await loadVideos(true)}
 async function deleteCurrentVideo(){if(!currentUser||!currentVideo||currentUser.id!==currentVideo.user_id)return;if(!confirm('Kya aap is video ko hamesha ke liye delete karna chahte hain?'))return;$('videoSettingsMessage').textContent='Deleting...';let paths=[currentVideo.file_path,currentVideo.thumbnail_path].filter(Boolean);let {error:dbError}=await sb.from('videos').delete().eq('id',currentVideo.id).eq('user_id',currentUser.id);if(dbError){$('videoSettingsMessage').textContent='Delete nahi hua: '+dbError.message;return}if(paths.length){let {error:storageError}=await sb.storage.from(VIDEO_BUCKET).remove(paths);if(storageError)console.warn('Storage cleanup:',storageError.message)}$('watchPlayer').pause();$('watchPlayer').removeAttribute('src');$('watchPlayer').load();currentVideo=null;currentVideoPath=null;await loadVideos();await loadVideos(true);setPage('profile')}
+  async function reportCurrentVideo(){
+  if(!currentUser){
+    alert('Report karne ke liye login karein.');
+    return;
+  }
+
+  if(!currentVideo)return;
+
+  const reason=prompt('Report reason likhein:');
+  if(!reason || !reason.trim())return;
+
+  const {error}=await sb.from('video_reports').insert({
+    video_id:currentVideo.id,
+    reporter_id:currentUser.id,
+    reason:reason.trim()
+  });
+
+  if(error){
+    alert('Report nahi hua: '+error.message);
+  }else{
+    alert('Report submit ho gaya.');
+  }
+  }
 async function downloadCurrentVideo(){if(!currentVideoPath)return;try{let {data,error}=await sb.storage.from(VIDEO_BUCKET).createSignedUrl(currentVideoPath,3600,{download:true});if(error)throw error;let a=document.createElement('a');a.href=data.signedUrl;a.download='surf-video';document.body.appendChild(a);a.click();a.remove()}catch(e){alert('Download nahi ho saka: '+e.message)}}
 async function uploadVideo(){if(!currentUser){$('uploadMessage').textContent='Pehle Profile mein login karein.';return}let f=$('videoFile').files[0],title=$('videoTitle').value.trim(),image=$('thumbnailFile').files[0];if(!f||!title){$('uploadMessage').textContent='Title aur video file chahiye.';return}let stamp=Date.now(),path=currentUser.id+'/'+stamp+'_'+f.name.replace(/[^a-z0-9._-]/gi,'_');$('uploadMessage').textContent='Video uploading...';let up=await sb.storage.from(VIDEO_BUCKET).upload(path,f,{upsert:false,contentType:f.type});if(up.error){$('uploadMessage').textContent=up.error.message;return}let thumbPath=null;if(image){let ip=currentUser.id+'/'+stamp+'_thumb_'+image.name.replace(/[^a-z0-9._-]/gi,'_');let iu=await sb.storage.from(VIDEO_BUCKET).upload(ip,image,{upsert:false,contentType:image.type});if(iu.error){$('uploadMessage').textContent='Video upload hua, thumbnail upload nahi hua: '+iu.error.message;return}thumbPath=ip}let ins=await sb.from('videos').insert({title,file_path:path,user_id:currentUser.id,thumbnail_path:thumbPath});if(ins.error){$('uploadMessage').textContent='File upload ho gaya, lekin database save nahi hua: '+ins.error.message;return}$('uploadMessage').textContent='Upload complete';$('videoTitle').value='';$('thumbnailFile').value='';$('videoFile').value='';await loadVideos();await loadVideos(true);setPage('home')}
 sb.auth.onAuthStateChange(()=>setTimeout(refreshProfile,0));refreshProfile();let savedPage='home';try{savedPage=sessionStorage.getItem('surf_last_page')||'home'}catch(e){}if(savedPage==='watch')savedPage='home';if(!$(savedPage))savedPage='home';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(savedPage).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===savedPage));if(savedPage==='profile')refreshProfile();else if(savedPage==='subscribed')loadSubscribedVideos();else if(savedPage==='home')loadVideos();
