@@ -55,26 +55,32 @@
 
   <!-- Top Sticky Header -->
   <header id="main-header" class="sticky top-0 z-40 h-14 px-3 sm:px-5 bg-ytDark/95 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between gap-3">
+    <!-- Surf logo only (no text subtitle) -->
     <div class="flex items-center shrink-0">
       <button onclick="switchTab('home', true)" class="flex items-center gap-1 group focus:outline-none rounded-xl p-1" title="Home">
         <span class="text-xl sm:text-2xl font-extrabold tracking-tight">Surf<span class="text-ytRed">.</span></span>
       </button>
     </div>
 
-    <!-- Search Box for Channels & Videos -->
-    <div class="flex-1 max-w-xl mx-2">
-      <div class="flex w-full items-center bg-[#121212] border border-zinc-700 rounded-full overflow-hidden px-3 py-1">
-        <input id="search-input" type="text" placeholder="Search videos or @username / channel..." class="w-full bg-transparent text-sm focus:outline-none text-white placeholder-gray-400" onkeydown="if(event.key==='Enter') handleSearch()" />
-        <button onclick="handleSearch()" class="text-gray-400 hover:text-white px-2"><i class="fa-solid fa-magnifying-glass"></i></button>
-      </div>
-    </div>
-
-    <div class="flex items-center shrink-0 gap-2">
+    <!-- Search icon only on header (clicking toggles search input) -->
+    <div class="flex items-center gap-2">
+      <button onclick="toggleSearchBox()" title="Search" class="w-9 h-9 rounded-full bg-ytDarkSec hover:bg-ytDarkHover flex items-center justify-center text-white transition-colors">
+        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      </button>
+      <!-- Video Upload Icon (+ Button) -->
       <button onclick="handleUploadClick()" title="Upload Video" class="flex items-center justify-center bg-ytRed hover:bg-red-700 text-white w-9 h-9 rounded-full shadow-xs transition-all active:scale-95">
         <i class="fa-solid fa-plus text-base"></i>
       </button>
     </div>
   </header>
+
+  <!-- Hidden expandable search overlay -->
+  <div id="search-overlay" class="hidden px-4 py-2 bg-ytDarkSec border-b border-zinc-800">
+    <div class="flex items-center max-w-xl mx-auto bg-[#121212] border border-zinc-700 rounded-full overflow-hidden px-3 py-1">
+      <input id="search-input" type="text" placeholder="Search videos or @username / channel..." class="w-full bg-transparent text-sm focus:outline-none text-white placeholder-gray-400 py-1" onkeydown="if(event.key==='Enter') handleSearch()" />
+      <button onclick="handleSearch()" class="text-gray-400 hover:text-white px-2"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+  </div>
 
   <!-- Main Workspace Container -->
   <div class="flex min-h-[calc(100vh-3.5rem)]">
@@ -139,7 +145,7 @@
             <p id="auth-message" class="text-xs text-center text-red-500 mt-3"></p>
           </div>
 
-          <!-- Logged-in Profile Panel (Banner removed as requested) -->
+          <!-- Logged-in Profile Panel -->
           <div id="profile-panel" hidden>
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-ytDarkSec/70 border border-zinc-800 mb-6 relative">
               <div class="relative group shrink-0">
@@ -177,7 +183,7 @@
           </div>
         </section>
 
-        <!-- 4. CHANNEL VIEW TAB (Searchable by @username or Name) -->
+        <!-- 4. CHANNEL VIEW TAB -->
         <section id="tab-channel" class="tab-section hidden max-w-6xl mx-auto">
           <button onclick="switchTab('home')" class="mb-4 px-3.5 py-1.5 rounded-full bg-ytDarkSec hover:bg-ytDarkHover text-xs font-semibold text-white">
             <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
@@ -197,39 +203,52 @@
           <div id="channel-view-videos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
-        <!-- 5. WATCH PAGE TAB -->
-        <section id="tab-watch" class="tab-section hidden max-w-5xl mx-auto">
+        <!-- 5. WATCH PAGE TAB (YouTube style with related videos sidebar/grid) -->
+        <section id="tab-watch" class="tab-section hidden max-w-7xl mx-auto">
           <button onclick="goBackFromWatch()" class="mb-4 px-3.5 py-1.5 rounded-full bg-ytDarkSec hover:bg-ytDarkHover text-xs font-semibold text-white">
             <i class="fa-solid fa-arrow-left mr-1"></i> Back
           </button>
 
-          <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl mb-4">
-            <video id="watch-page-player" controls autoplay class="w-full h-full object-contain"></video>
-          </div>
-
-          <h1 id="watch-page-title" class="text-lg sm:text-xl font-bold text-white mb-3">Video Title</h1>
-
-          <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-ytDarkSec border border-zinc-800">
-            <div class="flex items-center gap-3 cursor-pointer group" id="watch-channel-trigger">
-              <div id="watch-channel-avatar" class="w-10 h-10 rounded-full bg-red-600 text-white font-bold flex items-center justify-center shrink-0 bg-cover bg-center">
-                C
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Main Player Section -->
+            <div class="lg:col-span-2 space-y-4">
+              <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl">
+                <video id="watch-page-player" controls autoplay class="w-full h-full object-contain"></video>
               </div>
-              <div>
-                <h4 id="watch-channel-name" class="text-sm font-semibold text-white group-hover:text-ytRed transition-colors">Channel Name</h4>
-                <p class="text-[11px] text-gray-400" id="watch-video-date">Uploaded recently</p>
+
+              <h1 id="watch-page-title" class="text-lg sm:text-xl font-bold text-white">Video Title</h1>
+
+              <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-ytDarkSec border border-zinc-800">
+                <div class="flex items-center gap-3 cursor-pointer group" id="watch-channel-trigger">
+                  <div id="watch-channel-avatar" class="w-10 h-10 rounded-full bg-red-600 text-white font-bold flex items-center justify-center shrink-0 bg-cover bg-center">
+                    C
+                  </div>
+                  <div>
+                    <h4 id="watch-channel-name" class="text-sm font-semibold text-white group-hover:text-ytRed transition-colors">Channel Name</h4>
+                    <p class="text-[11px] text-gray-400" id="watch-video-date">Uploaded recently</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                  <button id="watch-subscribe-btn" onclick="toggleWatchSubscription()" class="px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
+                    Subscribe
+                  </button>
+                  <button id="watch-like-btn" onclick="handleLike()" class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                    <i class="fa-regular fa-thumbs-up"></i> <span id="watch-like-count">0</span>
+                  </button>
+                  <button onclick="showToast('Disliked')" class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                    <i class="fa-regular fa-thumbs-down"></i>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="flex items-center gap-2.5">
-              <button id="watch-subscribe-btn" onclick="toggleWatchSubscription()" class="px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
-                Subscribe
-              </button>
-              <button id="watch-like-btn" onclick="handleLike()" class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
-                <i class="fa-regular fa-thumbs-up"></i> <span id="watch-like-count">0</span>
-              </button>
-              <button onclick="showToast('Disliked')" class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
-                <i class="fa-regular fa-thumbs-down"></i>
-              </button>
+            <!-- Right Related Videos Sidebar (YouTube style) -->
+            <div class="space-y-4">
+              <h3 class="text-base font-bold text-white">Related Videos</h3>
+              <div id="related-videos-container" class="space-y-3">
+                <!-- Dynamically populated related videos -->
+              </div>
             </div>
           </div>
         </section>
@@ -254,7 +273,7 @@
     </button>
   </nav>
 
-  <!-- UPLOAD VIDEO MODAL (Supports Thumbnail optional or normal default preview) -->
+  <!-- UPLOAD VIDEO MODAL -->
   <div id="upload-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
       <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
@@ -287,7 +306,32 @@
     </div>
   </div>
 
-  <!-- EDIT PROFILE MODAL (Logo add/change, Nickname, Username) -->
+  <!-- EDIT VIDEO MODAL (Option 1 for profile video editing) -->
+  <div id="edit-video-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-pen text-ytRed"></i> Edit Video Title
+        </h3>
+        <button onclick="closeEditVideoModal()" class="w-8 h-8 rounded-full hover:bg-zinc-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-3">
+        <input type="hidden" id="edit-video-id" />
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1">New Video Title</label>
+          <input id="edit-video-title-input" type="text" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+        </div>
+        <div class="pt-3 flex justify-end gap-2">
+          <button onclick="closeEditVideoModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-zinc-800">Cancel</button>
+          <button onclick="saveVideoTitleEdit()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Save Title</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
   <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
       <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
@@ -455,6 +499,7 @@
       showToast('Logged out successfully');
     }
 
+    // --- PROFILE UPLOADS WITH 3-DOT MENU (EDIT / DELETE) ---
     async function loadUserProfileAndUploads(user) {
       let { data: profile } = await sb.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
       let nickname = profile?.channel_name || 'My Channel';
@@ -486,15 +531,82 @@
           thumbHtml = `<div class="w-full aspect-video rounded-xl bg-cover bg-center" style="background-image: url('${v.thumbnail_url}')"></div>`;
         }
         return `
-          <article onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${nickname}")' class="group cursor-pointer flex flex-col gap-2">
-            ${thumbHtml}
-            <div>
-              <h4 class="text-sm font-semibold truncate text-white">${v.title}</h4>
-              <p class="text-xs text-gray-400">${v.views || 0} views • ${timeAgo(v.created_at)}</p>
+          <div class="flex flex-col gap-2 relative">
+            <div onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${nickname}")' class="cursor-pointer">
+              ${thumbHtml}
             </div>
-          </article>
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1 cursor-pointer" onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${nickname}")'>
+                <h4 class="text-sm font-semibold truncate text-white">${v.title}</h4>
+                <p class="text-xs text-gray-400">${v.views || 0} views • ${timeAgo(v.created_at)}</p>
+              </div>
+              <!-- 3-Dot Menu for Profile Videos -->
+              <div class="relative">
+                <button onclick="toggleVideoMenu(event, '${v.id}')" class="p-1.5 rounded-full hover:bg-zinc-800 text-gray-400 hover:text-white">
+                  <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
+                </button>
+                <div id="vid-menu-${v.id}" class="hidden absolute right-0 mt-1 w-36 bg-zinc-800 border border-zinc-700 rounded-xl shadow-lg z-20 overflow-hidden text-xs">
+                  <button onclick="openEditVideoModal('${v.id}', '${v.title.replace(/'/g, "\\'")}')" class="w-full text-left px-3.5 py-2 hover:bg-zinc-700 flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-pen text-ytRed"></i> Edit Video
+                  </button>
+                  <button onclick="deleteVideo('${v.id}')" class="w-full text-left px-3.5 py-2 hover:bg-zinc-700 flex items-center gap-2 text-red-400">
+                    <i class="fa-solid fa-trash"></i> Delete Video
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         `;
       }).join('');
+    }
+
+    // Toggle dropdown menu for video card 3 dots
+    function toggleVideoMenu(event, videoId) {
+      event.stopPropagation();
+      // Close any other open menus first
+      document.querySelectorAll('[id^="vid-menu-"]').forEach(m => {
+        if (m.id !== `vid-menu-${videoId}`) m.classList.add('hidden');
+      });
+      const menu = document.getElementById(`vid-menu-${videoId}`);
+      menu.classList.toggle('hidden');
+    }
+
+    // Close menus when clicking outside
+    window.addEventListener('click', () => {
+      document.querySelectorAll('[id^="vid-menu-"]').forEach(m => m.classList.add('hidden'));
+    });
+
+    // Option 1: Edit Video Title
+    function openEditVideoModal(videoId, currentTitle) {
+      document.getElementById('edit-video-id').value = videoId;
+      document.getElementById('edit-video-title-input').value = currentTitle;
+      document.getElementById('edit-video-modal').classList.remove('hidden');
+    }
+    function closeEditVideoModal() {
+      document.getElementById('edit-video-modal').classList.add('hidden');
+    }
+
+    async function saveVideoTitleEdit() {
+      const videoId = document.getElementById('edit-video-id').value;
+      const newTitle = document.getElementById('edit-video-title-input').value.trim();
+      if (!newTitle) { showToast('Title cannot be empty'); return; }
+
+      const { error } = await sb.from('videos').update({ title: newTitle }).eq('id', videoId);
+      if (error) { showToast('Error updating title'); return; }
+
+      showToast('Video title updated successfully!');
+      closeEditVideoModal();
+      if (currentUser) loadUserProfileAndUploads(currentUser);
+    }
+
+    // Option 2: Delete Video
+    async function deleteVideo(videoId) {
+      if (!confirm('Are you sure you want to delete this video?')) return;
+      const { error } = await sb.from('videos').delete().eq('id', videoId);
+      if (error) { showToast('Failed to delete video'); return; }
+
+      showToast('Video deleted successfully');
+      if (currentUser) loadUserProfileAndUploads(currentUser);
     }
 
     async function loadHomeVideos() {
@@ -510,14 +622,10 @@
       emptyDiv.classList.add('hidden');
 
       for (let v of videos) {
-        let { data: prof } = await sb.from('profiles').select('channel_name, username, logo_url').eq('user_id', v.user_id).maybeSingle();
+        let { data: prof } = await sb.from('profiles').select('channel_name, logo_url').eq('user_id', v.user_id).maybeSingle();
         let channelName = prof?.channel_name || 'Creator';
-        let channelHandle = prof?.username || '@creator';
         let uploadTime = timeAgo(v.created_at);
         let realViews = v.views || 0;
-
-        // Fetch real subscriber count for this channel
-        let { count: subCount } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', v.user_id);
 
         let thumbHtml = `<div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs"><i class="fa-solid fa-play text-white/40 text-3xl group-hover:scale-110 transition-transform"></i></div>`;
         if (v.thumbnail_url) {
@@ -540,8 +648,8 @@
               </div>
               <div class="min-w-0 flex-1">
                 <h3 onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
-                <p onclick="openChannel('${v.user_id}')" class="cursor-pointer text-xs text-gray-400 mt-1 hover:underline">${channelName} (${channelHandle})</p>
-                <p class="text-[11px] text-gray-500">${realViews} views • ${subCount || 0} subs • ${uploadTime}</p>
+                <p onclick="openChannel('${v.user_id}')" class="cursor-pointer text-xs text-gray-400 mt-1 hover:underline">${channelName}</p>
+                <p class="text-[11px] text-gray-500">${realViews} views • ${uploadTime}</p>
               </div>
             </div>
           </div>
@@ -587,12 +695,10 @@
       }
 
       for (let v of videos) {
-        let { data: prof } = await sb.from('profiles').select('channel_name, username, logo_url').eq('user_id', v.user_id).maybeSingle();
+        let { data: prof } = await sb.from('profiles').select('channel_name, logo_url').eq('user_id', v.user_id).maybeSingle();
         let channelName = prof?.channel_name || 'Creator';
-        let channelHandle = prof?.username || '@creator';
         let uploadTime = timeAgo(v.created_at);
         let realViews = v.views || 0;
-        let { count: subCount } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', v.user_id);
 
         let thumbHtml = `<div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs"><i class="fa-solid fa-play text-white/40 text-3xl"></i></div>`;
         if (v.thumbnail_url) {
@@ -610,8 +716,8 @@
               </div>
               <div class="min-w-0 flex-1">
                 <h3 onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
-                <p onclick="openChannel('${v.user_id}')" class="cursor-pointer text-xs text-gray-400 mt-1 hover:underline">${channelName} (${channelHandle})</p>
-                <p class="text-[11px] text-gray-500">${realViews} views • ${subCount || 0} subs • ${uploadTime}</p>
+                <p onclick="openChannel('${v.user_id}')" class="cursor-pointer text-xs text-gray-400 mt-1 hover:underline">${channelName}</p>
+                <p class="text-[11px] text-gray-500">${realViews} views • ${uploadTime}</p>
               </div>
             </div>
           </div>
@@ -619,20 +725,16 @@
       }
     }
 
-    // --- SEARCH BY NAME OR USERNAME (@handle) ---
     async function handleSearch() {
       const q = document.getElementById('search-input').value.trim();
       if (!q) return;
       triggerTopProgressBar();
 
-      // Check if search matches a username or channel name
-      let queryClean = q.startsWith('@') ? q : '@' + q;
       let { data: matchedProfile } = await sb.from('profiles').select('*').or(`username.ilike.%${q}%,channel_name.ilike.%${q}%`).maybeSingle();
 
       if (matchedProfile) {
         openChannel(matchedProfile.user_id);
       } else {
-        // Filter home grid by title
         const grid = document.getElementById('home-video-grid');
         Array.from(grid.children).forEach(card => {
           const text = card.textContent.toLowerCase();
@@ -642,7 +744,6 @@
       }
     }
 
-    // --- CHANNEL VIEW ---
     async function openChannel(userId) {
       currentActiveChannelId = userId;
       let { data: profile } = await sb.from('profiles').select('*').eq('user_id', userId).maybeSingle();
@@ -682,7 +783,6 @@
         }
       }
 
-      // Load all videos uploaded by this channel
       const { data: channelVideos } = await sb.from('videos').select('*').eq('user_id', userId).order('created_at', { ascending: false });
       const cGrid = document.getElementById('channel-view-videos');
       
@@ -733,18 +833,16 @@
         subBtn.className = 'px-5 py-2 rounded-full bg-zinc-700 text-white text-xs font-semibold';
         showToast('Subscribed successfully!');
       }
-      // Refresh subscriber count display
       let { count } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', currentActiveChannelId);
       document.getElementById('channel-view-subs').textContent = `${count || 0} subscribers`;
     }
 
-    // --- WATCH PAGE & VIEW INCREMENT ---
+    // --- WATCH PAGE WITH YOUTUBE-STYLE RELATED VIDEOS SIDEBAR ---
     async function openWatchPage(video, channelName) {
       currentActiveVideo = video;
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
 
-      // Increment real view count in database
       const newViews = (video.views || 0) + 1;
       await sb.from('videos').update({ views: newViews }).eq('id', video.id);
 
@@ -784,7 +882,42 @@
         }
       }
 
+      // Load YouTube-style related videos in sidebar
+      await loadRelatedVideos(video.id);
+
       switchTab('watch');
+    }
+
+    async function loadRelatedVideos(currentVideoId) {
+      const container = document.getElementById('related-videos-container');
+      container.innerHTML = '';
+
+      const { data: allVideos } = await sb.from('videos').select('*').neq('id', currentVideoId).order('created_at', { ascending: false }).limit(8);
+      if (!allVideos || allVideos.length === 0) {
+        container.innerHTML = `<p class="text-xs text-gray-400">No related videos.</p>`;
+        return;
+      }
+
+      for (let rv of allVideos) {
+        let { data: prof } = await sb.from('profiles').select('channel_name').eq('user_id', rv.user_id).maybeSingle();
+        let rChannelName = prof?.channel_name || 'Creator';
+
+        let thumbHtml = `<div class="w-36 aspect-video rounded-lg bg-zinc-800 shrink-0 flex items-center justify-center"><i class="fa-solid fa-play text-white/50 text-xs"></i></div>`;
+        if (rv.thumbnail_url) {
+          thumbHtml = `<div class="w-36 aspect-video rounded-lg bg-cover bg-center shrink-0" style="background-image: url('${rv.thumbnail_url}')"></div>`;
+        }
+
+        container.innerHTML += `
+          <div onclick='openWatchPage(${JSON.stringify(rv).replace(/'/g, "&apos;")}, "${rChannelName}")' class="group cursor-pointer flex gap-3 items-center hover:bg-ytDarkSec p-1.5 rounded-xl transition-colors">
+            ${thumbHtml}
+            <div class="min-w-0 flex-1">
+              <h4 class="text-xs font-semibold line-clamp-2 text-white group-hover:text-ytRed transition-colors">${rv.title}</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">${rChannelName}</p>
+              <p class="text-[10px] text-gray-500">${rv.views || 0} views • ${timeAgo(rv.created_at)}</p>
+            </div>
+          </div>
+        `;
+      }
     }
 
     async function toggleWatchSubscription() {
@@ -829,7 +962,6 @@
       switchTab('home');
     }
 
-    // --- UPLOAD VIDEO (With optional custom thumbnail or normal thumbnail preview) ---
     async function uploadRealVideo() {
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
@@ -872,7 +1004,6 @@
       setTimeout(() => { closeUploadModal(); switchTab('home'); }, 1000);
     }
 
-    // --- EDIT PROFILE (Logo, Nickname, Username) ---
     async function openEditModal() {
       let { data: profile } = await sb.from('profiles').select('*').eq('user_id', currentUser.id).maybeSingle();
       document.getElementById('edit-nickname').value = profile?.channel_name || document.getElementById('display-nickname').textContent;
@@ -909,6 +1040,14 @@
       closeEditModal();
       checkUserSession();
       showToast('Profile updated!');
+    }
+
+    function toggleSearchBox() {
+      const overlay = document.getElementById('search-overlay');
+      overlay.classList.toggle('hidden');
+      if (!overlay.classList.contains('hidden')) {
+        document.getElementById('search-input').focus();
+      }
     }
 
     function timeAgo(dateString) {
