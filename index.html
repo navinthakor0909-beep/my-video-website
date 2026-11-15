@@ -15,9 +15,7 @@
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
             ytDark: '#0f0f0f',
             ytDarkSec: '#272727',
@@ -29,32 +27,13 @@
     }
   </script>
   <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(136, 136, 136, 0.35);
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(136, 136, 136, 0.65);
-    }
+    ::-webkit-scrollbar { width: 8px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(136, 136, 136, 0.35); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(136, 136, 136, 0.65); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Hide scrollbar for horizontal channel strip */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    /* YouTube Top Red Progress Bar */
     #top-progress-bar {
       position: fixed;
       top: 0;
@@ -69,85 +48,50 @@
       transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
 
-    /* Shimmer Skeleton Animation */
-    .skeleton {
-      position: relative;
-      overflow: hidden;
-      background-color: #e2e8f0;
-    }
-    .dark .skeleton {
-      background-color: #272727;
-    }
+    .skeleton { position: relative; overflow: hidden; background-color: #e2e8f0; }
+    .dark .skeleton { background-color: #272727; }
     .skeleton::after {
       content: "";
       position: absolute;
       inset: 0;
       transform: translateX(-100%);
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.5),
-        transparent
-      );
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
       animation: shimmer 1.3s infinite;
     }
     .dark .skeleton::after {
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.08),
-        transparent
-      );
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
     }
-    @keyframes shimmer {
-      100% {
-        transform: translateX(100%);
-      }
-    }
+    @keyframes shimmer { 100% { transform: translateX(100%); } }
 
-    /* YouTube Circular Spinner */
     .yt-spinner {
-      width: 30px;
-      height: 30px;
+      width: 30px; height: 30px;
       border: 3px solid rgba(150, 150, 150, 0.25);
       border-top-color: #ff0000;
       border-radius: 50%;
       animation: spin 0.75s linear infinite;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Custom Like Burst Animation */
     @keyframes likePop {
       0% { transform: scale(1); }
       40% { transform: scale(1.45) rotate(-12deg); }
       70% { transform: scale(0.9) rotate(6deg); }
       100% { transform: scale(1) rotate(0deg); }
     }
-    .like-pop {
-      animation: likePop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
+    .like-pop { animation: likePop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
     @keyframes floatUp {
       0% { opacity: 1; transform: translateY(0) scale(0.7); }
       100% { opacity: 0; transform: translateY(-28px) scale(1.25); }
     }
-    .float-particle {
-      position: absolute;
-      pointer-events: none;
-      animation: floatUp 0.65s ease-out forwards;
-    }
+    .float-particle { position: absolute; pointer-events: none; animation: floatUp 0.65s ease-out forwards; }
 
-    /* Double-Tap Seek Ripple */
     @keyframes seekFlash {
       0% { opacity: 0; transform: scale(0.85); }
       30% { opacity: 1; transform: scale(1); }
       100% { opacity: 0; transform: scale(1.05); }
     }
-    .seek-feedback {
-      animation: seekFlash 0.65s ease-out forwards;
-    }
+    .seek-feedback { animation: seekFlash 0.65s ease-out forwards; }
   </style>
 </head>
 <body class="bg-white dark:bg-ytDark text-gray-900 dark:text-gray-100 font-sans antialiased selection:bg-red-600 selection:text-white transition-colors duration-200 pb-16 md:pb-0">
@@ -155,10 +99,8 @@
   <!-- Top YouTube Red Loading Bar -->
   <div id="top-progress-bar"></div>
 
-  <!-- Top Sticky Header: Sirf Logo, Name, Search, aur Upload '+' Icon -->
-  <header class="sticky top-0 z-40 h-14 px-3 sm:px-5 bg-white/95 dark:bg-ytDark/95 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between gap-3">
-    
-    <!-- Left: Site Logo & Brand Name -->
+  <!-- Top Sticky Header: ONLY VISIBLE ON HOME TAB -->
+  <header id="main-header" class="sticky top-0 z-40 h-14 px-3 sm:px-5 bg-white/95 dark:bg-ytDark/95 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between gap-3">
     <div class="flex items-center shrink-0">
       <button onclick="switchTab('home', true)" class="flex items-center gap-2 group focus:outline-none rounded-xl p-1" title="Home">
         <div class="w-8 h-6 bg-ytRed rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
@@ -168,7 +110,6 @@
       </button>
     </div>
 
-    <!-- Center: Search Bar -->
     <div class="flex-1 max-w-xl">
       <div class="flex w-full items-center bg-gray-100 dark:bg-[#121212] border border-gray-300 dark:border-zinc-700 focus-within:border-blue-500 dark:focus-within:border-blue-500 rounded-full overflow-hidden transition-colors">
         <input 
@@ -188,20 +129,18 @@
       </div>
     </div>
 
-    <!-- Right: Sirf Upload '+' Icon -->
     <div class="flex items-center shrink-0">
       <button onclick="openUploadModal()" title="Upload" aria-label="Upload" class="flex items-center justify-center bg-ytRed hover:bg-red-700 text-white w-9 h-9 rounded-full shadow-xs transition-all active:scale-95">
         <i class="fa-solid fa-plus text-base"></i>
       </button>
     </div>
-
   </header>
 
   <!-- Main Workspace Container -->
   <div class="flex min-h-[calc(100vh-3.5rem)]">
     
     <!-- Desktop Left Sidebar -->
-    <aside class="hidden md:flex flex-col w-56 shrink-0 border-r border-gray-200 dark:border-zinc-800 p-3 gap-1 sticky top-14 h-[calc(100vh-3.5rem)]">
+    <aside class="hidden md:flex flex-col w-56 shrink-0 border-r border-gray-200 dark:border-zinc-800 p-3 gap-1 sticky top-0 h-screen">
       <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex items-center gap-4 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-gray-100 dark:bg-ytDarkSec">
         <i class="fa-solid fa-house w-5 text-center text-base"></i>
         <span>Home</span>
@@ -216,35 +155,22 @@
       </button>
 
       <hr class="my-3 border-gray-200 dark:border-zinc-800" />
-
-      <div class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-400">
-        Subscriptions
-      </div>
-      <div id="sidebar-subs-list" class="flex flex-col gap-1 mt-1 overflow-y-auto">
-        <!-- Populated by JS -->
-      </div>
+      <div class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Subscriptions</div>
+      <div id="sidebar-subs-list" class="flex flex-col gap-1 mt-1 overflow-y-auto"></div>
     </aside>
 
     <!-- Main Dynamic Content Area -->
     <main class="flex-1 min-w-0 p-3 sm:p-5 lg:p-6">
-      
-      <!-- SKELETON LOADING VIEW -->
       <div id="skeleton-container" class="hidden"></div>
 
-      <!-- ACTUAL CONTENT VIEW -->
       <div id="content-container">
-        
         <!-- 1. HOME TAB -->
         <section id="tab-home" class="tab-section">
           <div id="search-banner" class="hidden mb-4 p-3 rounded-xl bg-gray-100 dark:bg-ytDarkSec flex items-center justify-between text-sm">
             <span>Showing results for: <strong id="search-query-label" class="text-ytRed"></strong></span>
             <button onclick="clearSearch()" class="text-xs underline text-gray-500 hover:text-gray-900 dark:hover:text-white">Reset</button>
           </div>
-
-          <div id="home-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
-            <!-- Populated by JS -->
-          </div>
-
+          <div id="home-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
           <div class="mt-10 mb-4 flex flex-col items-center justify-center">
             <div id="bottom-spinner" class="hidden flex-col items-center gap-2">
               <div class="yt-spinner"></div>
@@ -262,26 +188,16 @@
             <h2 class="text-base sm:text-lg font-bold">Subscribed Channels</h2>
             <button onclick="filterSubscribedChannel('ALL')" id="show-all-subs-btn" class="text-xs font-semibold text-blue-500 hover:underline hidden">Show All Channels</button>
           </div>
-
-          <div id="subs-channel-strip" class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-4 mb-5 border-b border-gray-200 dark:border-zinc-800">
-            <!-- Populated by JS -->
-          </div>
-
+          <div id="subs-channel-strip" class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-4 mb-5 border-b border-gray-200 dark:border-zinc-800"></div>
           <h3 id="subs-feed-title" class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">Latest from your subscriptions</h3>
-
-          <div id="subs-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
-            <!-- Populated by JS -->
-          </div>
+          <div id="subs-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
         </section>
 
         <!-- 3. PROFILE TAB -->
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
+          <!-- Clean Banner without settings icon -->
           <div class="relative w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end justify-between p-4 shadow-xs">
             <span class="text-xs font-medium text-white/80 bg-black/40 px-3 py-1 rounded-full backdrop-blur-xs">Creator Studio Banner</span>
-            
-            <button onclick="openSettingsModal()" title="Settings" aria-label="Settings" class="w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-colors shadow-sm">
-              <i class="fa-solid fa-gear text-base"></i>
-            </button>
           </div>
 
           <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-gray-100 dark:bg-ytDarkSec/70 border border-gray-200 dark:border-zinc-800 mb-6 relative">
@@ -291,9 +207,16 @@
             <div class="text-center sm:text-left flex-1">
               <div class="flex items-center justify-center sm:justify-between gap-2">
                 <h1 class="text-xl sm:text-2xl font-bold">Aarav Sharma</h1>
-                <button onclick="openSettingsModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gray-200 dark:bg-ytDarkHover hover:opacity-90 text-xs font-semibold transition-opacity">
-                  <i class="fa-solid fa-gear"></i> Settings
-                </button>
+                <div class="flex items-center gap-2">
+                  <!-- Icon-only Edit Profile Button -->
+                  <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Edit Profile">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <!-- Icon-only Settings Button -->
+                  <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Settings">
+                    <i class="fa-solid fa-gear"></i>
+                  </button>
+                </div>
               </div>
               <p id="profile-stats" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">@aaravcreates • 12.4K subscribers • 2 videos</p>
               <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-2 max-w-xl">
@@ -308,12 +231,9 @@
                 <i class="fa-solid fa-film text-ytRed"></i> Your Videos
               </h2>
             </div>
-            <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <!-- Populated by JS -->
-            </div>
+            <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
           </div>
         </section>
-
       </div>
     </main>
   </div>
@@ -538,58 +458,6 @@
         subscribed: true,
         thumbGradient: 'from-emerald-600 via-teal-800 to-zinc-900',
         icon: 'fa-headphones'
-      },
-      {
-        id: 'v5',
-        title: 'Solo Trip to Manali in Snowfall | Cinematic Travel Film',
-        channel: 'Wanderlust Vlogs',
-        channelId: 'c5',
-        avatarColor: 'bg-amber-600',
-        views: '310K views',
-        time: '5 days ago',
-        duration: '18:12',
-        subscribed: true,
-        thumbGradient: 'from-amber-500 via-orange-700 to-zinc-900',
-        icon: 'fa-mountain-sun'
-      },
-      {
-        id: 'v6',
-        title: 'Modern CSS Grid & Responsive Web Design Masterclass',
-        channel: 'CodeWithRohan',
-        channelId: 'c1',
-        avatarColor: 'bg-blue-600',
-        views: '67K views',
-        time: '1 week ago',
-        duration: '09:50',
-        subscribed: true,
-        thumbGradient: 'from-cyan-600 via-sky-800 to-slate-900',
-        icon: 'fa-laptop-code'
-      },
-      {
-        id: 'v7',
-        title: 'Top 5 Minimalist Mechanical Keyboards for Creators!',
-        channel: 'TechBurner Lab',
-        channelId: 'c2',
-        avatarColor: 'bg-red-600',
-        views: '215K views',
-        time: '2 weeks ago',
-        duration: '13:33',
-        subscribed: true,
-        thumbGradient: 'from-zinc-600 via-neutral-800 to-black',
-        icon: 'fa-keyboard'
-      },
-      {
-        id: 'v8',
-        title: 'Championship Finals Highlights — Best Moments Compilation',
-        channel: 'PixelGamer',
-        channelId: 'c3',
-        avatarColor: 'bg-purple-600',
-        views: '540K views',
-        time: '3 weeks ago',
-        duration: '16:19',
-        subscribed: true,
-        thumbGradient: 'from-red-500 via-purple-900 to-black',
-        icon: 'fa-trophy'
       }
     ];
 
@@ -616,7 +484,6 @@
       }
     ];
 
-    let currentTab = 'home';
     let currentSearch = '';
     let selectedSubChannel = 'ALL';
     let isVideoLiked = false;
@@ -718,14 +585,31 @@
       `;
     }
 
+    // Switch Tab & Save Current Active Tab in sessionStorage
     function switchTab(tabName, resetSearch = false) {
       if (resetSearch) {
         currentSearch = '';
-        document.getElementById('search-input').value = '';
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
         toggleClearBtn();
       }
-      currentTab = tabName;
 
+      // Save tab to sessionStorage so refresh keeps the user on this tab
+      try {
+        sessionStorage.setItem('mystream_active_tab', tabName);
+      } catch(e) {}
+
+      // Show/Hide top header only for Home tab
+      const mainHeader = document.getElementById('main-header');
+      if (mainHeader) {
+        if (tabName === 'home') {
+          mainHeader.classList.remove('hidden');
+        } else {
+          mainHeader.classList.add('hidden');
+        }
+      }
+
+      // Update Desktop & Mobile Nav Active States
       document.querySelectorAll('.nav-btn').forEach(btn => {
         const isTarget = btn.getAttribute('data-tab') === tabName;
         if (btn.closest('aside')) {
@@ -743,7 +627,7 @@
     }
 
     function simulateLoadingState(tabName) {
-      const loadTime = 800;
+      const loadTime = 600;
       triggerTopProgressBar(loadTime);
 
       const skeletonContainer = document.getElementById('skeleton-container');
@@ -763,7 +647,7 @@
         document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
         document.getElementById(`tab-${tabName}`).classList.remove('hidden');
 
-        renderAll();
+        renderAll(tabName);
       }, loadTime);
     }
 
@@ -772,7 +656,7 @@
         <article onclick="openPlayerModal('${video.id}')" class="group cursor-pointer flex flex-col gap-2.5">
           <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-gradient-to-br ${video.thumbGradient} flex items-center justify-center shadow-xs">
             <i class="fa-solid ${video.icon} text-white/30 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center">
               <div class="opacity-0 group-hover:opacity-100 transition-opacity w-10 h-10 rounded-full bg-black/75 text-white flex items-center justify-center">
                 <i class="fa-solid fa-play text-xs ml-0.5 text-ytRed"></i>
               </div>
@@ -889,28 +773,29 @@
       })).join('');
     }
 
-    function renderAll() {
-      renderHomeVideos();
-      renderSubscribedTab();
-      renderProfileTab();
+    function renderAll(tab) {
+      if (tab === 'home') renderHomeVideos();
+      else if (tab === 'subscribed') renderSubscribedTab();
+      else if (tab === 'profile') renderProfileTab();
     }
 
     function handleSearch() {
-      currentSearch = document.getElementById('search-input').value.trim();
-      if (currentTab !== 'home') {
-        switchTab('home');
-      } else {
-        simulateLoadingState('home');
-      }
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) currentSearch = searchInput.value.trim();
+      switchTab('home');
     }
 
     function toggleClearBtn() {
-      const val = document.getElementById('search-input').value;
-      document.getElementById('clear-search-btn').classList.toggle('hidden', val.length === 0);
+      const searchInput = document.getElementById('search-input');
+      const clearBtn = document.getElementById('clear-search-btn');
+      if (searchInput && clearBtn) {
+        clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
+      }
     }
 
     function clearSearch() {
-      document.getElementById('search-input').value = '';
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) searchInput.value = '';
       currentSearch = '';
       toggleClearBtn();
       renderHomeVideos();
@@ -980,7 +865,7 @@
       titleInput.value = '';
       closeUploadModal();
       showToast('Video uploaded to your feed!');
-      simulateLoadingState(currentTab);
+      switchTab(currentSearch ? 'home' : currentTab);
     }
 
     function openPlayerModal(videoId) {
@@ -1084,9 +969,7 @@
       html.classList.toggle('dark');
       const isDark = html.classList.contains('dark');
       if (icon) {
-        icon.className = isDark
-          ? 'fa-solid fa-sun text-amber-400 text-sm'
-          : 'fa-solid fa-moon text-gray-700 text-sm';
+        icon.className = isDark ? 'fa-solid fa-sun text-amber-400 text-sm' : 'fa-solid fa-moon text-gray-700 text-sm';
       }
       if (statusLabel) {
         statusLabel.textContent = isDark ? 'Dark Mode Active' : 'Light Mode Active';
@@ -1105,8 +988,16 @@
       }, 2500);
     }
 
+    // On Load, restore the last active tab from sessionStorage so refresh keeps you on the same tab
     window.addEventListener('DOMContentLoaded', () => {
-      simulateLoadingState('home');
+      let savedTab = 'home';
+      try {
+        const stored = sessionStorage.getItem('mystream_active_tab');
+        if (stored && ['home', 'subscribed', 'profile'].includes(stored)) {
+          savedTab = stored;
+        }
+      } catch(e) {}
+      switchTab(savedTab);
     });
   </script>
 </body>
