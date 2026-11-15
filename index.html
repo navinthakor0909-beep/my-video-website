@@ -75,19 +75,6 @@
       100% { transform: scale(1) rotate(0deg); }
     }
     .like-pop { animation: likePop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(0.7); }
-      100% { opacity: 0; transform: translateY(-28px) scale(1.25); }
-    }
-    .float-particle { position: absolute; pointer-events: none; animation: floatUp 0.65s ease-out forwards; }
-
-    @keyframes seekFlash {
-      0% { opacity: 0; transform: scale(0.85); }
-      30% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.05); }
-    }
-    .seek-feedback { animation: seekFlash 0.65s ease-out forwards; }
   </style>
 </head>
 <body class="bg-ytDark text-gray-100 font-sans antialiased selection:bg-red-600 selection:text-white transition-colors duration-200 pb-16 md:pb-0">
@@ -95,39 +82,35 @@
   <!-- Top YouTube Red Loading Bar -->
   <div id="top-progress-bar"></div>
 
-  <!-- Top Sticky Header: ONLY VISIBLE ON HOME TAB -->
+  <!-- Top Sticky Header -->
   <header id="main-header" class="sticky top-0 z-40 h-14 px-3 sm:px-5 bg-ytDark/95 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between gap-3">
+    <!-- Surf logo thoda bada kiya gaya hai -->
     <div class="flex items-center shrink-0">
       <button onclick="switchTab('home', true)" class="flex items-center gap-1 group focus:outline-none rounded-xl p-1" title="Home">
-        <span class="text-lg sm:text-xl font-bold tracking-tight">Surf<span class="text-ytRed">.</span></span>
+        <span class="text-xl sm:text-2xl font-extrabold tracking-tight">Surf<span class="text-ytRed">.</span></span>
       </button>
     </div>
 
-    <div class="flex-1 max-w-xl">
-      <div class="flex w-full items-center bg-[#121212] border border-zinc-750 rounded-full overflow-hidden transition-colors">
-        <input 
-          id="search-input" 
-          type="text" 
-          placeholder="Search videos..." 
-          class="w-full bg-transparent px-4 py-1.5 text-sm focus:outline-none text-white placeholder-gray-400"
-          onkeydown="if(event.key==='Enter') handleSearch()"
-          oninput="toggleClearBtn()"
-        />
-        <button id="clear-search-btn" onclick="clearSearch()" title="Clear" class="hidden px-2 text-gray-400 hover:text-white">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <button onclick="handleSearch()" title="Search" class="bg-ytDarkSec hover:bg-ytDarkHover px-4 py-1.5 border-l border-zinc-700 text-gray-200 transition-colors">
-          <i class="fa-solid fa-magnifying-glass text-sm"></i>
-        </button>
-      </div>
-    </div>
+    <!-- Bada sa search likha hua hata kar sirf search icon rakha gaya hai -->
+    <div class="flex items-center gap-2">
+      <button onclick="toggleSearchBox()" title="Search" class="w-9 h-9 rounded-full bg-ytDarkSec hover:bg-ytDarkHover flex items-center justify-center text-white transition-colors">
+        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      </button>
 
-    <div class="flex items-center shrink-0">
-      <button onclick="openUploadModal()" title="Upload" aria-label="Upload" class="flex items-center justify-center bg-ytRed hover:bg-red-700 text-white w-9 h-9 rounded-full shadow-xs transition-all active:scale-95">
+      <!-- Video Upload Icon (+ Button) -->
+      <button onclick="handleUploadClick()" title="Upload Video" class="flex items-center justify-center bg-ytRed hover:bg-red-700 text-white w-9 h-9 rounded-full shadow-xs transition-all active:scale-95">
         <i class="fa-solid fa-plus text-base"></i>
       </button>
     </div>
   </header>
+
+  <!-- Hidden expandable search overlay -->
+  <div id="search-overlay" class="hidden px-4 py-2 bg-ytDarkSec border-b border-zinc-800">
+    <div class="flex items-center max-w-xl mx-auto bg-[#121212] border border-zinc-700 rounded-full overflow-hidden px-3 py-1">
+      <input id="search-input" type="text" placeholder="Search videos..." class="w-full bg-transparent text-sm focus:outline-none text-white placeholder-gray-400 py-1" onkeydown="if(event.key==='Enter') handleSearch()" />
+      <button onclick="handleSearch()" class="text-gray-400 hover:text-white px-2"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+  </div>
 
   <!-- Main Workspace Container -->
   <div class="flex min-h-[calc(100vh-3.5rem)]">
@@ -155,10 +138,6 @@
       <div id="content-container">
         <!-- 1. HOME TAB -->
         <section id="tab-home" class="tab-section">
-          <div id="search-banner" class="hidden mb-4 p-3 rounded-xl bg-ytDarkSec flex items-center justify-between text-sm">
-            <span>Showing results for: <strong id="search-query-label" class="text-ytRed"></strong></span>
-            <button onclick="clearSearch()" class="text-xs underline text-gray-400 hover:text-white">Reset</button>
-          </div>
           <div id="home-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
           <div id="empty-home" class="hidden py-16 text-center text-gray-400">
             <i class="fa-solid fa-video-slash text-3xl mb-2"></i>
@@ -168,8 +147,15 @@
 
         <!-- 2. SUBSCRIBED TAB -->
         <section id="tab-subscribed" class="tab-section hidden">
-          <h2 class="text-base sm:text-lg font-bold mb-4">Subscribed Channels Feed</h2>
-          <div id="subs-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
+          <div id="subscribed-auth-prompt" class="hidden py-16 text-center">
+            <i class="fa-solid fa-lock text-4xl text-gray-500 mb-3"></i>
+            <p class="text-sm text-gray-300 mb-4">Subscribed channels dekhne ke liye login ya sign up karein.</p>
+            <button onclick="switchTab('profile')" class="px-5 py-2 rounded-full bg-ytRed text-white text-xs font-semibold">Login / Sign Up</button>
+          </div>
+          <div id="subscribed-content" class="hidden">
+            <h2 class="text-base sm:text-lg font-bold mb-4">Subscribed Channels Feed</h2>
+            <div id="subs-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
+          </div>
           <div id="empty-subscribed" class="hidden py-16 text-center text-gray-400">
             <i class="fa-solid fa-users-slash text-3xl mb-2"></i>
             <p>Aapne abhi tak kisi bhi channel ko subscribe nahi kiya hai.</p>
@@ -180,7 +166,7 @@
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
           <!-- Auth Panel (Login / Signup) -->
           <div id="auth-panel" class="max-w-md mx-auto p-6 rounded-2xl bg-ytDarkSec border border-zinc-800 mt-10">
-            <h3 class="text-lg font-bold mb-4 text-center text-white">Login to Surf</h3>
+            <h3 class="text-lg font-bold mb-4 text-center text-white">Login or Sign Up to Surf</h3>
             <input id="auth-email" type="email" placeholder="Email address" class="w-full px-3 py-2 mb-3 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
             <input id="auth-password" type="password" placeholder="Password" class="w-full px-3 py-2 mb-4 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
             <div class="flex gap-2">
@@ -233,6 +219,67 @@
                 </h2>
               </div>
               <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. CHANNEL VIEW TAB -->
+        <section id="tab-channel" class="tab-section hidden max-w-6xl mx-auto">
+          <button onclick="switchTab('home')" class="mb-4 px-3.5 py-1.5 rounded-full bg-ytDarkSec hover:bg-ytDarkHover text-xs font-semibold text-white">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+          </button>
+          <div class="p-5 rounded-2xl bg-ytDarkSec border border-zinc-800 flex flex-col sm:flex-row items-center gap-5 mb-6">
+            <div id="channel-view-avatar" class="w-20 h-20 rounded-full bg-red-600 text-white text-3xl font-bold flex items-center justify-center">C</div>
+            <div class="text-center sm:text-left flex-1">
+              <h1 id="channel-view-name" class="text-xl font-bold text-white">Channel Name</h1>
+              <p id="channel-view-subs" class="text-xs text-gray-400 mt-1">0 subscribers</p>
+            </div>
+            <button id="channel-view-sub-btn" onclick="toggleChannelSubscription()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">
+              Subscribe
+            </button>
+          </div>
+          <h3 class="text-base font-bold text-white mb-3">Videos by this channel</h3>
+          <div id="channel-view-videos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+        </section>
+
+        <!-- 5. WATCH PAGE TAB (YouTube-like separate watch view) -->
+        <section id="tab-watch" class="tab-section hidden max-w-5xl mx-auto">
+          <button onclick="goBackFromWatch()" class="mb-4 px-3.5 py-1.5 rounded-full bg-ytDarkSec hover:bg-ytDarkHover text-xs font-semibold text-white">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Back
+          </button>
+
+          <!-- Video Player Container -->
+          <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl mb-4">
+            <video id="watch-page-player" controls autoplay class="w-full h-full object-contain"></video>
+          </div>
+
+          <!-- Video Title -->
+          <h1 id="watch-page-title" class="text-lg sm:text-xl font-bold text-white mb-3">Video Title</h1>
+
+          <!-- Channel Info, Subscribe, Like, Unlike on ONE LINE -->
+          <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-ytDarkSec border border-zinc-800">
+            <!-- Left: Channel Logo & Name (Clickable to visit channel) -->
+            <div class="flex items-center gap-3 cursor-pointer group" id="watch-channel-trigger" onclick="">
+              <div id="watch-channel-avatar" class="w-10 h-10 rounded-full bg-red-600 text-white font-bold flex items-center justify-center shrink-0">
+                C
+              </div>
+              <div>
+                <h4 id="watch-channel-name" class="text-sm font-semibold text-white group-hover:text-ytRed transition-colors">Channel Name</h4>
+                <p class="text-[11px] text-gray-400" id="watch-video-date">Uploaded recently</p>
+              </div>
+            </div>
+
+            <!-- Right: Subscribe Button, Like, Unlike (All on 1 line) -->
+            <div class="flex items-center gap-2.5">
+              <button id="watch-subscribe-btn" onclick="toggleWatchSubscription()" class="px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
+                Subscribe
+              </button>
+              <button id="watch-like-btn" onclick="handleLike(true)" class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                <i class="fa-regular fa-thumbs-up"></i> <span id="watch-like-count">0</span>
+              </button>
+              <button id="watch-dislike-btn" onclick="handleLike(false)" class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                <i class="fa-regular fa-thumbs-down"></i>
+              </button>
             </div>
           </div>
         </section>
@@ -336,24 +383,8 @@
     </div>
   </div>
 
-  <!-- VIDEO PLAYER MODAL -->
-  <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-[#181818] w-full max-w-2xl rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl text-white">
-      <div class="relative aspect-video bg-black flex flex-col items-center justify-center text-white">
-        <button onclick="closePlayerModal()" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <video id="modal-video-player" controls autoplay class="w-full h-full object-contain"></video>
-      </div>
-      <div class="p-4">
-        <h3 id="modal-video-title" class="text-base font-bold"></h3>
-        <p id="modal-video-channel" class="text-xs text-gray-400 mt-1"></p>
-      </div>
-    </div>
-  </div>
-
   <!-- TOAST NOTIFICATION -->
-  <div id="toast" class="fixed bottom-16 md:bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold"></div>
+  <div id="toast" class="fixed bottom-16 md:bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-zinc-900 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold"></div>
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -364,6 +395,7 @@
 
     let currentUser = null;
     let currentTab = 'home';
+    let currentActiveVideo = null; // for watch page & subscription checks
 
     function triggerTopProgressBar(duration = 600) {
       const bar = document.getElementById('top-progress-bar');
@@ -379,7 +411,7 @@
 
     async function switchTab(tabName, resetSearch = false) {
       currentTab = tabName;
-      try { sessionStorage.setItem('mystream_active_tab', tabName); } catch(e) {}
+      try { sessionStorage.setItem('surf_active_tab', tabName); } catch(e) {}
 
       const mainHeader = document.getElementById('main-header');
       if (mainHeader) {
@@ -404,41 +436,63 @@
       document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
 
+      // Check session on load / tab switch to persist login state without auto-logout
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
       if (tabName === 'home') await loadHomeVideos();
       else if (tabName === 'subscribed') await loadSubscribedVideos();
       else if (tabName === 'profile') checkUserSession();
     }
 
     async function checkUserSession() {
-      const { data: { user } } = await sb.auth.getUser();
-      currentUser = user;
       const authPanel = document.getElementById('auth-panel');
       const profilePanel = document.getElementById('profile-panel');
 
-      if (!user) {
+      if (!currentUser) {
         authPanel.hidden = false;
         profilePanel.hidden = true;
       } else {
         authPanel.hidden = true;
         profilePanel.hidden = false;
-        await loadUserProfileAndUploads(user);
+        await loadUserProfileAndUploads(currentUser);
+      }
+    }
+
+    // Video upload icon click -> if not logged in, go directly to profile/login tab
+    async function handleUploadClick() {
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+      if (!currentUser) {
+        showToast('Pehle login ya sign up karein.');
+        switchTab('profile');
+      } else {
+        openUploadModal();
       }
     }
 
     async function handleSignup() {
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const { error } = await sb.auth.signUp({ email, password });
+      const { error, data } = await sb.auth.signUp({ email, password });
       if (error) document.getElementById('auth-message').textContent = error.message;
-      else { showToast('Account created! You can now log in.'); }
+      else { 
+        showToast('Account created & logged in successfully!'); 
+        currentUser = data.user;
+        checkUserSession(); 
+      }
     }
 
     async function handleLogin() {
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const { error } = await sb.auth.signInWithPassword({ email, password });
+      const { error, data } = await sb.auth.signInWithPassword({ email, password });
       if (error) document.getElementById('auth-message').textContent = error.message;
-      else { showToast('Login successful!'); checkUserSession(); }
+      else { 
+        showToast('Login successful!'); 
+        currentUser = data.user;
+        checkUserSession(); 
+      }
     }
 
     async function handleLogout() {
@@ -466,7 +520,7 @@
       }
 
       grid.innerHTML = videos.map(v => `
-        <article onclick="openPlayer('${v.file_path}', '${v.title}', '${nickname}')" class="group cursor-pointer flex flex-col gap-2">
+        <article onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${nickname}")' class="group cursor-pointer flex flex-col gap-2">
           <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden">
             <i class="fa-solid fa-play text-white/50 text-2xl"></i>
           </div>
@@ -493,40 +547,53 @@
       for (let v of videos) {
         let { data: prof } = await sb.from('profiles').select('channel_name').eq('user_id', v.user_id).maybeSingle();
         let channelName = prof?.channel_name || 'Creator';
+        let uploadTime = timeAgo(v.created_at);
 
         grid.innerHTML += `
-          <article onclick="openPlayer('${v.file_path}', '${v.title}', '${channelName}')" class="group cursor-pointer flex flex-col gap-2.5">
-            <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs">
+          <div class="group flex flex-col gap-2.5">
+            <div onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs">
               <i class="fa-solid fa-play text-white/40 text-3xl group-hover:scale-110 transition-transform"></i>
             </div>
             <div class="flex gap-3 items-start">
-              <div class="w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
+              <!-- Logo or username click -> go directly to channel -->
+              <div onclick="openChannel('${v.user_id}', '${channelName}')" class="cursor-pointer w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0 hover:scale-105 transition-transform">
                 ${channelName.charAt(0).toUpperCase()}
               </div>
               <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
-                <p class="text-xs text-gray-400 mt-1">${channelName}</p>
+                <h3 onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
+                <p onclick="openChannel('${v.user_id}', '${channelName}')" class="cursor-pointer text-xs text-gray-400 mt-1 hover:underline">${channelName}</p>
+                <p class="text-[11px] text-gray-500">0 views • ${uploadTime}</p>
               </div>
             </div>
-          </article>
+          </div>
         `;
       }
     }
 
     async function loadSubscribedVideos() {
-      const grid = document.getElementById('subs-video-grid');
+      const authPrompt = document.getElementById('subscribed-auth-prompt');
+      const contentDiv = document.getElementById('subscribed-content');
       const emptyDiv = document.getElementById('empty-subscribed');
+      const grid = document.getElementById('subs-video-grid');
       grid.innerHTML = '';
 
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
       if (!currentUser) {
-        emptyDiv.classList.remove('hidden');
-        emptyDiv.innerHTML = `<p class="text-sm">Subscribed videos dekhne ke liye pehle Profile mein login karein.</p>`;
+        authPrompt.classList.remove('hidden');
+        contentDiv.classList.add('hidden');
+        emptyDiv.classList.add('hidden');
         return;
       }
+
+      authPrompt.classList.add('hidden');
+      contentDiv.classList.remove('hidden');
 
       const { data: subs } = await sb.from('subscriptions').select('channel_id').eq('subscriber_id', currentUser.id);
       if (!subs || subs.length === 0) {
         emptyDiv.classList.remove('hidden');
+        contentDiv.classList.add('hidden');
         return;
       }
       emptyDiv.classList.add('hidden');
@@ -536,34 +603,200 @@
 
       if (!videos || videos.length === 0) {
         emptyDiv.classList.remove('hidden');
+        contentDiv.classList.add('hidden');
         return;
       }
 
       for (let v of videos) {
         let { data: prof } = await sb.from('profiles').select('channel_name').eq('user_id', v.user_id).maybeSingle();
         let channelName = prof?.channel_name || 'Creator';
+        let uploadTime = timeAgo(v.created_at);
 
         grid.innerHTML += `
-          <article onclick="openPlayer('${v.file_path}', '${v.title}', '${channelName}')" class="group cursor-pointer flex flex-col gap-2.5">
-            <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs">
+          <div class="group flex flex-col gap-2.5">
+            <div onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs">
               <i class="fa-solid fa-play text-white/40 text-3xl group-hover:scale-110 transition-transform"></i>
             </div>
             <div class="flex gap-3 items-start">
-              <div class="w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
+              <div onclick="openChannel('${v.user_id}', '${channelName}')" class="cursor-pointer w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
                 ${channelName.charAt(0).toUpperCase()}
               </div>
               <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
-                <p class="text-xs text-gray-400 mt-1">${channelName}</p>
+                <h3 onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
+                <p onclick="openChannel('${v.user_id}', '${channelName}')" class="cursor-pointer text-xs text-gray-400 mt-1 hover:underline">${channelName}</p>
+                <p class="text-[11px] text-gray-500">0 views • ${uploadTime}</p>
               </div>
             </div>
-          </article>
+          </div>
         `;
       }
     }
 
+    // --- CHANNEL VIEW & SUBSCRIPTION LOGIC ---
+    let viewingChannelId = null;
+
+    async function openChannel(userId, channelName) {
+      viewingChannelId = userId;
+      document.getElementById('channel-view-name').textContent = channelName;
+      document.getElementById('channel-view-avatar').textContent = channelName.charAt(0).toUpperCase();
+      
+      const { count } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', userId);
+      document.getElementById('channel-view-subs').textContent = `${count || 0} subscribers`;
+
+      // Check if subscribed
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+      const subBtn = document.getElementById('channel-view-sub-btn');
+      
+      if (currentUser && currentUser.id === userId) {
+        subBtn.hidden = true; // cannot subscribe to self
+      } else {
+        subBtn.hidden = false;
+        if (currentUser) {
+          const { data: subCheck } = await sb.from('subscriptions').select('id').eq('subscriber_id', currentUser.id).eq('channel_id', userId).maybeSingle();
+          subBtn.textContent = subCheck ? 'Subscribed' : 'Subscribe';
+          subBtn.className = subCheck ? 'px-5 py-2 rounded-full bg-zinc-700 text-white text-xs font-semibold' : 'px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold';
+        } else {
+          subBtn.textContent = 'Subscribe';
+          subBtn.className = 'px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold';
+        }
+      }
+
+      // Load channel videos
+      const { data: channelVideos } = await sb.from('videos').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+      const cGrid = document.getElementById('channel-view-videos');
+      cGrid.innerHTML = (channelVideos || []).map(v => `
+        <article onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="group cursor-pointer flex flex-col gap-2">
+          <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden">
+            <i class="fa-solid fa-play text-white/50 text-2xl"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold truncate text-white">${v.title}</h4>
+            <p class="text-xs text-gray-400">${timeAgo(v.created_at)}</p>
+          </div>
+        </article>
+      `).join('');
+
+      switchTab('channel');
+    }
+
+    async function toggleChannelSubscription() {
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
+      if (!currentUser) {
+        showToast('Subscribe karne ke liye pehle login karein.');
+        switchTab('profile');
+        return;
+      }
+
+      const { data: existing } = await sb.from('subscriptions').select('id').eq('subscriber_id', currentUser.id).eq('channel_id', viewingChannelId).maybeSingle();
+      const subBtn = document.getElementById('channel-view-sub-btn');
+
+      if (existing) {
+        await sb.from('subscriptions').delete().eq('id', existing.id);
+        subBtn.textContent = 'Subscribe';
+        subBtn.className = 'px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold';
+        showToast('Unsubscribed');
+      } else {
+        await sb.from('subscriptions').insert({ subscriber_id: currentUser.id, channel_id: viewingChannelId });
+        subBtn.textContent = 'Subscribed';
+        subBtn.className = 'px-5 py-2 rounded-full bg-zinc-700 text-white text-xs font-semibold';
+        showToast('Subscribed successfully!');
+      }
+    }
+
+    // --- WATCH PAGE (YouTube-like separate page) ---
+    async function openWatchPage(video, channelName) {
+      currentActiveVideo = video;
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
+      // Set video player src
+      const { data } = await sb.storage.from('Videos').createSignedUrl(video.file_path, 3600);
+      const player = document.getElementById('watch-page-player');
+      player.src = data ? data.signedUrl : '';
+
+      document.getElementById('watch-page-title').textContent = video.title;
+      document.getElementById('watch-channel-name').textContent = channelName;
+      document.getElementById('watch-channel-avatar').textContent = channelName.charAt(0).toUpperCase();
+      document.getElementById('watch-video-date').textContent = timeAgo(video.created_at);
+
+      // Make channel info clickable to visit channel
+      document.getElementById('watch-channel-trigger').onclick = () => openChannel(video.user_id, channelName);
+
+      // Setup Subscribe button in watch page
+      const watchSubBtn = document.getElementById('watch-subscribe-btn');
+      if (currentUser && currentUser.id === video.user_id) {
+        watchSubBtn.hidden = true;
+      } else {
+        watchSubBtn.hidden = false;
+        if (currentUser) {
+          const { data: subCheck } = await sb.from('subscriptions').select('id').eq('subscriber_id', currentUser.id).eq('channel_id', video.user_id).maybeSingle();
+          watchSubBtn.textContent = subCheck ? 'Subscribed' : 'Subscribe';
+          watchSubBtn.className = subCheck ? 'px-4 py-2 rounded-full bg-zinc-700 text-white text-xs font-semibold transition-colors' : 'px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors';
+        } else {
+          watchSubBtn.textContent = 'Subscribe';
+          watchSubBtn.className = 'px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors';
+        }
+      }
+
+      switchTab('watch');
+    }
+
+    async function toggleWatchSubscription() {
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
+      if (!currentUser) {
+        showToast('Subscribe karne ke liye pehle login karein.');
+        switchTab('profile');
+        return;
+      }
+
+      const channelId = currentActiveVideo.user_id;
+      const { data: existing } = await sb.from('subscriptions').select('id').eq('subscriber_id', currentUser.id).eq('channel_id', channelId).maybeSingle();
+      const watchSubBtn = document.getElementById('watch-subscribe-btn');
+
+      if (existing) {
+        await sb.from('subscriptions').delete().eq('id', existing.id);
+        watchSubBtn.textContent = 'Subscribe';
+        watchSubBtn.className = 'px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors';
+        showToast('Unsubscribed');
+      } else {
+        await sb.from('subscriptions').insert({ subscriber_id: currentUser.id, channel_id: channelId });
+        watchSubBtn.textContent = 'Subscribed';
+        watchSubBtn.className = 'px-4 py-2 rounded-full bg-zinc-700 text-white text-xs font-semibold transition-colors';
+        showToast('Subscribed successfully!');
+      }
+    }
+
+    function handleLike(isLike) {
+      const btn = document.getElementById('watch-like-btn');
+      const countSpan = document.getElementById('watch-like-count');
+      let count = parseInt(countSpan.textContent);
+      if (isLike) {
+        countSpan.textContent = count + 1;
+        btn.classList.add('text-ytRed');
+        showToast('Liked video');
+      } else {
+        showToast('Disliked video');
+      }
+    }
+
+    function goBackFromWatch() {
+      const player = document.getElementById('watch-page-player');
+      player.pause();
+      player.src = '';
+      switchTab('home');
+    }
+
+    // --- UPLOAD & PROFILE ---
     async function uploadRealVideo() {
-      if (!currentUser) { alert('Pehle Profile mein login karein!'); return; }
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+      if (!currentUser) { alert('Pehle login karein!'); return; }
+
       const title = document.getElementById('upload-title').value.trim();
       const fileInput = document.getElementById('upload-file').files[0];
       const msg = document.getElementById('upload-msg');
@@ -583,21 +816,37 @@
       setTimeout(() => { closeUploadModal(); switchTab('home'); }, 1000);
     }
 
-    async function openPlayer(path, title, channel) {
-      const { data } = await sb.storage.from('Videos').createSignedUrl(path, 3600);
-      if (!data) { alert('Video link nahi mila'); return; }
-      
-      document.getElementById('modal-video-player').src = data.signedUrl;
-      document.getElementById('modal-video-title').textContent = title;
-      document.getElementById('modal-video-channel').textContent = channel;
-      document.getElementById('player-modal').classList.remove('hidden');
+    function toggleSearchBox() {
+      const overlay = document.getElementById('search-overlay');
+      overlay.classList.toggle('hidden');
+      if (!overlay.classList.contains('hidden')) {
+        document.getElementById('search-input').focus();
+      }
     }
 
-    function closePlayerModal() {
-      const player = document.getElementById('modal-video-player');
-      player.pause();
-      player.src = '';
-      document.getElementById('player-modal').classList.add('hidden');
+    function handleSearch() {
+      const q = document.getElementById('search-input').value.trim().toLowerCase();
+      const grid = document.getElementById('home-video-grid');
+      // basic filter on home grid cards
+      Array.from(grid.children).forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function timeAgo(dateString) {
+      const seconds = Math.floor((new Date() - new Date(dateString)) / 1000);
+      let interval = seconds / 31536000;
+      if (interval > 1) return Math.floor(interval) + " years ago";
+      interval = seconds / 2592000;
+      if (interval > 1) return Math.floor(interval) + " months ago";
+      interval = seconds / 86400;
+      if (interval > 1) return Math.floor(interval) + " days ago";
+      interval = seconds / 3600;
+      if (interval > 1) return Math.floor(interval) + " hours ago";
+      interval = seconds / 60;
+      if (interval > 1) return Math.floor(interval) + " minutes ago";
+      return "just now";
     }
 
     function openUploadModal() { document.getElementById('upload-modal').classList.remove('hidden'); }
@@ -612,6 +861,8 @@
     function closeEditModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
 
     async function saveRealProfile() {
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
       const nick = document.getElementById('edit-nickname').value.trim();
       if (!currentUser || !nick) return;
       await sb.from('profiles').upsert({ user_id: currentUser.id, channel_name: nick }, { onConflict: 'user_id' });
@@ -627,12 +878,16 @@
       setTimeout(() => t.classList.add('hidden'), 2500);
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       let savedTab = 'home';
       try {
-        const stored = sessionStorage.getItem('mystream_active_tab');
+        const stored = sessionStorage.getItem('surf_active_tab');
         if (stored) savedTab = stored;
       } catch(e) {}
+      
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
       switchTab(savedTab);
     });
   </script>
