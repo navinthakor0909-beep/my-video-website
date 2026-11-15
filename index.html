@@ -115,7 +115,7 @@
         <input 
           id="search-input" 
           type="text" 
-          placeholder="Search" 
+          placeholder="Search videos..." 
           class="w-full bg-transparent px-4 py-1.5 text-sm focus:outline-none placeholder-gray-500 dark:placeholder-gray-400"
           onkeydown="if(event.key==='Enter') handleSearch()"
           oninput="toggleClearBtn()"
@@ -153,10 +153,6 @@
         <i class="fa-solid fa-circle-user w-5 text-center text-base"></i>
         <span>Profile</span>
       </button>
-
-      <hr class="my-3 border-gray-200 dark:border-zinc-800" />
-      <div class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Subscriptions</div>
-      <div id="sidebar-subs-list" class="flex flex-col gap-1 mt-1 overflow-y-auto"></div>
     </aside>
 
     <!-- Main Dynamic Content Area -->
@@ -171,80 +167,80 @@
             <button onclick="clearSearch()" class="text-xs underline text-gray-500 hover:text-gray-900 dark:hover:text-white">Reset</button>
           </div>
           <div id="home-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
-          <div class="mt-10 mb-4 flex flex-col items-center justify-center">
-            <div id="bottom-spinner" class="hidden flex-col items-center gap-2">
-              <div class="yt-spinner"></div>
-              <span class="text-xs text-gray-500 dark:text-gray-400">Loading more videos...</span>
-            </div>
-            <button id="load-more-btn" onclick="loadMoreVideos()" class="px-5 py-2 rounded-full bg-gray-100 dark:bg-ytDarkSec hover:bg-gray-200 dark:hover:bg-ytDarkHover text-sm font-medium transition-colors">
-              Load More Videos
-            </button>
+          <div id="empty-home" class="hidden py-16 text-center text-gray-400">
+            <i class="fa-solid fa-video-slash text-3xl mb-2"></i>
+            <p>Abhi tak koi video upload nahi kiya gaya hai.</p>
           </div>
         </section>
 
         <!-- 2. SUBSCRIBED TAB -->
         <section id="tab-subscribed" class="tab-section hidden">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="text-base sm:text-lg font-bold">Subscribed Channels</h2>
-            <button onclick="filterSubscribedChannel('ALL')" id="show-all-subs-btn" class="text-xs font-semibold text-blue-500 hover:underline hidden">Show All Channels</button>
-          </div>
-          <div id="subs-channel-strip" class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-4 mb-5 border-b border-gray-200 dark:border-zinc-800"></div>
-          <h3 id="subs-feed-title" class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">Latest from your subscriptions</h3>
+          <h2 class="text-base sm:text-lg font-bold mb-4">Subscribed Channels Feed</h2>
           <div id="subs-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
+          <div id="empty-subscribed" class="hidden py-16 text-center text-gray-400">
+            <i class="fa-solid fa-users-slash text-3xl mb-2"></i>
+            <p>Aapne abhi tak kisi bhi channel ko subscribe nahi kiya hai.</p>
+          </div>
         </section>
 
-        <!-- 3. PROFILE TAB -->
+        <!-- 3. PROFILE / AUTH TAB -->
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
-          <!-- Channel Banner with Bottom-Left Pencil Icon for Banner Management -->
-          <div class="relative w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end justify-between p-4 shadow-xs overflow-hidden">
-            <span class="text-xs font-medium text-white/80 bg-black/40 px-3 py-1 rounded-full backdrop-blur-xs">Creator Studio Banner</span>
-            <!-- Banner Pencil Icon -->
-            <button onclick="openEditModal('banner')" class="w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors shadow-md" title="Edit Banner">
-              <i class="fa-solid fa-pen text-xs"></i>
-            </button>
+          <!-- Auth Panel (Login / Signup) -->
+          <div id="auth-panel" class="max-w-md mx-auto p-6 rounded-2xl bg-gray-100 dark:bg-ytDarkSec border border-gray-200 dark:border-zinc-800 mt-10">
+            <h3 class="text-lg font-bold mb-4 text-center">Login to MyChannel</h3>
+            <input id="auth-email" type="email" placeholder="Email address" class="w-full px-3 py-2 mb-3 rounded-xl bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
+            <input id="auth-password" type="password" placeholder="Password" class="w-full px-3 py-2 mb-4 rounded-xl bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
+            <div class="flex gap-2">
+              <button onclick="handleLogin()" class="flex-1 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold">Login</button>
+              <button onclick="handleSignup()" class="flex-1 py-2 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Sign Up</button>
+            </div>
+            <p id="auth-message" class="text-xs text-center text-red-500 mt-3"></p>
           </div>
 
-          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-gray-100 dark:bg-ytDarkSec/70 border border-gray-200 dark:border-zinc-800 mb-6 relative">
-            <!-- Channel Logo with Overlay Pencil Icon -->
-            <div class="relative group shrink-0">
-              <div id="profile-logo-container" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden">
-                <span id="profile-logo-text">A</span>
-              </div>
-              <button onclick="openEditModal('logo')" class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-sm" title="Edit Logo">
-                <i class="fa-solid fa-pen"></i>
+          <!-- Logged-in Profile Panel -->
+          <div id="profile-panel" hidden>
+            <div id="banner-container" class="relative w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end justify-between p-4 shadow-xs overflow-hidden bg-cover bg-center">
+              <button onclick="openEditModal('banner')" class="w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors shadow-md" title="Edit Banner">
+                <i class="fa-solid fa-pen text-xs"></i>
               </button>
             </div>
 
-            <div class="text-center sm:text-left flex-1">
-              <div class="flex items-center justify-center sm:justify-between gap-2">
-                <div>
-                  <h1 id="display-nickname" class="text-xl sm:text-2xl font-bold">Aarav Sharma</h1>
-                  <p id="display-username" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">@aaravcreates • 12.4K subscribers • 2 videos</p>
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-gray-100 dark:bg-ytDarkSec/70 border border-gray-200 dark:border-zinc-800 mb-6 relative">
+              <div class="relative group shrink-0">
+                <div id="profile-logo-container" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden bg-cover bg-center">
+                  <span id="profile-logo-text">A</span>
                 </div>
-                <div class="flex items-center gap-2">
-                  <!-- Icon-only Edit Profile Button (Opens Edit Channel Modal) -->
-                  <button onclick="openEditModal('all')" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Edit Profile">
-                    <i class="fa-solid fa-pen"></i>
-                  </button>
-                  <!-- Icon-only Settings Button (Opens Settings Modal with Logout) -->
-                  <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Settings">
-                    <i class="fa-solid fa-gear"></i>
-                  </button>
+                <button onclick="openEditModal('logo')" class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-sm" title="Edit Logo">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+              </div>
+
+              <div class="text-center sm:text-left flex-1">
+                <div class="flex items-center justify-center sm:justify-between gap-2">
+                  <div>
+                    <h1 id="display-nickname" class="text-xl sm:text-2xl font-bold">My Channel</h1>
+                    <p id="display-username" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">@username • 0 subscribers</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button onclick="openEditModal('all')" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Edit Profile">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Settings">
+                      <i class="fa-solid fa-gear"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
-              <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-2 max-w-xl">
-                Tech enthusiast, web developer, and content creator sharing clean UI builds and video stories.
-              </p>
             </div>
-          </div>
 
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-base sm:text-lg font-bold flex items-center gap-2">
-                <i class="fa-solid fa-film text-ytRed"></i> Your Videos
-              </h2>
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="text-base sm:text-lg font-bold flex items-center gap-2">
+                  <i class="fa-solid fa-film text-ytRed"></i> Your Uploaded Videos
+                </h2>
+              </div>
+              <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
-            <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
           </div>
         </section>
       </div>
@@ -267,110 +263,6 @@
     </button>
   </nav>
 
-  <!-- EDIT PROFILE / CHANNEL MODAL -->
-  <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-pen text-ytRed"></i> Edit Channel Profile
-        </h3>
-        <button onclick="closeEditModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
-        
-        <!-- BANNER SECTION -->
-        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80 space-y-2">
-          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Channel Banner</label>
-          <div class="flex items-center gap-2">
-            <button onclick="actionBanner('add')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Add Banner</button>
-            <button onclick="actionBanner('change')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Change</button>
-            <button onclick="actionBanner('delete')" class="px-3 py-1.5 rounded-lg bg-red-600/15 text-red-500 hover:bg-red-600/25 text-xs font-semibold">Delete</button>
-          </div>
-        </div>
-
-        <!-- LOGO SECTION -->
-        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80 space-y-2">
-          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Channel Logo / Avatar</label>
-          <div class="flex items-center gap-2">
-            <button onclick="actionLogo('add')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Add Logo</button>
-            <button onclick="actionLogo('change')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Change</button>
-            <button onclick="actionLogo('delete')" class="px-3 py-1.5 rounded-lg bg-red-600/15 text-red-500 hover:bg-red-600/25 text-xs font-semibold">Delete</button>
-          </div>
-        </div>
-
-        <!-- NICKNAME & USERNAME FIELDS -->
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-400 mb-1">Nickname (Channel Name)</label>
-            <input id="input-nickname" type="text" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-400 mb-1">Username</label>
-            <input id="input-username" type="text" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
-          </div>
-        </div>
-
-        <div class="pt-2 flex justify-end gap-2">
-          <button onclick="closeEditModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
-          <button onclick="saveProfileEdits()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Save Changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SETTINGS MODAL (Includes Logout Button) -->
-  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-gear text-ytRed"></i> Settings & Account
-        </h3>
-        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="p-5 space-y-4">
-        <!-- Appearance Toggle Row -->
-        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center">
-              <i id="theme-icon" class="fa-solid fa-sun text-sm"></i>
-            </div>
-            <div>
-              <p class="text-sm font-semibold">Appearance</p>
-              <p id="theme-status-label" class="text-xs text-gray-500 dark:text-gray-400">Dark Mode Active</p>
-            </div>
-          </div>
-          <button onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
-            Switch Theme
-          </button>
-        </div>
-
-        <!-- Logout Button Section -->
-        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-red-600/15 text-ytRed flex items-center justify-center">
-              <i class="fa-solid fa-right-from-bracket text-sm"></i>
-            </div>
-            <div>
-              <p class="text-sm font-semibold">Account Session</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Sign out from MyStream</p>
-            </div>
-          </div>
-          <button onclick="handleLogout()" class="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-xs transition-colors">
-            Log Out
-          </button>
-        </div>
-
-        <div class="pt-2 flex justify-end">
-          <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-zinc-800 hover:opacity-90 text-xs font-semibold">Done</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- UPLOAD VIDEO MODAL -->
   <div id="upload-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
@@ -382,29 +274,70 @@
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div class="p-5">
-        <div class="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-6 text-center hover:border-ytRed transition-colors cursor-pointer" onclick="document.getElementById('upload-title-input').focus()">
-          <div class="w-12 h-12 rounded-full bg-red-600/10 text-ytRed flex items-center justify-center mx-auto mb-3">
-            <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
-          </div>
-          <p class="text-sm font-medium">Select video file to upload</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">MP4, WebM or MOV up to 4K</p>
+      <div class="p-5 space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1">Video Title</label>
+          <input id="upload-title" type="text" placeholder="Video title" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
         </div>
-
-        <div class="mt-4 space-y-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Video Title</label>
-            <input id="upload-title-input" type="text" placeholder="e.g., My New Desk Setup Tour" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" onkeydown="if(event.key==='Enter') submitSimulatedUpload()" />
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Video Duration</label>
-            <input id="upload-duration-input" type="text" value="08:25" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
-          </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1">Video File (MP4)</label>
+          <input id="upload-file" type="file" accept="video/*" class="w-full text-xs text-gray-400" />
         </div>
+        <div class="pt-3 flex justify-end gap-2">
+          <button onclick="closeUploadModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
+          <button onclick="uploadRealVideo()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Upload</button>
+        </div>
+        <p id="upload-msg" class="text-xs text-center text-gray-400 mt-2"></p>
+      </div>
+    </div>
+  </div>
 
-        <div class="mt-5 flex justify-end gap-2">
-          <button onclick="closeUploadModal()" class="px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
-          <button onclick="submitSimulatedUpload()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-sm font-semibold shadow-sm transition-colors">Publish Now</button>
+  <!-- EDIT PROFILE MODAL -->
+  <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-pen text-ytRed"></i> Edit Profile
+        </h3>
+        <button onclick="closeEditModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1">Channel Name</label>
+          <input id="edit-nickname" type="text" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1">Username</label>
+          <input id="edit-username" type="text" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
+        </div>
+        <div class="pt-3 flex justify-end gap-2">
+          <button onclick="closeEditModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
+          <button onclick="saveRealProfile()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-gear text-ytRed"></i> Settings
+        </h3>
+        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800 flex items-center justify-between">
+          <span class="text-sm font-semibold">Log out from account</span>
+          <button onclick="handleLogout()" class="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold">Log Out</button>
+        </div>
+        <div class="flex justify-end">
+          <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-zinc-800 text-xs font-semibold">Done</button>
         </div>
       </div>
     </div>
@@ -413,280 +346,54 @@
   <!-- VIDEO PLAYER MODAL -->
   <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white dark:bg-[#181818] w-full max-w-2xl rounded-2xl overflow-hidden border border-gray-200 dark:border-zinc-800 shadow-2xl">
-      <div id="player-stage" ondblclick="handlePlayerDoubleSeek(event)" class="relative aspect-video bg-gradient-to-br from-zinc-900 via-black to-zinc-900 flex flex-col items-center justify-center text-white p-6 text-center select-none cursor-pointer overflow-hidden">
-        <button onclick="closePlayerModal()" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors">
+      <div class="relative aspect-video bg-black flex flex-col items-center justify-center text-white">
+        <button onclick="closePlayerModal()" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center">
           <i class="fa-solid fa-xmark"></i>
         </button>
-
-        <div id="seek-overlay" class="hidden absolute inset-0 pointer-events-none flex items-center justify-center z-10">
-          <div class="bg-black/65 backdrop-blur-xs px-5 py-3 rounded-full flex items-center gap-2 text-sm font-semibold seek-feedback">
-            <i id="seek-icon" class="fa-solid fa-forward text-ytRed"></i>
-            <span id="seek-text">+10 seconds</span>
-          </div>
-        </div>
-
-        <div class="w-16 h-16 rounded-full bg-ytRed/95 flex items-center justify-center mb-3 shadow-lg">
-          <i class="fa-solid fa-play text-2xl ml-1"></i>
-        </div>
-        <h3 id="player-title" class="text-base sm:text-lg font-bold max-w-lg">Video Title</h3>
-        <p id="player-meta" class="text-xs text-gray-300 mt-1">Channel Name • Views</p>
-        <p class="text-[11px] text-gray-400 mt-2">Tip: Double-click left or right side of video to seek 10s</p>
-
-        <div class="w-full max-w-md mt-5">
-          <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
-            <div id="player-progress-fill" class="h-full bg-ytRed w-1/3 rounded-full transition-all duration-300"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-gray-300 mt-1">
-            <span id="player-current-time">03:42</span>
-            <span id="player-duration">11:20</span>
-          </div>
-        </div>
+        <video id="modal-video-player" controls autoplay class="w-full h-full object-contain"></video>
       </div>
-
-      <div class="p-4 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-3 min-w-0">
-          <div id="player-avatar" class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">C</div>
-          <div class="min-w-0">
-            <p id="player-channel" class="text-sm font-semibold truncate">Channel</p>
-            <p class="text-xs text-gray-500">Subscribed</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <button id="custom-like-btn" onclick="triggerCustomLike()" class="relative px-4 py-1.5 rounded-full bg-gray-100 dark:bg-ytDarkSec hover:bg-gray-200 dark:hover:bg-ytDarkHover text-xs font-semibold flex items-center gap-1.5 transition-colors">
-            <i id="custom-like-icon" class="fa-regular fa-thumbs-up text-sm"></i>
-            <span id="custom-like-label">Like</span>
-          </button>
-          <button onclick="closePlayerModal()" class="px-4 py-1.5 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
-            Close
-          </button>
-        </div>
+      <div class="p-4">
+        <h3 id="modal-video-title" class="text-base font-bold"></h3>
+        <p id="modal-video-channel" class="text-xs text-gray-400 mt-1"></p>
       </div>
     </div>
   </div>
 
   <!-- TOAST NOTIFICATION -->
-  <div id="toast" class="fixed bottom-16 md:bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-medium transition-all"></div>
+  <div id="toast" class="fixed bottom-16 md:bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold"></div>
 
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const channels = [
-      { id: 'c1', name: 'CodeWithRohan', color: 'bg-blue-600', initial: 'R', hasNew: true },
-      { id: 'c2', name: 'TechBurner Lab', color: 'bg-red-600', initial: 'T', hasNew: true },
-      { id: 'c3', name: 'PixelGamer', color: 'bg-purple-600', initial: 'P', hasNew: false },
-      { id: 'c4', name: 'LoFi Beats India', color: 'bg-emerald-600', initial: 'L', hasNew: true },
-      { id: 'c5', name: 'Wanderlust Vlogs', color: 'bg-amber-600', initial: 'W', hasNew: false },
-    ];
+    const SUPABASE_URL = "https://scczyiossqleuzidplxx.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_rvecUf_3ZkeAxnbAJ8iiiw_2mItGPT2";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let videos = [
-      {
-        id: 'v1',
-        title: 'Build a YouTube Clone UI with Shimmer Skeleton Loaders!',
-        channel: 'CodeWithRohan',
-        channelId: 'c1',
-        avatarColor: 'bg-blue-600',
-        views: '142K views',
-        time: '3 hours ago',
-        duration: '15:24',
-        subscribed: true,
-        thumbGradient: 'from-blue-600 via-indigo-700 to-slate-900',
-        icon: 'fa-code'
-      },
-      {
-        id: 'v2',
-        title: 'Unboxing the Craziest Transparent Smartphone of 2026!',
-        channel: 'TechBurner Lab',
-        channelId: 'c2',
-        avatarColor: 'bg-red-600',
-        views: '890K views',
-        time: '1 day ago',
-        duration: '11:08',
-        subscribed: true,
-        thumbGradient: 'from-rose-600 via-red-700 to-zinc-900',
-        icon: 'fa-mobile-screen'
-      },
-      {
-        id: 'v3',
-        title: 'Next-Gen Open World Gameplay — Every Hidden Detail Explained',
-        channel: 'PixelGamer',
-        channelId: 'c3',
-        avatarColor: 'bg-purple-600',
-        views: '1.2M views',
-        time: '2 days ago',
-        duration: '22:45',
-        subscribed: true,
-        thumbGradient: 'from-purple-600 via-fuchsia-700 to-zinc-900',
-        icon: 'fa-gamepad'
-      },
-      {
-        id: 'v4',
-        title: 'Late Night Coding & Study LoFi Hip Hop Radio [Chill Beats]',
-        channel: 'LoFi Beats India',
-        channelId: 'c4',
-        avatarColor: 'bg-emerald-600',
-        views: '45K views',
-        time: '4 days ago',
-        duration: '58:10',
-        subscribed: true,
-        thumbGradient: 'from-emerald-600 via-teal-800 to-zinc-900',
-        icon: 'fa-headphones'
-      }
-    ];
+    let currentUser = null;
+    let currentTab = 'home';
 
-    let userUploads = [
-      {
-        id: 'u1',
-        title: 'My Desk Setup & Minimalist Workflow Tour',
-        channel: 'Aarav Sharma',
-        views: '4.2K views',
-        time: '4 days ago',
-        duration: '08:15',
-        thumbGradient: 'from-indigo-600 to-zinc-900',
-        icon: 'fa-desktop'
-      },
-      {
-        id: 'u2',
-        title: 'How I Designed My Own Video Streaming Interface',
-        channel: 'Aarav Sharma',
-        views: '1.9K views',
-        time: '2 weeks ago',
-        duration: '12:40',
-        thumbGradient: 'from-red-600 to-zinc-900',
-        icon: 'fa-wand-magic-sparkles'
-      }
-    ];
-
-    // User Profile Data state
-    let channelProfile = {
-      nickname: 'Aarav Sharma',
-      username: '@aaravcreates',
-      hasBanner: true,
-      hasLogo: true
-    };
-
-    let currentSearch = '';
-    let selectedSubChannel = 'ALL';
-    let isVideoLiked = false;
-    let playerProgressPercent = 35;
-    let seekTimeout;
-
-    function triggerTopProgressBar(duration = 800) {
+    function triggerTopProgressBar(duration = 600) {
       const bar = document.getElementById('top-progress-bar');
       bar.style.transition = 'none';
       bar.style.width = '0%';
       bar.style.opacity = '1';
       void bar.offsetWidth;
-      bar.style.transition = `width ${duration * 0.7}ms cubic-bezier(0.1, 0.7, 0.3, 1)`;
-      bar.style.width = '78%';
-
-      setTimeout(() => {
-        bar.style.transition = `width ${duration * 0.3}ms ease-out`;
-        bar.style.width = '100%';
-      }, duration * 0.7);
-
-      setTimeout(() => {
-        bar.style.opacity = '0';
-        setTimeout(() => { bar.style.width = '0%'; }, 250);
-      }, duration + 50);
+      bar.style.transition = `width ${duration * 0.7}ms ease-out`;
+      bar.style.width = '80%';
+      setTimeout(() => { bar.style.width = '100%'; }, duration * 0.7);
+      setTimeout(() => { bar.style.opacity = '0'; }, duration);
     }
 
-    function getHomeSkeletonHTML() {
-      let cards = '';
-      for (let i = 0; i < 8; i++) {
-        cards += `
-          <div class="flex flex-col gap-3">
-            <div class="w-full aspect-video rounded-xl skeleton"></div>
-            <div class="flex gap-3">
-              <div class="w-9 h-9 rounded-full skeleton shrink-0"></div>
-              <div class="flex-1 space-y-2 py-0.5">
-                <div class="h-3.5 rounded-md skeleton w-11/12"></div>
-                <div class="h-3 rounded-md skeleton w-7/12"></div>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      return `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">${cards}</div>`;
-    }
+    async function switchTab(tabName, resetSearch = false) {
+      currentTab = tabName;
+      try { sessionStorage.setItem('mystream_active_tab', tabName); } catch(e) {}
 
-    function getSubscribedSkeletonHTML() {
-      let avatars = '';
-      for (let i = 0; i < 6; i++) {
-        avatars += `
-          <div class="flex flex-col items-center gap-2 shrink-0">
-            <div class="w-14 h-14 rounded-full skeleton"></div>
-            <div class="w-12 h-2.5 rounded skeleton"></div>
-          </div>
-        `;
-      }
-      return `
-        <div class="h-5 w-44 rounded skeleton mb-4"></div>
-        <div class="flex gap-5 mb-6 pb-4 border-b border-gray-200 dark:border-zinc-800 overflow-hidden">${avatars}</div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
-          ${Array(4).fill(`
-            <div class="flex flex-col gap-3">
-              <div class="w-full aspect-video rounded-xl skeleton"></div>
-              <div class="flex gap-3">
-                <div class="w-9 h-9 rounded-full skeleton shrink-0"></div>
-                <div class="flex-1 space-y-2">
-                  <div class="h-3.5 rounded skeleton w-10/12"></div>
-                  <div class="h-3 rounded skeleton w-6/12"></div>
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function getProfileSkeletonHTML() {
-      return `
-        <div class="max-w-6xl mx-auto">
-          <div class="w-full h-28 sm:h-40 rounded-2xl skeleton mb-4"></div>
-          <div class="flex flex-col sm:flex-row items-center gap-5 p-5 rounded-2xl border border-gray-200 dark:border-zinc-800 mb-6">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full skeleton shrink-0"></div>
-            <div class="flex-1 space-y-3 w-full">
-              <div class="h-5 w-48 rounded skeleton mx-auto sm:mx-0"></div>
-              <div class="h-3.5 w-64 rounded skeleton mx-auto sm:mx-0"></div>
-              <div class="h-3 w-full max-w-md rounded skeleton mx-auto sm:mx-0"></div>
-            </div>
-          </div>
-          <div class="h-5 w-36 rounded skeleton mb-4"></div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            ${Array(3).fill(`
-              <div class="space-y-2.5">
-                <div class="w-full aspect-video rounded-xl skeleton"></div>
-                <div class="h-3.5 w-10/12 rounded skeleton"></div>
-                <div class="h-3 w-1/2 rounded skeleton"></div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // Switch Tab & Save Current Active Tab in sessionStorage
-    function switchTab(tabName, resetSearch = false) {
-      if (resetSearch) {
-        currentSearch = '';
-        const searchInput = document.getElementById('search-input');
-        if (searchInput) searchInput.value = '';
-        toggleClearBtn();
-      }
-
-      try {
-        sessionStorage.setItem('mystream_active_tab', tabName);
-      } catch(e) {}
-
-      // Show/Hide top header only for Home tab
       const mainHeader = document.getElementById('main-header');
       if (mainHeader) {
-        if (tabName === 'home') {
-          mainHeader.classList.remove('hidden');
-        } else {
-          mainHeader.classList.add('hidden');
-        }
+        if (tabName === 'home') mainHeader.classList.remove('hidden');
+        else mainHeader.classList.add('hidden');
       }
 
-      // Update Desktop & Mobile Nav Active States
       document.querySelectorAll('.nav-btn').forEach(btn => {
         const isTarget = btn.getAttribute('data-tab') === tabName;
         if (btn.closest('aside')) {
@@ -700,453 +407,239 @@
         }
       });
 
-      simulateLoadingState(tabName);
+      triggerTopProgressBar();
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+      if (tabName === 'home') await loadHomeVideos();
+      else if (tabName === 'subscribed') await loadSubscribedVideos();
+      else if (tabName === 'profile') checkUserSession();
     }
 
-    function simulateLoadingState(tabName) {
-      const loadTime = 600;
-      triggerTopProgressBar(loadTime);
+    async function checkUserSession() {
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+      const authPanel = document.getElementById('auth-panel');
+      const profilePanel = document.getElementById('profile-panel');
 
-      const skeletonContainer = document.getElementById('skeleton-container');
-      const contentContainer = document.getElementById('content-container');
-
-      if (tabName === 'home') skeletonContainer.innerHTML = getHomeSkeletonHTML();
-      else if (tabName === 'subscribed') skeletonContainer.innerHTML = getSubscribedSkeletonHTML();
-      else if (tabName === 'profile') skeletonContainer.innerHTML = getProfileSkeletonHTML();
-
-      contentContainer.classList.add('hidden');
-      skeletonContainer.classList.remove('hidden');
-
-      setTimeout(() => {
-        skeletonContainer.classList.add('hidden');
-        contentContainer.classList.remove('hidden');
-
-        document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
-        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-
-        renderAll(tabName);
-      }, loadTime);
-    }
-
-    function createVideoCardHTML(video) {
-      return `
-        <article onclick="openPlayerModal('${video.id}')" class="group cursor-pointer flex flex-col gap-2.5">
-          <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-gradient-to-br ${video.thumbGradient} flex items-center justify-center shadow-xs">
-            <i class="fa-solid ${video.icon} text-white/30 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center">
-              <div class="opacity-0 group-hover:opacity-100 transition-opacity w-10 h-10 rounded-full bg-black/75 text-white flex items-center justify-center">
-                <i class="fa-solid fa-play text-xs ml-0.5 text-ytRed"></i>
-              </div>
-            </div>
-            <span class="absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-black/80 text-white">
-              ${video.duration}
-            </span>
-          </div>
-          <div class="flex gap-3 items-start">
-            <div class="w-9 h-9 rounded-full ${video.avatarColor || 'bg-zinc-700'} text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-              ${video.channel.charAt(0)}
-            </div>
-            <div class="min-w-0 flex-1">
-              <h3 class="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors">
-                ${video.title}
-              </h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${video.channel}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">${video.views} • ${video.time}</p>
-            </div>
-          </div>
-        </article>
-      `;
-    }
-
-    function renderHomeVideos() {
-      const grid = document.getElementById('home-video-grid');
-      const searchBanner = document.getElementById('search-banner');
-      const searchLabel = document.getElementById('search-query-label');
-
-      const filtered = videos.filter(v => {
-        if (!currentSearch) return true;
-        const q = currentSearch.toLowerCase();
-        return v.title.toLowerCase().includes(q) || v.channel.toLowerCase().includes(q);
-      });
-
-      if (currentSearch) {
-        searchBanner.classList.remove('hidden');
-        searchLabel.textContent = `"${currentSearch}"`;
+      if (!user) {
+        authPanel.hidden = false;
+        profilePanel.hidden = true;
       } else {
-        searchBanner.classList.add('hidden');
+        authPanel.hidden = true;
+        profilePanel.hidden = false;
+        await loadUserProfileAndUploads(user);
       }
+    }
 
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-12 text-center">
-            <i class="fa-solid fa-video-slash text-3xl text-gray-400 mb-2"></i>
-            <p class="text-sm font-medium">No videos found matching "${currentSearch}".</p>
-            <button onclick="switchTab('home', true)" class="mt-3 px-4 py-1.5 rounded-full bg-ytRed text-white text-xs font-semibold">Show All Videos</button>
-          </div>
-        `;
+    async function handleSignup() {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const { error } = await sb.auth.signUp({ email, password });
+      if (error) document.getElementById('auth-message').textContent = error.message;
+      else { showToast('Account created! You can now log in.'); }
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) document.getElementById('auth-message').textContent = error.message;
+      else { showToast('Login successful!'); checkUserSession(); }
+    }
+
+    async function handleLogout() {
+      await sb.auth.signOut();
+      currentUser = null;
+      closeSettingsModal();
+      checkUserSession();
+      showToast('Logged out successfully');
+    }
+
+    async function loadUserProfileAndUploads(user) {
+      let { data: profile } = await sb.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
+      let nickname = profile?.channel_name || user.user_metadata?.channel_name || 'My Channel';
+      let username = profile?.username || user.user_metadata?.username || '@' + user.email.split('@')[0];
+
+      document.getElementById('display-nickname').textContent = nickname;
+      document.getElementById('display-username').textContent = `${username} • 0 subscribers`;
+
+      // Load user uploaded videos from database
+      const { data: videos } = await sb.from('videos').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+      const grid = document.getElementById('user-uploads-grid');
+      
+      if (!videos || videos.length === 0) {
+        grid.innerHTML = `<p class="text-xs text-gray-400 col-span-full">Aapne abhi tak koi video upload nahi kiya hai.</p>`;
         return;
       }
 
-      grid.innerHTML = filtered.map(createVideoCardHTML).join('');
-    }
-
-    function renderSubscribedTab() {
-      const sidebarList = document.getElementById('sidebar-subs-list');
-      sidebarList.innerHTML = channels.map(ch => `
-        <button onclick="switchTab('subscribed'); filterSubscribedChannel('${ch.id}')" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-ytDarkSec transition-colors">
-          <div class="flex items-center gap-2.5 truncate">
-            <span class="w-6 h-6 rounded-full ${ch.color} text-white font-bold flex items-center justify-center shrink-0 text-[11px]">${ch.initial}</span>
-            <span class="truncate">${ch.name}</span>
+      grid.innerHTML = videos.map(v => `
+        <article onclick="openPlayer('${v.file_path}', '${v.title}', '${nickname}')" class="group cursor-pointer flex flex-col gap-2">
+          <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden">
+            <i class="fa-solid fa-play text-white/50 text-2xl"></i>
           </div>
-          ${ch.hasNew ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>' : ''}
-        </button>
+          <div>
+            <h4 class="text-sm font-semibold truncate">${v.title}</h4>
+            <p class="text-xs text-gray-400">${new Date(v.created_at).toLocaleDateString()}</p>
+          </div>
+        </article>
       `).join('');
+    }
 
-      const strip = document.getElementById('subs-channel-strip');
-      strip.innerHTML = channels.map(ch => {
-        const isSelected = selectedSubChannel === ch.id;
-        return `
-          <button onclick="filterSubscribedChannel('${ch.id}')" class="flex flex-col items-center gap-1.5 shrink-0 group focus:outline-none">
-            <div class="relative p-0.5 rounded-full ${isSelected ? 'ring-2 ring-ytRed' : ''}">
-              <div class="w-14 h-14 rounded-full ${ch.color} text-white text-lg font-bold flex items-center justify-center group-hover:scale-105 transition-transform">
-                ${ch.initial}
-              </div>
-              ${ch.hasNew ? '<span class="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-blue-500 border-2 border-white dark:border-ytDark"></span>' : ''}
+    async function loadHomeVideos() {
+      const grid = document.getElementById('home-video-grid');
+      const emptyDiv = document.getElementById('empty-home');
+      grid.innerHTML = '';
+
+      const { data: videos, error } = await sb.from('videos').select('*').order('created_at', { ascending: false });
+      if (error || !videos || videos.length === 0) {
+        emptyDiv.classList.remove('hidden');
+        return;
+      }
+      emptyDiv.classList.add('hidden');
+
+      for (let v of videos) {
+        let { data: prof } = await sb.from('profiles').select('channel_name').eq('user_id', v.user_id).maybeSingle();
+        let channelName = prof?.channel_name || 'Creator';
+
+        grid.innerHTML += `
+          <article onclick="openPlayer('${v.file_path}', '${v.title}', '${channelName}')" class="group cursor-pointer flex flex-col gap-2.5">
+            <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs">
+              <i class="fa-solid fa-play text-white/40 text-3xl group-hover:scale-110 transition-transform"></i>
             </div>
-            <span class="text-xs max-w-[72px] truncate ${isSelected ? 'font-bold text-ytRed' : 'text-gray-600 dark:text-gray-300'}">${ch.name}</span>
-          </button>
+            <div class="flex gap-3 items-start">
+              <div class="w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
+                ${channelName.charAt(0).toUpperCase()}
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors">${v.title}</h3>
+                <p class="text-xs text-gray-400 mt-1">${channelName}</p>
+              </div>
+            </div>
+          </article>
         `;
-      }).join('');
+      }
+    }
 
-      const showAllBtn = document.getElementById('show-all-subs-btn');
-      const feedTitle = document.getElementById('subs-feed-title');
-      let subVideos = videos.filter(v => v.subscribed);
+    async function loadSubscribedVideos() {
+      const grid = document.getElementById('subs-video-grid');
+      const emptyDiv = document.getElementById('empty-subscribed');
+      grid.innerHTML = '';
 
-      if (selectedSubChannel !== 'ALL') {
-        const ch = channels.find(c => c.id === selectedSubChannel);
-        subVideos = subVideos.filter(v => v.channelId === selectedSubChannel);
-        showAllBtn.classList.remove('hidden');
-        feedTitle.textContent = `Latest videos from ${ch ? ch.name : 'channel'}`;
-      } else {
-        showAllBtn.classList.add('hidden');
-        feedTitle.textContent = 'Latest from your subscriptions';
+      if (!currentUser) {
+        emptyDiv.classList.remove('hidden');
+        emptyDiv.innerHTML = `<p class="text-sm">Subscribed videos dekhne ke liye pehle Profile mein login karein.</p>`;
+        return;
       }
 
-      document.getElementById('subs-video-grid').innerHTML = subVideos.map(createVideoCardHTML).join('');
+      const { data: subs } = await sb.from('subscriptions').select('channel_id').eq('subscriber_id', currentUser.id);
+      if (!subs || subs.length === 0) {
+        emptyDiv.classList.remove('hidden');
+        return;
+      }
+      emptyDiv.classList.add('hidden');
+
+      const channelIds = subs.map(s => s.channel_id);
+      const { data: videos } = await sb.from('videos').select('*').in('user_id', channelIds).order('created_at', { ascending: false });
+
+      if (!videos || videos.length === 0) {
+        emptyDiv.classList.remove('hidden');
+        return;
+      }
+
+      for (let v of videos) {
+        let { data: prof } = await sb.from('profiles').select('channel_name').eq('user_id', v.user_id).maybeSingle();
+        let channelName = prof?.channel_name || 'Creator';
+
+        grid.innerHTML += `
+          <article onclick="openPlayer('${v.file_path}', '${v.title}', '${channelName}')" class="group cursor-pointer flex flex-col gap-2.5">
+            <div class="relative w-full aspect-video rounded-xl bg-zinc-800 flex items-center justify-center overflow-hidden shadow-xs">
+              <i class="fa-solid fa-play text-white/40 text-3xl group-hover:scale-110 transition-transform"></i>
+            </div>
+            <div class="flex gap-3 items-start">
+              <div class="w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
+                ${channelName.charAt(0).toUpperCase()}
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors">${v.title}</h3>
+                <p class="text-xs text-gray-400 mt-1">${channelName}</p>
+              </div>
+            </div>
+          </article>
+        `;
+      }
     }
 
-    function filterSubscribedChannel(channelId) {
-      selectedSubChannel = channelId;
-      triggerTopProgressBar(400);
-      renderSubscribedTab();
-    }
+    async function uploadRealVideo() {
+      if (!currentUser) { alert('Pehle Profile mein login karein!'); return; }
+      const title = document.getElementById('upload-title').value.trim();
+      const fileInput = document.getElementById('upload-file').files[0];
+      const msg = document.getElementById('upload-msg');
 
-    function renderProfileTab() {
-      document.getElementById('display-nickname').textContent = channelProfile.nickname;
-      document.getElementById('display-username').textContent = `${channelProfile.username} • 12.4K subscribers • ${userUploads.length} videos`;
+      if (!title || !fileInput) { msg.textContent = 'Title aur video file select karein.'; return; }
+      msg.textContent = 'Uploading...';
+
+      const filePath = `${currentUser.id}/${Date.now()}_${fileInput.name}`;
+      const { error: uploadErr } = await sb.storage.from('Videos').upload(filePath, fileInput);
       
-      const logoContainer = document.getElementById('profile-logo-container');
-      const logoText = document.getElementById('profile-logo-text');
-      if (channelProfile.hasLogo) {
-        logoContainer.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden";
-        logoText.textContent = channelProfile.nickname.charAt(0).toUpperCase();
-        logoText.classList.remove('hidden');
-      } else {
-        logoContainer.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-zinc-700 flex items-center justify-center text-gray-400 text-xs shadow-lg overflow-hidden";
-        logoText.textContent = 'No Logo';
-      }
+      if (uploadErr) { msg.textContent = uploadErr.message; return; }
 
-      const uploadsGrid = document.getElementById('user-uploads-grid');
-      uploadsGrid.innerHTML = userUploads.map(u => createVideoCardHTML({
-        ...u,
-        channel: channelProfile.nickname,
-        avatarColor: 'bg-gradient-to-tr from-red-600 to-amber-500'
-      })).join('');
+      const { error: dbErr } = await sb.from('videos').insert({ title, file_path: filePath, user_id: currentUser.id });
+      if (dbErr) { msg.textContent = dbErr.message; return; }
+
+      msg.textContent = 'Upload complete!';
+      setTimeout(() => { closeUploadModal(); switchTab('home'); }, 1000);
     }
 
-    function renderAll(tab) {
-      if (tab === 'home') renderHomeVideos();
-      else if (tab === 'subscribed') renderSubscribedTab();
-      else if (tab === 'profile') renderProfileTab();
-    }
-
-    function handleSearch() {
-      const searchInput = document.getElementById('search-input');
-      if (searchInput) currentSearch = searchInput.value.trim();
-      switchTab('home');
-    }
-
-    function toggleClearBtn() {
-      const searchInput = document.getElementById('search-input');
-      const clearBtn = document.getElementById('clear-search-btn');
-      if (searchInput && clearBtn) {
-        clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
-      }
-    }
-
-    function clearSearch() {
-      const searchInput = document.getElementById('search-input');
-      if (searchInput) searchInput.value = '';
-      currentSearch = '';
-      toggleClearBtn();
-      renderHomeVideos();
-    }
-
-    function loadMoreVideos() {
-      const spinner = document.getElementById('bottom-spinner');
-      const btn = document.getElementById('load-more-btn');
-      btn.classList.add('hidden');
-      spinner.classList.remove('hidden');
-      spinner.classList.add('flex');
-
-      setTimeout(() => {
-        const more = [
-          {
-            ...videos[0],
-            id: 'v' + Date.now(),
-            title: 'Advanced UI Animations & Shimmer Skeletons Tutorial',
-            views: '58K views',
-            time: 'Just now'
-          },
-          {
-            ...videos[1],
-            id: 'v' + (Date.now() + 1),
-            title: 'Minimalist Creator Studio Setup Tour 2026',
-            views: '190K views',
-            time: '4 hours ago'
-          }
-        ];
-        videos = [...videos, ...more];
-        spinner.classList.add('hidden');
-        spinner.classList.remove('flex');
-        btn.classList.remove('hidden');
-        renderHomeVideos();
-        showToast('Loaded more videos');
-      }, 850);
-    }
-
-    // --- PROFILE EDIT & MODAL CONTROLS ---
-    function openEditModal(focusTarget = 'all') {
-      document.getElementById('input-nickname').value = channelProfile.nickname;
-      document.getElementById('input-username').value = channelProfile.username;
-      document.getElementById('edit-profile-modal').classList.remove('hidden');
-    }
-
-    function closeEditModal() {
-      document.getElementById('edit-profile-modal').classList.add('hidden');
-    }
-
-    function actionBanner(action) {
-      if (action === 'add') {
-        channelProfile.hasBanner = true;
-        showToast('Banner added successfully');
-      } else if (action === 'change') {
-        channelProfile.hasBanner = true;
-        showToast('Banner updated successfully');
-      } else if (action === 'delete') {
-        channelProfile.hasBanner = false;
-        showToast('Banner deleted');
-      }
-      closeEditModal();
-      renderProfileTab();
-    }
-
-    function actionLogo(action) {
-      if (action === 'add') {
-        channelProfile.hasLogo = true;
-        showToast('Logo added successfully');
-      } else if (action === 'change') {
-        channelProfile.hasLogo = true;
-        showToast('Logo updated successfully');
-      } else if (action === 'delete') {
-        channelProfile.hasLogo = false;
-        showToast('Logo deleted');
-      }
-      closeEditModal();
-      renderProfileTab();
-    }
-
-    function saveProfileEdits() {
-      const nick = document.getElementById('input-nickname').value.trim();
-      const user = document.getElementById('input-username').value.trim();
-      if (nick) channelProfile.nickname = nick;
-      if (user) channelProfile.username = user.startsWith('@') ? user : '@' + user;
-
-      closeEditModal();
-      renderProfileTab();
-      showToast('Profile updated successfully!');
-    }
-
-    // --- SETTINGS & LOGOUT ---
-    function openSettingsModal() {
-      document.getElementById('settings-modal').classList.remove('hidden');
-    }
-    function closeSettingsModal() {
-      document.getElementById('settings-modal').classList.add('hidden');
-    }
-
-    function handleLogout() {
-      closeSettingsModal();
-      showToast('Logged out successfully');
-      setTimeout(() => {
-        switchTab('home', true);
-      }, 600);
-    }
-
-    function openUploadModal() {
-      document.getElementById('upload-modal').classList.remove('hidden');
-    }
-    function closeUploadModal() {
-      document.getElementById('upload-modal').classList.add('hidden');
-    }
-    function submitSimulatedUpload() {
-      const titleInput = document.getElementById('upload-title-input');
-      const durationInput = document.getElementById('upload-duration-input');
-      const title = titleInput.value.trim() || 'My New Video Upload';
-      const duration = durationInput.value.trim() || '05:30';
-
-      const newVid = {
-        id: 'u' + Date.now(),
-        title: title,
-        channel: channelProfile.nickname,
-        channelId: 'c1',
-        avatarColor: 'bg-gradient-to-tr from-red-600 to-amber-500',
-        views: '1 view',
-        time: 'Just now',
-        duration: duration,
-        subscribed: true,
-        thumbGradient: 'from-red-600 via-rose-800 to-zinc-900',
-        icon: 'fa-clapperboard'
-      };
-
-      videos.unshift(newVid);
-      userUploads.unshift(newVid);
-      titleInput.value = '';
-      closeUploadModal();
-      showToast('Video uploaded to your feed!');
-      switchTab(currentSearch ? 'home' : currentTab);
-    }
-
-    function openPlayerModal(videoId) {
-      const vid = [...videos, ...userUploads].find(v => v.id === videoId);
-      if (!vid) return;
-
-      isVideoLiked = false;
-      playerProgressPercent = 35;
-      updateLikeButtonUI();
-
-      document.getElementById('player-title').textContent = vid.title;
-      document.getElementById('player-meta').textContent = `${vid.channel} • ${vid.views} • ${vid.time}`;
-      document.getElementById('player-channel').textContent = vid.channel;
-      document.getElementById('player-avatar').textContent = vid.channel.charAt(0);
-      document.getElementById('player-duration').textContent = vid.duration;
-      document.getElementById('player-progress-fill').style.width = `${playerProgressPercent}%`;
+    async function openPlayer(path, title, channel) {
+      const { data } = await sb.storage.from('Videos').createSignedUrl(path, 3600);
+      if (!data) { alert('Video link nahi mila'); return; }
+      
+      document.getElementById('modal-video-player').src = data.signedUrl;
+      document.getElementById('modal-video-title').textContent = title;
+      document.getElementById('modal-video-channel').textContent = channel;
       document.getElementById('player-modal').classList.remove('hidden');
     }
 
     function closePlayerModal() {
+      const player = document.getElementById('modal-video-player');
+      player.pause();
+      player.src = '';
       document.getElementById('player-modal').classList.add('hidden');
     }
 
-    function triggerCustomLike() {
-      isVideoLiked = !isVideoLiked;
-      updateLikeButtonUI();
+    function openUploadModal() { document.getElementById('upload-modal').classList.remove('hidden'); }
+    function closeUploadModal() { document.getElementById('upload-modal').classList.add('hidden'); }
+    function openSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
+    function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
+    
+    function openEditModal() {
+      document.getElementById('edit-nickname').value = document.getElementById('display-nickname').textContent;
+      document.getElementById('edit-profile-modal').classList.remove('hidden');
+    }
+    function closeEditModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
 
-      const btn = document.getElementById('custom-like-btn');
-      const icon = document.getElementById('custom-like-icon');
-
-      if (isVideoLiked) {
-        icon.classList.remove('like-pop');
-        void icon.offsetWidth;
-        icon.classList.add('like-pop');
-
-        const icons = ['fa-music', 'fa-heart', 'fa-sparkles'];
-        icons.forEach((ic, idx) => {
-          const particle = document.createElement('i');
-          particle.className = `fa-solid ${ic} text-ytRed text-xs float-particle`;
-          particle.style.left = `${20 + idx * 22}%`;
-          particle.style.top = '-6px';
-          btn.appendChild(particle);
-          setTimeout(() => particle.remove(), 650);
-        });
-      }
+    async function saveRealProfile() {
+      const nick = document.getElementById('edit-nickname').value.trim();
+      if (!currentUser || !nick) return;
+      await sb.from('profiles').upsert({ user_id: currentUser.id, channel_name: nick }, { onConflict: 'user_id' });
+      closeEditModal();
+      checkUserSession();
+      showToast('Profile updated!');
     }
 
-    function updateLikeButtonUI() {
-      const btn = document.getElementById('custom-like-btn');
-      const icon = document.getElementById('custom-like-icon');
-      const label = document.getElementById('custom-like-label');
-
-      if (isVideoLiked) {
-        btn.className = 'relative px-4 py-1.5 rounded-full bg-red-600/15 text-ytRed text-xs font-semibold flex items-center gap-1.5 transition-colors';
-        icon.className = 'fa-solid fa-thumbs-up text-sm';
-        label.textContent = 'Liked';
-      } else {
-        btn.className = 'relative px-4 py-1.5 rounded-full bg-gray-100 dark:bg-ytDarkSec hover:bg-gray-200 dark:hover:bg-ytDarkHover text-xs font-semibold flex items-center gap-1.5 transition-colors';
-        icon.className = 'fa-regular fa-thumbs-up text-sm';
-        label.textContent = 'Like';
-      }
-    }
-
-    function handlePlayerDoubleSeek(event) {
-      const stage = document.getElementById('player-stage');
-      const rect = stage.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const isForward = clickX > rect.width / 2;
-
-      playerProgressPercent = isForward
-        ? Math.min(100, playerProgressPercent + 12)
-        : Math.max(0, playerProgressPercent - 12);
-
-      document.getElementById('player-progress-fill').style.width = `${playerProgressPercent}%`;
-
-      const overlay = document.getElementById('seek-overlay');
-      const seekIcon = document.getElementById('seek-icon');
-      const seekText = document.getElementById('seek-text');
-
-      seekIcon.className = isForward ? 'fa-solid fa-forward text-ytRed' : 'fa-solid fa-backward text-ytRed';
-      seekText.textContent = isForward ? '+10 seconds' : '-10 seconds';
-
-      overlay.classList.remove('hidden');
-      clearTimeout(seekTimeout);
-      seekTimeout = setTimeout(() => {
-        overlay.classList.add('hidden');
-      }, 650);
-    }
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const icon = document.getElementById('theme-icon');
-      const statusLabel = document.getElementById('theme-status-label');
-      html.classList.toggle('dark');
-      const isDark = html.classList.contains('dark');
-      if (icon) {
-        icon.className = isDark ? 'fa-solid fa-sun text-amber-400 text-sm' : 'fa-solid fa-moon text-gray-700 text-sm';
-      }
-      if (statusLabel) {
-        statusLabel.textContent = isDark ? 'Dark Mode Active' : 'Light Mode Active';
-      }
-      showToast(isDark ? 'Switched to Dark Mode' : 'Switched to Light Mode');
-    }
-
-    let toastTimeout;
     function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.classList.remove('hidden');
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 2500);
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 2500);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       let savedTab = 'home';
       try {
         const stored = sessionStorage.getItem('mystream_active_tab');
-        if (stored && ['home', 'subscribed', 'profile'].includes(stored)) {
-          savedTab = stored;
-        }
+        if (stored) savedTab = stored;
       } catch(e) {}
       switchTab(savedTab);
     });
