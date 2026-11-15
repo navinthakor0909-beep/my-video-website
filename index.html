@@ -202,12 +202,12 @@
       <!-- Test Loader Button -->
       <button onclick="simulateReload()" title="Test Loading Animation" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-ytDarkSec hover:bg-gray-200 dark:hover:bg-ytDarkHover transition-colors">
         <i class="fa-solid fa-rotate-right text-ytRed"></i>
-        <span class="hidden md:inline">Test Loader</span>
-      </button>
-
-      <!-- Dark / Light Mode Toggle -->
-      <button onclick="toggleTheme()" title="Toggle Dark/Light Theme" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-ytDarkSec hover:bg-gray-200 dark:hover:bg-ytDarkHover flex items-center justify-center transition-colors">
-        <i id="theme-icon" class="fa-solid fa-sun text-amber-400 text-sm"></i>
+    <!-- Right: Prominent Video Upload '+' Button -->
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <!-- Video Upload '+' Icon Button -->
+      <button onclick="openUploadModal()" title="Upload Video" aria-label="Upload Video" class="flex items-center justify-center gap-1.5 bg-ytRed hover:bg-red-700 text-white w-9 h-9 sm:w-auto sm:h-9 sm:px-3.5 rounded-full text-sm font-semibold shadow-xs transition-all active:scale-95">
+        <i class="fa-solid fa-plus text-base"></i>
+        <span class="hidden sm:inline text-xs sm:text-sm">Upload</span>
       </button>
     </div>
   </header>
@@ -237,12 +237,6 @@
       </div>
       <div id="sidebar-subs-list" class="flex flex-col gap-1 mt-1 overflow-y-auto">
         <!-- Populated by JS -->
-      </div>
-
-      <div class="mt-auto pt-3 border-t border-gray-200 dark:border-zinc-800">
-        <button onclick="simulateReload()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-red-600/10 text-red-500 hover:bg-red-600/20 text-xs font-semibold transition-colors">
-          <i class="fa-solid fa-spinner"></i> Replay Loading Screen
-        </button>
       </div>
     </aside>
 
@@ -305,42 +299,31 @@
         <!-- 3. PROFILE TAB -->
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
           <!-- Channel Banner -->
-          <div class="w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end p-4 shadow-xs">
+          <div class="relative w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end justify-between p-4 shadow-xs">
             <span class="text-xs font-medium text-white/80 bg-black/40 px-3 py-1 rounded-full backdrop-blur-xs">Creator Studio Banner</span>
+            
+            <!-- Settings Icon Button on Profile Banner -->
+            <button onclick="openSettingsModal()" title="Account & Appearance Settings" aria-label="Settings" class="w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-colors shadow-sm">
+              <i class="fa-solid fa-gear text-base"></i>
+            </button>
           </div>
 
           <!-- Profile Info Card -->
-          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-gray-100 dark:bg-ytDarkSec/70 border border-gray-200 dark:border-zinc-800 mb-6">
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-gray-100 dark:bg-ytDarkSec/70 border border-gray-200 dark:border-zinc-800 mb-6 relative">
             <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0">
               A
             </div>
             <div class="text-center sm:text-left flex-1">
-              <h1 class="text-xl sm:text-2xl font-bold">Aarav Sharma</h1>
+              <div class="flex items-center justify-center sm:justify-between gap-2">
+                <h1 class="text-xl sm:text-2xl font-bold">Aarav Sharma</h1>
+                <button onclick="openSettingsModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gray-200 dark:bg-ytDarkHover hover:opacity-90 text-xs font-semibold transition-opacity">
+                  <i class="fa-solid fa-gear"></i> Settings
+                </button>
+              </div>
               <p id="profile-stats" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">@aaravcreates • 12.4K subscribers • 2 videos</p>
               <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-2 max-w-xl">
                 Tech enthusiast, web developer, and content creator sharing clean UI builds and video stories.
               </p>
-              <div class="flex flex-wrap justify-center sm:justify-start gap-2 mt-3.5">
-                <button onclick="openUploadModal()" class="px-4 py-1.5 rounded-full bg-ytRed text-white text-xs font-semibold hover:bg-red-700 transition-colors">
-                  <i class="fa-solid fa-video mr-1.5"></i> Upload Video
-                </button>
-                <button onclick="copyChannelLink()" class="px-4 py-1.5 rounded-full bg-gray-200 dark:bg-ytDarkHover text-xs font-semibold hover:opacity-90 transition-opacity">
-                  <i class="fa-solid fa-share-nodes mr-1.5"></i> Share Channel
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Watch History Horizontal Strip -->
-          <div class="mb-8">
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-base sm:text-lg font-bold flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left text-ytRed"></i> Watch History
-              </h2>
-              <span class="text-xs text-gray-500 dark:text-gray-400">Recently watched</span>
-            </div>
-            <div id="history-strip" class="flex gap-4 overflow-x-auto pb-3">
-              <!-- Populated by JS -->
             </div>
           </div>
 
@@ -348,9 +331,8 @@
           <div>
             <div class="flex items-center justify-between mb-3">
               <h2 class="text-base sm:text-lg font-bold flex items-center gap-2">
-                <i class="fa-solid fa-film text-ytRed"></i> Your Uploaded Videos
+                <i class="fa-solid fa-film text-ytRed"></i> Your Videos
               </h2>
-              <button onclick="openUploadModal()" class="text-xs font-semibold text-ytRed hover:underline">+ Upload New</button>
             </div>
             <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <!-- Populated by JS -->
@@ -412,6 +394,55 @@
         <div class="mt-5 flex justify-end gap-2">
           <button onclick="closeUploadModal()" class="px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
           <button onclick="submitSimulatedUpload()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-sm font-semibold shadow-sm transition-colors">Publish Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE SETTINGS MODAL -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-gear text-ytRed"></i> Profile Settings
+        </h3>
+        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <!-- Appearance / Theme Toggle Row -->
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center">
+              <i id="theme-icon" class="fa-solid fa-sun text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Appearance</p>
+              <p id="theme-status-label" class="text-xs text-gray-500 dark:text-gray-400">Dark Mode Active</p>
+            </div>
+          </div>
+          <button onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
+            Switch Theme
+          </button>
+        </div>
+
+        <!-- Playback Quality Preference -->
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-blue-500/15 text-blue-500 flex items-center justify-center">
+              <i class="fa-solid fa-sliders text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Video Quality</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Auto (1080p HD)</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-gray-500 dark:text-gray-300 bg-gray-200 dark:bg-zinc-700 px-2.5 py-1 rounded-lg">Default</span>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-zinc-800 hover:opacity-90 text-xs font-semibold">Done</button>
         </div>
       </div>
     </div>
@@ -720,9 +751,9 @@
             </div>
           </div>
           <div class="h-5 w-36 rounded skeleton mb-4"></div>
-          <div class="flex gap-4 mb-8 overflow-hidden">
-            ${Array(4).fill(`
-              <div class="w-56 shrink-0 space-y-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            ${Array(3).fill(`
+              <div class="space-y-2.5">
                 <div class="w-full aspect-video rounded-xl skeleton"></div>
                 <div class="h-3.5 w-10/12 rounded skeleton"></div>
                 <div class="h-3 w-1/2 rounded skeleton"></div>
@@ -920,22 +951,6 @@
     function renderProfileTab() {
       document.getElementById('profile-stats').textContent = `@aaravcreates • 12.4K subscribers • ${userUploads.length} videos`;
 
-      // Watch History
-      const historyStrip = document.getElementById('history-strip');
-      historyStrip.innerHTML = videos.slice(0, 4).map(v => `
-        <div onclick="openPlayerModal('${v.id}')" class="w-56 shrink-0 cursor-pointer group">
-          <div class="relative w-full aspect-video rounded-xl bg-gradient-to-br ${v.thumbGradient} flex items-center justify-center overflow-hidden">
-            <i class="fa-solid ${v.icon} text-white/30 text-2xl"></i>
-            <span class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/80 text-white text-[10px] font-semibold">${v.duration}</span>
-            <div class="absolute bottom-0 inset-x-0 h-1 bg-zinc-700">
-              <div class="h-full bg-ytRed w-3/4"></div>
-            </div>
-          </div>
-          <h4 class="text-xs font-semibold line-clamp-2 mt-2 group-hover:text-ytRed">${v.title}</h4>
-          <p class="text-[11px] text-gray-500 mt-0.5">${v.channel}</p>
-        </div>
-      `).join('');
-
       // User Uploaded Videos
       const uploadsGrid = document.getElementById('user-uploads-grid');
       uploadsGrid.innerHTML = userUploads.map(u => createVideoCardHTML({
@@ -1127,29 +1142,29 @@
 
       overlay.classList.remove('hidden');
       setTimeout(() => {
-        overlay.classList.add('hidden');
-      }, 650);
+    // --- PROFILE SETTINGS MODAL & THEME TOGGLE ---
+    function openSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('hidden');
+    }
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.add('hidden');
     }
 
-    // --- CLIPBOARD FALLBACK ---
-    function copyChannelLink() {
-      const tempInput = document.createElement('input');
-      tempInput.value = window.location.href;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-      showToast('Channel link copied to clipboard!');
-    }
-
-    // --- THEME TOGGLE ---
     function toggleTheme() {
       const html = document.documentElement;
       const icon = document.getElementById('theme-icon');
+      const statusLabel = document.getElementById('theme-status-label');
       html.classList.toggle('dark');
-      icon.className = html.classList.contains('dark')
-        ? 'fa-solid fa-sun text-amber-400 text-sm'
-        : 'fa-solid fa-moon text-gray-700 text-sm';
+      const isDark = html.classList.contains('dark');
+      if (icon) {
+        icon.className = isDark
+          ? 'fa-solid fa-sun text-amber-400 text-sm'
+          : 'fa-solid fa-moon text-gray-700 text-sm';
+      }
+      if (statusLabel) {
+        statusLabel.textContent = isDark ? 'Dark Mode Active' : 'Light Mode Active';
+      }
+      showToast(isDark ? 'Switched to Dark Mode' : 'Switched to Light Mode');
     }
 
     // --- TOAST ---
