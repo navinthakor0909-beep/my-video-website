@@ -655,7 +655,33 @@ async function handleForgotPassword() {
   showToast('Password updated successfully!');
   switchAuthMode('login');
 }
-      
+      async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const msg = document.getElementById('login-msg');
+
+  if (!email || !password) {
+    msg.textContent = 'Enter Gmail and password.';
+    return;
+  }
+
+  msg.textContent = 'Logging in...';
+
+  const { data, error } = await sb.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    msg.textContent = error.message;
+    return;
+  }
+
+  currentUser = data.user;
+  showToast('Login successful!');
+
+  await checkUserSession();
+      }
     async function handleLogout() {
       await sb.auth.signOut();
       currentUser = null;
