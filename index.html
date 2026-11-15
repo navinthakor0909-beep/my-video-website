@@ -655,31 +655,7 @@ async function handleForgotPassword() {
   showToast('Password updated successfully!');
   switchAuthMode('login');
 }
-      const email = document.getElementById('forgot-email').value.trim();
-      const newPassword = document.getElementById('forgot-new-password').value.trim();
-      const enteredOtp = document.getElementById('forgot-otp-input').value.trim();
-      const msg = document.getElementById('forgot-msg');
-
-      if (!email || !newPassword || !enteredOtp) {
-        msg.textContent = 'All fields are required.';
-        return;
-      }
-
-      if (generatedOtpStore[email] !== enteredOtp) {
-        msg.textContent = 'Invalid OTP.';
-        return;
-      }
-
-      // Update password using Supabase updateUser (requires active session or admin, simulating via update user metadata / direct auth update if permitted)
-      const { error } = await sb.auth.updateUser({ password: newPassword });
-      if (error) {
-        msg.textContent = 'Error updating password: ' + error.message;
-      } else {
-        showToast('Password updated successfully! Please login.');
-        switchAuthMode('login');
-      }
-    }
-
+      
     async function handleLogout() {
       await sb.auth.signOut();
       currentUser = null;
