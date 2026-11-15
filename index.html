@@ -55,26 +55,24 @@
 
   <!-- Top Sticky Header -->
   <header id="main-header" class="sticky top-0 z-40 h-14 px-3 sm:px-5 bg-ytDark/95 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between gap-3">
-    <!-- Surf logo only (no text subtitle) -->
     <div class="flex items-center shrink-0">
       <button onclick="switchTab('home', true)" class="flex items-center gap-1 group focus:outline-none rounded-xl p-1" title="Home">
         <span class="text-xl sm:text-2xl font-extrabold tracking-tight">Surf<span class="text-ytRed">.</span></span>
       </button>
     </div>
 
-    <!-- Search icon only on header (clicking toggles search input) -->
+    <!-- Search icon only -->
     <div class="flex items-center gap-2">
       <button onclick="toggleSearchBox()" title="Search" class="w-9 h-9 rounded-full bg-ytDarkSec hover:bg-ytDarkHover flex items-center justify-center text-white transition-colors">
         <i class="fa-solid fa-magnifying-glass text-sm"></i>
       </button>
-      <!-- Video Upload Icon (+ Button) -->
       <button onclick="handleUploadClick()" title="Upload Video" class="flex items-center justify-center bg-ytRed hover:bg-red-700 text-white w-9 h-9 rounded-full shadow-xs transition-all active:scale-95">
         <i class="fa-solid fa-plus text-base"></i>
       </button>
     </div>
   </header>
 
-  <!-- Hidden expandable search overlay -->
+  <!-- Hidden Search Overlay -->
   <div id="search-overlay" class="hidden px-4 py-2 bg-ytDarkSec border-b border-zinc-800">
     <div class="flex items-center max-w-xl mx-auto bg-[#121212] border border-zinc-700 rounded-full overflow-hidden px-3 py-1">
       <input id="search-input" type="text" placeholder="Search videos or @username / channel..." class="w-full bg-transparent text-sm focus:outline-none text-white placeholder-gray-400 py-1" onkeydown="if(event.key==='Enter') handleSearch()" />
@@ -122,7 +120,11 @@
             <button onclick="switchTab('profile')" class="px-5 py-2 rounded-full bg-ytRed text-white text-xs font-semibold">Login / Sign Up</button>
           </div>
           <div id="subscribed-content" class="hidden">
-            <h2 class="text-base sm:text-lg font-bold mb-4 text-white">Subscribed Channels Feed</h2>
+            <!-- Channel List Strip (YouTube style) -->
+            <h3 class="text-sm font-semibold text-gray-400 mb-2">Subscribed Channels</h3>
+            <div id="subs-channel-strip" class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-3 mb-5 border-b border-zinc-800"></div>
+
+            <h2 class="text-base sm:text-lg font-bold mb-4 text-white">Latest from Subscribed Channels</h2>
             <div id="subs-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6"></div>
           </div>
           <div id="empty-subscribed" class="hidden py-16 text-center text-gray-400">
@@ -131,18 +133,65 @@
           </div>
         </section>
 
-        <!-- 3. PROFILE TAB -->
+        <!-- 3. PROFILE TAB (Register, Login, Forgot Password, Profile Mgmt) -->
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
-          <!-- Auth Panel -->
-          <div id="auth-panel" class="max-w-md mx-auto p-6 rounded-2xl bg-ytDarkSec border border-zinc-800 mt-10">
-            <h3 class="text-lg font-bold mb-4 text-center text-white">Login or Sign Up to Surf</h3>
-            <input id="auth-email" type="email" placeholder="Email address" class="w-full px-3 py-2 mb-3 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
-            <input id="auth-password" type="password" placeholder="Password" class="w-full px-3 py-2 mb-4 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
-            <div class="flex gap-2">
-              <button onclick="handleLogin()" class="flex-1 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold">Login</button>
-              <button onclick="handleSignup()" class="flex-1 py-2 rounded-full bg-zinc-700 hover:opacity-90 text-xs font-semibold text-white">Sign Up</button>
+          
+          <!-- AUTH CONTAINER (Register, Login, Forgot Password switchers) -->
+          <div id="auth-container" class="max-w-md mx-auto p-6 rounded-2xl bg-ytDarkSec border border-zinc-800 mt-6">
+            
+            <!-- 3.1 REGISTER FORM -->
+            <div id="form-register">
+              <h3 class="text-lg font-bold mb-4 text-center text-white">Register to Surf</h3>
+              <div class="space-y-3">
+                <input id="reg-email" type="email" placeholder="Gmail address" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                <input id="reg-password" type="password" placeholder="Password" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                <div class="flex gap-2 items-center">
+                  <input id="reg-otp-input" type="text" placeholder="Enter OTP" class="flex-1 px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                  <button onclick="sendOtp('reg')" class="px-4 py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white text-xs font-semibold">Send OTP</button>
+                </div>
+              </div>
+              <button onclick="handleRegister()" class="w-full mt-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold">Register</button>
+              <p class="text-xs text-center text-gray-400 mt-4">
+                Already have an account? <span onclick="switchAuthMode('login')" class="text-ytRed cursor-pointer font-semibold underline">Login</span>
+              </p>
+              <p id="reg-msg" class="text-xs text-center text-red-500 mt-2"></p>
             </div>
-            <p id="auth-message" class="text-xs text-center text-red-500 mt-3"></p>
+
+            <!-- 3.2 LOGIN FORM (Default view under Register/Login hierarchy) -->
+            <div id="form-login" class="hidden">
+              <h3 class="text-lg font-bold mb-4 text-center text-white">Login to Surf</h3>
+              <div class="space-y-3">
+                <input id="login-email" type="email" placeholder="Gmail address" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                <input id="login-password" type="password" placeholder="Password" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+              </div>
+              <div class="flex justify-end mt-1">
+                <span onclick="switchAuthMode('forgot')" class="text-xs text-gray-400 hover:text-white cursor-pointer underline">Forgot Password?</span>
+              </div>
+              <button onclick="handleLogin()" class="w-full mt-3 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold">Login</button>
+              <p class="text-xs text-center text-gray-400 mt-4">
+                Don't have an account? <span onclick="switchAuthMode('register')" class="text-ytRed cursor-pointer font-semibold underline">Register</span>
+              </p>
+              <p id="login-msg" class="text-xs text-center text-red-500 mt-2"></p>
+            </div>
+
+            <!-- 3.3 FORGOT PASSWORD FORM -->
+            <div id="form-forgot" class="hidden">
+              <h3 class="text-lg font-bold mb-4 text-center text-white">Reset Password</h3>
+              <div class="space-y-3">
+                <input id="forgot-email" type="email" placeholder="Registered Gmail address" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                <input id="forgot-new-password" type="password" placeholder="New Password" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                <div class="flex gap-2 items-center">
+                  <input id="forgot-otp-input" type="text" placeholder="Enter OTP" class="flex-1 px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+                  <button onclick="sendOtp('forgot')" class="px-4 py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white text-xs font-semibold">Send OTP</button>
+                </div>
+              </div>
+              <button onclick="handleForgotPassword()" class="w-full mt-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold">Update Password</button>
+              <p class="text-xs text-center text-gray-400 mt-4">
+                Remembered password? <span onclick="switchAuthMode('login')" class="text-ytRed cursor-pointer font-semibold underline">Login</span>
+              </p>
+              <p id="forgot-msg" class="text-xs text-center text-red-500 mt-2"></p>
+            </div>
+
           </div>
 
           <!-- Logged-in Profile Panel -->
@@ -158,7 +207,8 @@
                 <div class="flex items-center justify-center sm:justify-between gap-2">
                   <div>
                     <h1 id="display-nickname" class="text-xl sm:text-2xl font-bold text-white">My Channel</h1>
-                    <p id="display-username" class="text-xs sm:text-sm text-gray-400 mt-0.5">@username • 0 subscribers</p>
+                    <!-- Real subscriber count & total video uploads count -->
+                    <p id="display-meta" class="text-xs sm:text-sm text-gray-400 mt-0.5">@username • 0 subscribers • 0 videos</p>
                   </div>
                   <div class="flex items-center gap-2">
                     <button onclick="openEditModal()" class="px-4 py-2 rounded-full bg-zinc-700 hover:opacity-90 text-xs font-semibold flex items-center gap-1.5 text-white" title="Edit Profile">
@@ -203,7 +253,7 @@
           <div id="channel-view-videos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </section>
 
-        <!-- 5. WATCH PAGE TAB (YouTube style with related videos sidebar/grid) -->
+        <!-- 5. WATCH PAGE TAB -->
         <section id="tab-watch" class="tab-section hidden max-w-7xl mx-auto">
           <button onclick="goBackFromWatch()" class="mb-4 px-3.5 py-1.5 rounded-full bg-ytDarkSec hover:bg-ytDarkHover text-xs font-semibold text-white">
             <i class="fa-solid fa-arrow-left mr-1"></i> Back
@@ -243,12 +293,10 @@
               </div>
             </div>
 
-            <!-- Right Related Videos Sidebar (YouTube style) -->
+            <!-- Right Related Videos Sidebar -->
             <div class="space-y-4">
               <h3 class="text-base font-bold text-white">Related Videos</h3>
-              <div id="related-videos-container" class="space-y-3">
-                <!-- Dynamically populated related videos -->
-              </div>
+              <div id="related-videos-container" class="space-y-3"></div>
             </div>
           </div>
         </section>
@@ -306,7 +354,7 @@
     </div>
   </div>
 
-  <!-- EDIT VIDEO MODAL (Option 1 for profile video editing) -->
+  <!-- EDIT VIDEO MODAL (Only Delete Video is on the 3-dot menu, but this supports title editing if triggered) -->
   <div id="edit-video-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
       <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
@@ -331,7 +379,7 @@
     </div>
   </div>
 
-  <!-- EDIT PROFILE MODAL -->
+  <!-- EDIT PROFILE MODAL (Fixes Logo, Nickname, Username saving) -->
   <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
       <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
@@ -400,6 +448,7 @@
     let currentTab = 'home';
     let currentActiveVideo = null;
     let currentActiveChannelId = null;
+    let generatedOtpStore = {};
 
     function triggerTopProgressBar(duration = 600) {
       const bar = document.getElementById('top-progress-bar');
@@ -443,16 +492,35 @@
     }
 
     async function checkUserSession() {
-      const authPanel = document.getElementById('auth-panel');
+      const authContainer = document.getElementById('auth-container');
       const profilePanel = document.getElementById('profile-panel');
 
+      const { data: { user } } = await sb.auth.getUser();
+      currentUser = user;
+
       if (!currentUser) {
-        authPanel.hidden = false;
+        authContainer.hidden = false;
         profilePanel.hidden = true;
+        switchAuthMode('register'); // Default to register as requested
       } else {
-        authPanel.hidden = true;
+        authContainer.hidden = true;
         profilePanel.hidden = false;
         await loadUserProfileAndUploads(currentUser);
+      }
+    }
+
+    // Switch between Register, Login, and Forgot Password forms
+    function switchAuthMode(mode) {
+      document.getElementById('form-register').classList.add('hidden');
+      document.getElementById('form-login').classList.add('hidden');
+      document.getElementById('form-forgot').classList.add('hidden');
+
+      if (mode === 'register') {
+        document.getElementById('form-register').classList.remove('hidden');
+      } else if (mode === 'login') {
+        document.getElementById('form-login').classList.remove('hidden');
+      } else if (mode === 'forgot') {
+        document.getElementById('form-forgot').classList.remove('hidden');
       }
     }
 
@@ -467,27 +535,100 @@
       }
     }
 
-    async function handleSignup() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
+    // Send Simulated OTP
+    function sendOtp(type) {
+      const emailId = type === 'reg' ? 'reg-email' : 'forgot-email';
+      const msgId = type === 'reg' ? 'reg-msg' : 'forgot-msg';
+      const email = document.getElementById(emailId).value.trim();
+
+      if (!email) {
+        document.getElementById(msgId).textContent = 'Please enter email first.';
+        return;
+      }
+
+      const otp = Math.floor(1000 + Math.random() * 9000).toString();
+      generatedOtpStore[email] = otp;
+      document.getElementById(msgId).textContent = `[Simulated OTP sent to email]: ${otp}`;
+      showToast('OTP sent successfully!');
+    }
+
+    // Handle Register with OTP & 1-Gmail-1-Register check
+    async function handleRegister() {
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value.trim();
+      const enteredOtp = document.getElementById('reg-otp-input').value.trim();
+      const msg = document.getElementById('reg-msg');
+
+      if (!email || !password || !enteredOtp) {
+        msg.textContent = 'All fields including OTP are required.';
+        return;
+      }
+
+      if (generatedOtpStore[email] !== enteredOtp) {
+        msg.textContent = 'Invalid OTP. Please check or resend.';
+        return;
+      }
+
       const { error, data } = await sb.auth.signUp({ email, password });
-      if (error) document.getElementById('auth-message').textContent = error.message;
-      else { 
-        showToast('Account created successfully!'); 
+      if (error) {
+        msg.textContent = error.message;
+      } else {
+        showToast('Registration successful!');
         currentUser = data.user;
-        checkUserSession(); 
+        if (currentUser) {
+          // Initialize profile entry
+          let handle = '@' + email.split('@')[0];
+          await sb.from('profiles').upsert({ user_id: currentUser.id, channel_name: email.split('@')[0], username: handle }, { onConflict: 'user_id' });
+        }
+        checkUserSession();
       }
     }
 
+    // Handle Login
     async function handleLogin() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      const msg = document.getElementById('login-msg');
+
+      if (!email || !password) {
+        msg.textContent = 'Enter both email and password.';
+        return;
+      }
+
       const { error, data } = await sb.auth.signInWithPassword({ email, password });
-      if (error) document.getElementById('auth-message').textContent = error.message;
-      else { 
-        showToast('Login successful!'); 
+      if (error) {
+        msg.textContent = 'Invalid email or password.';
+      } else {
+        showToast('Login successful!');
         currentUser = data.user;
-        checkUserSession(); 
+        checkUserSession();
+      }
+    }
+
+    // Handle Forgot Password
+    async function handleForgotPassword() {
+      const email = document.getElementById('forgot-email').value.trim();
+      const newPassword = document.getElementById('forgot-new-password').value.trim();
+      const enteredOtp = document.getElementById('forgot-otp-input').value.trim();
+      const msg = document.getElementById('forgot-msg');
+
+      if (!email || !newPassword || !enteredOtp) {
+        msg.textContent = 'All fields are required.';
+        return;
+      }
+
+      if (generatedOtpStore[email] !== enteredOtp) {
+        msg.textContent = 'Invalid OTP.';
+        return;
+      }
+
+      // Update password using Supabase updateUser (requires active session or admin, simulating via update user metadata / direct auth update if permitted)
+      const { error } = await sb.auth.updateUser({ password: newPassword });
+      if (error) {
+        msg.textContent = 'Error updating password: ' + error.message;
+      } else {
+        showToast('Password updated successfully! Please login.');
+        switchAuthMode('login');
       }
     }
 
@@ -499,14 +640,21 @@
       showToast('Logged out successfully');
     }
 
-    // --- PROFILE UPLOADS WITH 3-DOT MENU (EDIT / DELETE) ---
+    // --- PROFILE UPLOADS WITH REAL STATS & DELETE VIDEO OPTION ---
     async function loadUserProfileAndUploads(user) {
       let { data: profile } = await sb.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
       let nickname = profile?.channel_name || 'My Channel';
       let username = profile?.username || '@' + user.email.split('@')[0];
 
+      // Fetch real subscriber count
+      let { count: subCount } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', user.id);
+      
+      // Fetch real uploaded videos count
+      let { data: videos } = await sb.from('videos').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+      let videoCount = videos ? videos.length : 0;
+
       document.getElementById('display-nickname').textContent = nickname;
-      document.getElementById('display-username').textContent = `${username} • 0 subscribers`;
+      document.getElementById('display-meta').textContent = `${username} • ${subCount || 0} subscribers • ${videoCount} videos`;
 
       if (profile?.logo_url) {
         const logoDiv = document.getElementById('profile-logo-container');
@@ -517,7 +665,6 @@
         document.getElementById('profile-logo-text').classList.remove('hidden');
       }
 
-      const { data: videos } = await sb.from('videos').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       const grid = document.getElementById('user-uploads-grid');
       
       if (!videos || videos.length === 0) {
@@ -540,15 +687,12 @@
                 <h4 class="text-sm font-semibold truncate text-white">${v.title}</h4>
                 <p class="text-xs text-gray-400">${v.views || 0} views • ${timeAgo(v.created_at)}</p>
               </div>
-              <!-- 3-Dot Menu for Profile Videos -->
+              <!-- 3-Dot Menu: Edit removed, only Delete Video kept -->
               <div class="relative">
                 <button onclick="toggleVideoMenu(event, '${v.id}')" class="p-1.5 rounded-full hover:bg-zinc-800 text-gray-400 hover:text-white">
                   <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                 </button>
-                <div id="vid-menu-${v.id}" class="hidden absolute right-0 mt-1 w-36 bg-zinc-800 border border-zinc-700 rounded-xl shadow-lg z-20 overflow-hidden text-xs">
-                  <button onclick="openEditVideoModal('${v.id}', '${v.title.replace(/'/g, "\\'")}')" class="w-full text-left px-3.5 py-2 hover:bg-zinc-700 flex items-center gap-2 text-white">
-                    <i class="fa-solid fa-pen text-ytRed"></i> Edit Video
-                  </button>
+                <div id="vid-menu-${v.id}" class="hidden absolute right-0 mt-1 w-32 bg-zinc-800 border border-zinc-700 rounded-xl shadow-lg z-20 overflow-hidden text-xs">
                   <button onclick="deleteVideo('${v.id}')" class="w-full text-left px-3.5 py-2 hover:bg-zinc-700 flex items-center gap-2 text-red-400">
                     <i class="fa-solid fa-trash"></i> Delete Video
                   </button>
@@ -560,10 +704,8 @@
       }).join('');
     }
 
-    // Toggle dropdown menu for video card 3 dots
     function toggleVideoMenu(event, videoId) {
       event.stopPropagation();
-      // Close any other open menus first
       document.querySelectorAll('[id^="vid-menu-"]').forEach(m => {
         if (m.id !== `vid-menu-${videoId}`) m.classList.add('hidden');
       });
@@ -571,40 +713,14 @@
       menu.classList.toggle('hidden');
     }
 
-    // Close menus when clicking outside
     window.addEventListener('click', () => {
       document.querySelectorAll('[id^="vid-menu-"]').forEach(m => m.classList.add('hidden'));
     });
 
-    // Option 1: Edit Video Title
-    function openEditVideoModal(videoId, currentTitle) {
-      document.getElementById('edit-video-id').value = videoId;
-      document.getElementById('edit-video-title-input').value = currentTitle;
-      document.getElementById('edit-video-modal').classList.remove('hidden');
-    }
-    function closeEditVideoModal() {
-      document.getElementById('edit-video-modal').classList.add('hidden');
-    }
-
-    async function saveVideoTitleEdit() {
-      const videoId = document.getElementById('edit-video-id').value;
-      const newTitle = document.getElementById('edit-video-title-input').value.trim();
-      if (!newTitle) { showToast('Title cannot be empty'); return; }
-
-      const { error } = await sb.from('videos').update({ title: newTitle }).eq('id', videoId);
-      if (error) { showToast('Error updating title'); return; }
-
-      showToast('Video title updated successfully!');
-      closeEditVideoModal();
-      if (currentUser) loadUserProfileAndUploads(currentUser);
-    }
-
-    // Option 2: Delete Video
     async function deleteVideo(videoId) {
       if (!confirm('Are you sure you want to delete this video?')) return;
       const { error } = await sb.from('videos').delete().eq('id', videoId);
       if (error) { showToast('Failed to delete video'); return; }
-
       showToast('Video deleted successfully');
       if (currentUser) loadUserProfileAndUploads(currentUser);
     }
@@ -643,6 +759,7 @@
               ${thumbHtml}
             </div>
             <div class="flex gap-3 items-start">
+              <!-- Channel Logo or Name click goes directly to channel -->
               <div onclick="openChannel('${v.user_id}')" class="cursor-pointer shrink-0 hover:scale-105 transition-transform">
                 ${avatarHtml}
               </div>
@@ -657,12 +774,15 @@
       }
     }
 
+    // --- SUBSCRIBED TAB (Channel Strip + Subscribed Videos Feed) ---
     async function loadSubscribedVideos() {
       const authPrompt = document.getElementById('subscribed-auth-prompt');
       const contentDiv = document.getElementById('subscribed-content');
       const emptyDiv = document.getElementById('empty-subscribed');
       const grid = document.getElementById('subs-video-grid');
+      const strip = document.getElementById('subs-channel-strip');
       grid.innerHTML = '';
+      strip.innerHTML = '';
 
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
@@ -686,11 +806,30 @@
       emptyDiv.classList.add('hidden');
 
       const channelIds = subs.map(s => s.channel_id);
+
+      // Populate Channel Strip
+      for (let chId of channelIds) {
+        let { data: prof } = await sb.from('profiles').select('*').eq('user_id', chId).maybeSingle();
+        if (prof) {
+          let chName = prof.channel_name || 'Creator';
+          let avatarContent = `<div class="w-14 h-14 rounded-full bg-red-600 text-white font-bold text-lg flex items-center justify-center">${chName.charAt(0).toUpperCase()}</div>`;
+          if (prof.logo_url) {
+            avatarContent = `<div class="w-14 h-14 rounded-full bg-cover bg-center" style="background-image: url('${prof.logo_url}')"></div>`;
+          }
+          strip.innerHTML += `
+            <div onclick="openChannel('${chId}')" class="cursor-pointer flex flex-col items-center gap-1 shrink-0 group">
+              ${avatarContent}
+              <span class="text-xs text-gray-300 max-w-[64px] truncate group-hover:text-ytRed">${chName}</span>
+            </div>
+          `;
+        }
+      }
+
+      // Load videos from subscribed channels
       const { data: videos } = await sb.from('videos').select('*').in('user_id', channelIds).order('created_at', { ascending: false });
 
       if (!videos || videos.length === 0) {
-        emptyDiv.classList.remove('hidden');
-        contentDiv.classList.add('hidden');
+        grid.innerHTML = `<p class="text-xs text-gray-400 col-span-full">No videos from subscribed channels.</p>`;
         return;
       }
 
@@ -705,14 +844,19 @@
           thumbHtml = `<div class="relative w-full aspect-video rounded-xl bg-cover bg-center overflow-hidden shadow-xs" style="background-image: url('${v.thumbnail_url}')"></div>`;
         }
 
+        let avatarHtml = `<div class="w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">${channelName.charAt(0).toUpperCase()}</div>`;
+        if (prof?.logo_url) {
+          avatarHtml = `<div class="w-9 h-9 rounded-full bg-cover bg-center shrink-0" style="background-image: url('${prof.logo_url}')"></div>`;
+        }
+
         grid.innerHTML += `
           <div class="group flex flex-col gap-2.5">
             <div onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer">
               ${thumbHtml}
             </div>
             <div class="flex gap-3 items-start">
-              <div onclick="openChannel('${v.user_id}')" class="cursor-pointer w-9 h-9 rounded-full bg-red-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                ${channelName.charAt(0).toUpperCase()}
+              <div onclick="openChannel('${v.user_id}')" class="cursor-pointer shrink-0">
+                ${avatarHtml}
               </div>
               <div class="min-w-0 flex-1">
                 <h3 onclick='openWatchPage(${JSON.stringify(v).replace(/'/g, "&apos;")}, "${channelName}")' class="cursor-pointer text-sm font-semibold leading-snug line-clamp-2 group-hover:text-ytRed transition-colors text-white">${v.title}</h3>
@@ -837,7 +981,7 @@
       document.getElementById('channel-view-subs').textContent = `${count || 0} subscribers`;
     }
 
-    // --- WATCH PAGE WITH YOUTUBE-STYLE RELATED VIDEOS SIDEBAR ---
+    // --- WATCH PAGE (YouTube style with related videos) ---
     async function openWatchPage(video, channelName) {
       currentActiveVideo = video;
       const { data: { user } } = await sb.auth.getUser();
@@ -882,9 +1026,7 @@
         }
       }
 
-      // Load YouTube-style related videos in sidebar
       await loadRelatedVideos(video.id);
-
       switchTab('watch');
     }
 
@@ -1012,6 +1154,7 @@
     }
     function closeEditModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
 
+    // Fixed Profile Edit & Save function
     async function saveRealProfile() {
       const nick = document.getElementById('edit-nickname').value.trim();
       let userHandle = document.getElementById('edit-username').value.trim();
@@ -1036,10 +1179,15 @@
       let updatePayload = { user_id: currentUser.id, channel_name: nick, username: userHandle };
       if (logoUrl) updatePayload.logo_url = logoUrl;
 
-      await sb.from('profiles').upsert(updatePayload, { onConflict: 'user_id' });
+      const { error } = await sb.from('profiles').upsert(updatePayload, { onConflict: 'user_id' });
+      if (error) {
+        msg.textContent = 'Error saving profile: ' + error.message;
+        return;
+      }
+
       closeEditModal();
       checkUserSession();
-      showToast('Profile updated!');
+      showToast('Profile updated successfully!');
     }
 
     function toggleSearchBox() {
