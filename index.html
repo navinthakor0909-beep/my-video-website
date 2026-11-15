@@ -195,30 +195,43 @@
 
         <!-- 3. PROFILE TAB -->
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
-          <!-- Clean Banner without settings icon -->
-          <div class="relative w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end justify-between p-4 shadow-xs">
+          <!-- Channel Banner with Bottom-Left Pencil Icon for Banner Management -->
+          <div class="relative w-full h-28 sm:h-40 rounded-2xl bg-gradient-to-r from-red-600 via-rose-700 to-zinc-900 mb-4 flex items-end justify-between p-4 shadow-xs overflow-hidden">
             <span class="text-xs font-medium text-white/80 bg-black/40 px-3 py-1 rounded-full backdrop-blur-xs">Creator Studio Banner</span>
+            <!-- Banner Pencil Icon -->
+            <button onclick="openEditModal('banner')" class="w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors shadow-md" title="Edit Banner">
+              <i class="fa-solid fa-pen text-xs"></i>
+            </button>
           </div>
 
           <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-gray-100 dark:bg-ytDarkSec/70 border border-gray-200 dark:border-zinc-800 mb-6 relative">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0">
-              A
+            <!-- Channel Logo with Overlay Pencil Icon -->
+            <div class="relative group shrink-0">
+              <div id="profile-logo-container" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden">
+                <span id="profile-logo-text">A</span>
+              </div>
+              <button onclick="openEditModal('logo')" class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-sm" title="Edit Logo">
+                <i class="fa-solid fa-pen"></i>
+              </button>
             </div>
+
             <div class="text-center sm:text-left flex-1">
               <div class="flex items-center justify-center sm:justify-between gap-2">
-                <h1 class="text-xl sm:text-2xl font-bold">Aarav Sharma</h1>
+                <div>
+                  <h1 id="display-nickname" class="text-xl sm:text-2xl font-bold">Aarav Sharma</h1>
+                  <p id="display-username" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">@aaravcreates • 12.4K subscribers • 2 videos</p>
+                </div>
                 <div class="flex items-center gap-2">
-                  <!-- Icon-only Edit Profile Button -->
-                  <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Edit Profile">
+                  <!-- Icon-only Edit Profile Button (Opens Edit Channel Modal) -->
+                  <button onclick="openEditModal('all')" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Edit Profile">
                     <i class="fa-solid fa-pen"></i>
                   </button>
-                  <!-- Icon-only Settings Button -->
+                  <!-- Icon-only Settings Button (Opens Settings Modal with Logout) -->
                   <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity" title="Settings">
                     <i class="fa-solid fa-gear"></i>
                   </button>
                 </div>
               </div>
-              <p id="profile-stats" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">@aaravcreates • 12.4K subscribers • 2 videos</p>
               <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-2 max-w-xl">
                 Tech enthusiast, web developer, and content creator sharing clean UI builds and video stories.
               </p>
@@ -254,6 +267,110 @@
     </button>
   </nav>
 
+  <!-- EDIT PROFILE / CHANNEL MODAL -->
+  <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-pen text-ytRed"></i> Edit Channel Profile
+        </h3>
+        <button onclick="closeEditModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+        
+        <!-- BANNER SECTION -->
+        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80 space-y-2">
+          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Channel Banner</label>
+          <div class="flex items-center gap-2">
+            <button onclick="actionBanner('add')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Add Banner</button>
+            <button onclick="actionBanner('change')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Change</button>
+            <button onclick="actionBanner('delete')" class="px-3 py-1.5 rounded-lg bg-red-600/15 text-red-500 hover:bg-red-600/25 text-xs font-semibold">Delete</button>
+          </div>
+        </div>
+
+        <!-- LOGO SECTION -->
+        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80 space-y-2">
+          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Channel Logo / Avatar</label>
+          <div class="flex items-center gap-2">
+            <button onclick="actionLogo('add')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Add Logo</button>
+            <button onclick="actionLogo('change')" class="flex-1 py-1.5 rounded-lg bg-gray-200 dark:bg-zinc-700 hover:opacity-90 text-xs font-semibold">Change</button>
+            <button onclick="actionLogo('delete')" class="px-3 py-1.5 rounded-lg bg-red-600/15 text-red-500 hover:bg-red-600/25 text-xs font-semibold">Delete</button>
+          </div>
+        </div>
+
+        <!-- NICKNAME & USERNAME FIELDS -->
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-400 mb-1">Nickname (Channel Name)</label>
+            <input id="input-nickname" type="text" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-400 mb-1">Username</label>
+            <input id="input-username" type="text" class="w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-sm focus:outline-none focus:border-ytRed" />
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button onclick="closeEditModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
+          <button onclick="saveProfileEdits()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL (Includes Logout Button) -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-gear text-ytRed"></i> Settings & Account
+        </h3>
+        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <!-- Appearance Toggle Row -->
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center">
+              <i id="theme-icon" class="fa-solid fa-sun text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Appearance</p>
+              <p id="theme-status-label" class="text-xs text-gray-500 dark:text-gray-400">Dark Mode Active</p>
+            </div>
+          </div>
+          <button onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
+            Switch Theme
+          </button>
+        </div>
+
+        <!-- Logout Button Section -->
+        <div class="p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-red-600/15 text-ytRed flex items-center justify-center">
+              <i class="fa-solid fa-right-from-bracket text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Account Session</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Sign out from MyStream</p>
+            </div>
+          </div>
+          <button onclick="handleLogout()" class="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-xs transition-colors">
+            Log Out
+          </button>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-zinc-800 hover:opacity-90 text-xs font-semibold">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- UPLOAD VIDEO MODAL -->
   <div id="upload-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
@@ -288,53 +405,6 @@
         <div class="mt-5 flex justify-end gap-2">
           <button onclick="closeUploadModal()" class="px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-zinc-800">Cancel</button>
           <button onclick="submitSimulatedUpload()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-sm font-semibold shadow-sm transition-colors">Publish Now</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROFILE SETTINGS MODAL -->
-  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-gray-200 dark:border-zinc-700 shadow-2xl overflow-hidden">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-gear text-ytRed"></i> Profile Settings
-        </h3>
-        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="p-5 space-y-4">
-        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center">
-              <i id="theme-icon" class="fa-solid fa-sun text-sm"></i>
-            </div>
-            <div>
-              <p class="text-sm font-semibold">Appearance</p>
-              <p id="theme-status-label" class="text-xs text-gray-500 dark:text-gray-400">Dark Mode Active</p>
-            </div>
-          </div>
-          <button onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold transition-colors">
-            Switch Theme
-          </button>
-        </div>
-
-        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-100 dark:bg-zinc-800/80">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-blue-500/15 text-blue-500 flex items-center justify-center">
-              <i class="fa-solid fa-sliders text-sm"></i>
-            </div>
-            <div>
-              <p class="text-sm font-semibold">Video Quality</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Auto (1080p HD)</p>
-            </div>
-          </div>
-          <span class="text-xs font-semibold text-gray-500 dark:text-gray-300 bg-gray-200 dark:bg-zinc-700 px-2.5 py-1 rounded-lg">Default</span>
-        </div>
-
-        <div class="pt-2 flex justify-end">
-          <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-zinc-800 hover:opacity-90 text-xs font-semibold">Done</button>
         </div>
       </div>
     </div>
@@ -484,6 +554,14 @@
       }
     ];
 
+    // User Profile Data state
+    let channelProfile = {
+      nickname: 'Aarav Sharma',
+      username: '@aaravcreates',
+      hasBanner: true,
+      hasLogo: true
+    };
+
     let currentSearch = '';
     let selectedSubChannel = 'ALL';
     let isVideoLiked = false;
@@ -594,7 +672,6 @@
         toggleClearBtn();
       }
 
-      // Save tab to sessionStorage so refresh keeps the user on this tab
       try {
         sessionStorage.setItem('mystream_active_tab', tabName);
       } catch(e) {}
@@ -765,10 +842,24 @@
     }
 
     function renderProfileTab() {
-      document.getElementById('profile-stats').textContent = `@aaravcreates • 12.4K subscribers • ${userUploads.length} videos`;
+      document.getElementById('display-nickname').textContent = channelProfile.nickname;
+      document.getElementById('display-username').textContent = `${channelProfile.username} • 12.4K subscribers • ${userUploads.length} videos`;
+      
+      const logoContainer = document.getElementById('profile-logo-container');
+      const logoText = document.getElementById('profile-logo-text');
+      if (channelProfile.hasLogo) {
+        logoContainer.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden";
+        logoText.textContent = channelProfile.nickname.charAt(0).toUpperCase();
+        logoText.classList.remove('hidden');
+      } else {
+        logoContainer.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-zinc-700 flex items-center justify-center text-gray-400 text-xs shadow-lg overflow-hidden";
+        logoText.textContent = 'No Logo';
+      }
+
       const uploadsGrid = document.getElementById('user-uploads-grid');
       uploadsGrid.innerHTML = userUploads.map(u => createVideoCardHTML({
         ...u,
+        channel: channelProfile.nickname,
         avatarColor: 'bg-gradient-to-tr from-red-600 to-amber-500'
       })).join('');
     }
@@ -834,6 +925,74 @@
       }, 850);
     }
 
+    // --- PROFILE EDIT & MODAL CONTROLS ---
+    function openEditModal(focusTarget = 'all') {
+      document.getElementById('input-nickname').value = channelProfile.nickname;
+      document.getElementById('input-username').value = channelProfile.username;
+      document.getElementById('edit-profile-modal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-profile-modal').classList.add('hidden');
+    }
+
+    function actionBanner(action) {
+      if (action === 'add') {
+        channelProfile.hasBanner = true;
+        showToast('Banner added successfully');
+      } else if (action === 'change') {
+        channelProfile.hasBanner = true;
+        showToast('Banner updated successfully');
+      } else if (action === 'delete') {
+        channelProfile.hasBanner = false;
+        showToast('Banner deleted');
+      }
+      closeEditModal();
+      renderProfileTab();
+    }
+
+    function actionLogo(action) {
+      if (action === 'add') {
+        channelProfile.hasLogo = true;
+        showToast('Logo added successfully');
+      } else if (action === 'change') {
+        channelProfile.hasLogo = true;
+        showToast('Logo updated successfully');
+      } else if (action === 'delete') {
+        channelProfile.hasLogo = false;
+        showToast('Logo deleted');
+      }
+      closeEditModal();
+      renderProfileTab();
+    }
+
+    function saveProfileEdits() {
+      const nick = document.getElementById('input-nickname').value.trim();
+      const user = document.getElementById('input-username').value.trim();
+      if (nick) channelProfile.nickname = nick;
+      if (user) channelProfile.username = user.startsWith('@') ? user : '@' + user;
+
+      closeEditModal();
+      renderProfileTab();
+      showToast('Profile updated successfully!');
+    }
+
+    // --- SETTINGS & LOGOUT ---
+    function openSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('hidden');
+    }
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.add('hidden');
+    }
+
+    function handleLogout() {
+      closeSettingsModal();
+      showToast('Logged out successfully');
+      setTimeout(() => {
+        switchTab('home', true);
+      }, 600);
+    }
+
     function openUploadModal() {
       document.getElementById('upload-modal').classList.remove('hidden');
     }
@@ -849,7 +1008,7 @@
       const newVid = {
         id: 'u' + Date.now(),
         title: title,
-        channel: 'Aarav Sharma',
+        channel: channelProfile.nickname,
         channelId: 'c1',
         avatarColor: 'bg-gradient-to-tr from-red-600 to-amber-500',
         views: '1 view',
@@ -955,13 +1114,6 @@
       }, 650);
     }
 
-    function openSettingsModal() {
-      document.getElementById('settings-modal').classList.remove('hidden');
-    }
-    function closeSettingsModal() {
-      document.getElementById('settings-modal').classList.add('hidden');
-    }
-
     function toggleTheme() {
       const html = document.documentElement;
       const icon = document.getElementById('theme-icon');
@@ -988,7 +1140,6 @@
       }, 2500);
     }
 
-    // On Load, restore the last active tab from sessionStorage so refresh keeps you on the same tab
     window.addEventListener('DOMContentLoaded', () => {
       let savedTab = 'home';
       try {
