@@ -535,78 +535,126 @@
       }
     }
 
-    // Send Simulated OTP
-    function sendOtp(type) {
-      const emailId = type === 'reg' ? 'reg-email' : 'forgot-email';
-      const msgId = type === 'reg' ? 'reg-msg' : 'forgot-msg';
-      const email = document.getElementById(emailId).value.trim();
+    // REAL SUPABASE EMAIL OTP
+async function sendOtp(type) {
+  const isReg = type === 'reg';
+  const email = document.getElementById(
+    isReg ? 'reg-email' : 'forgot-email'
+  ).value.trim().toLowerCase();
 
-      if (!email) {
-        document.getElementById(msgId).textContent = 'Please enter email first.';
-        return;
-      }
+  const msg = document.getElementById(
+    isReg ? 'reg-msg' : 'forgot-msg'
+  );
 
-      const otp = Math.floor(1000 + Math.random() * 9000).toString();
-      generatedOtpStore[email] = otp;
-      document.getElementById(msgId).textContent = `[Simulated OTP sent to email]: ${otp}`;
-      showToast('OTP sent successfully!');
+  if (!email) {
+    msg.textContent = 'Please enter your email.';
+    return;
+  }
+
+  msg.textContent = 'Sending OTP...';
+
+  if (isReg) {
+    const password = document.getElementById('reg-password').value.trim();
+
+    if (!password) {
+      msg.textContent = 'Enter password first.';
+      return;
     }
 
-    // Handle Register with OTP & 1-Gmail-1-Register check
-    async function handleRegister() {
-      const email = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-password').value.trim();
-      const enteredOtp = document.getElementById('reg-otp-input').value.trim();
-      const msg = document.getElementById('reg-msg');
+    const { error } = await sb.auth.signUp({
+      email,
+      password
+    });
 
-      if (!email || !password || !enteredOtp) {
-        msg.textContent = 'All fields including OTP are required.';
-        return;
-      }
-
-      if (generatedOtpStore[email] !== enteredOtp) {
-        msg.textContent = 'Invalid OTP. Please check or resend.';
-        return;
-      }
-
-      const { error, data } = await sb.auth.signUp({ email, password });
-      if (error) {
-        msg.textContent = error.message;
-      } else {
-        showToast('Registration successful!');
-        currentUser = data.user;
-        if (currentUser) {
-          // Initialize profile entry
-          let handle = '@' + email.split('@')[0];
-          await sb.from('profiles').upsert({ user_id: currentUser.id, channel_name: email.split('@')[0], username: handle }, { onConflict: 'user_id' });
-        }
-        checkUserSession();
-      }
+    if (error) {
+      msg.textContent = error.message;
+      return;
     }
+  } else {
+    const { error } = await sb.auth.resetPasswordForEmail(email);
 
-    // Handle Login
-    async function handleLogin() {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value.trim();
-      const msg = document.getElementById('login-msg');
-
-      if (!email || !password) {
-        msg.textContent = 'Enter both email and password.';
-        return;
-      }
-
-      const { error, data } = await sb.auth.signInWithPassword({ email, password });
-      if (error) {
-        msg.textContent = 'Invalid email or password.';
-      } else {
-        showToast('Login successful!');
-        currentUser = data.user;
-        checkUserSession();
-      }
+    if (error) {
+      msg.textContent = error.message;
+      return;
     }
+  }
 
-    // Handle Forgot Password
-    async function handleForgotPassword() {
+  msg.textContent = 'OTP email requested. Check your Gmail Inbox and Spam.';
+}
+
+// REGISTER WITH REAL OTP
+async function handleRegister() {
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const otp = document.getElementById('reg-otp-input').value.trim();
+  const msg = document.getElementById('reg-msg');
+
+  if (!email || !otp) {
+    msg.textContent = 'Enter email and OTP.';
+    return;
+  }
+
+  const { data, error } = await sb.auth.verifyOtp({
+    email,
+    token: otp,
+    type: 'signup'
+  });
+
+  if (error) {
+    msg.textContent = error.message;
+    return;
+  }
+
+  currentUser = data.user;
+
+  if (currentUser) {
+    const handle = '@' + email.split('@')[0];
+
+    await sb.from('profiles').upsert({
+      user_id: currentUser.id,
+      channel_name: email.split('@')[0],
+      username: handle
+    }, { onConflict: 'user_id' });
+  }
+
+  showToast('Registration successful!');
+  checkUserSession();
+}
+
+// FORGOT PASSWORD WITH REAL OTP
+async function handleForgotPassword() {
+  const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+  const otp = document.getElementById('forgot-otp-input').value.trim();
+  const newPassword = document.getElementById('forgot-new-password').value.trim();
+  const msg = document.getElementById('forgot-msg');
+
+  if (!email || !otp || !newPassword) {
+    msg.textContent = 'All fields are required.';
+    return;
+  }
+
+  const { error: verifyError } = await sb.auth.verifyOtp({
+    email,
+    token: otp,
+    type: 'recovery'
+  });
+
+  if (verifyError) {
+    msg.textContent = verifyError.message;
+    return;
+  }
+
+  const { error } = await sb.auth.updateUser({
+    password: newPassword
+  });
+
+  if (error) {
+    msg.textContent = error.message;
+    return;
+  }
+
+  showToast('Password updated successfully!');
+  switchAuthMode('login');
+}
       const email = document.getElementById('forgot-email').value.trim();
       const newPassword = document.getElementById('forgot-new-password').value.trim();
       const enteredOtp = document.getElementById('forgot-otp-input').value.trim();
