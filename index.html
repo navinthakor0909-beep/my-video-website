@@ -956,9 +956,12 @@ async function handleForgotPassword() {
         avatarDiv.textContent = channelName.charAt(0).toUpperCase();
       }
 
-      const { count } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', userId);
-      document.getElementById('channel-view-subs').textContent = `${count || 0} subscribers`;
+      const { data: count, error: countError } = await sb.rpc('get_channel_subscriber_count', {
+  channel_uuid: userId
+});
 
+document.getElementById('channel-view-subs').textContent =
+  `${countError ? 0 : count || 0} subscribers`;
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
       const subBtn = document.getElementById('channel-view-sub-btn');
