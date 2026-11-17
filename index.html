@@ -448,6 +448,64 @@
     let currentTab = 'home';
     let currentActiveVideo = null;
     let currentActiveChannelId = null;
+    // Analytics session state: watch time is counted only while the video is playing.
+    let analyticsWatchSeconds = 0;
+    let analyticsLastMediaTime = null;
+    let analyticsFlushTimer = null;
+    let analyticsSessionVideoId = null;
+
+    async function recordVideoAnalytics(videoId, channelId, eventType, watchSeconds = 0) {
+      try {
+        const { error } = await sb.from('video_analytics_events').insert({
+          video_id: videoId,
+          channel_id: channelId,
+          event_type: eventType,
+          watch_seconds: watchSeconds
+        });
+        if (error) console.warn('Analytics event was not saved:', error.message);
+      } catch (err) {
+        console.warn('Analytics event was not saved:', err);
+      }
+    }
+
+    async function flushAnalyticsWatchTime() {
+      if (!analyticsSessionVideoId || analyticsWatchSeconds <= 0) return;
+      const seconds = Math.floor(analyticsWatchSeconds);
+      if (seconds <= 0) return;
+      analyticsWatchSeconds -= seconds;
+      await recordVideoAnalytics(analyticsSessionVideoId, currentActiveVideo?.user_id, 'watch_time', seconds);
+    }
+
+    function stopAnalyticsWatchTracking() {
+      if (analyticsFlushTimer) clearInterval(analyticsFlushTimer);
+      analyticsFlushTimer = null;
+      analyticsLastMediaTime = null;
+      flushAnalyticsWatchTime();
+      analyticsSessionVideoId = null;
+    }
+
+    function startAnalyticsWatchTracking(player, video) {
+      stopAnalyticsWatchTracking();
+      analyticsWatchSeconds = 0;
+      analyticsSessionVideoId = video.id;
+      player.ontimeupdate = () => {
+        if (player.paused || player.seeking) { analyticsLastMediaTime = player.currentTime; return; }
+        if (analyticsLastMediaTime !== null) {
+          const delta = player.currentTime - analyticsLastMediaTime;
+          if (delta > 0 && delta <= 5) analyticsWatchSeconds += delta;
+        }
+        analyticsLastMediaTime = player.currentTime;
+      };
+      player.onplaying = () => {
+        analyticsLastMediaTime = player.currentTime;
+        if (!analyticsFlushTimer) analyticsFlushTimer = setInterval(flushAnalyticsWatchTime, 15000);
+      };
+      player.onpause = () => { analyticsLastMediaTime = null; flushAnalyticsWatchTime(); };
+      player.onended = () => { analyticsLastMediaTime = null; flushAnalyticsWatchTime(); };
+      player.onseeking = () => { analyticsLastMediaTime = null; };
+      analyticsFlushTimer = setInterval(flushAnalyticsWatchTime, 15000);
+    }
+
     let generatedOtpStore = {};
 
     function triggerTopProgressBar(duration = 600) {
@@ -1036,16 +1094,20 @@ document.getElementById('channel-view-subs').textContent =
 
     // --- WATCH PAGE (YouTube style with related videos) ---
     async function openWatchPage(video, channelName) {
+      stopAnalyticsWatchTracking();
       currentActiveVideo = video;
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
 
       const newViews = (video.views || 0) + 1;
       await sb.from('videos').update({ views: newViews }).eq('id', video.id);
+      // One analytics view event per visit to the watch page.
+      await recordVideoAnalytics(video.id, video.user_id, 'view', 0);
 
       const { data } = await sb.storage.from('Videos').createSignedUrl(video.file_path, 3600);
       const player = document.getElementById('watch-page-player');
       player.src = data ? data.signedUrl : '';
+      startAnalyticsWatchTracking(player, video);
 
       document.getElementById('watch-page-title').textContent = video.title;
       document.getElementById('watch-channel-name').textContent = channelName;
@@ -1153,9 +1215,19 @@ document.getElementById('channel-view-subs').textContent =
     function goBackFromWatch() {
       const player = document.getElementById('watch-page-player');
       player.pause();
+      stopAnalyticsWatchTracking();
       player.src = '';
       switchTab('home');
     }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        const player = document.getElementById('watch-page-player');
+        if (player && !player.paused) player.pause();
+        flushAnalyticsWatchTime();
+      }
+    });
+    window.addEventListener('pagehide', flushAnalyticsWatchTime);
 
     async function uploadRealVideo() {
       const { data: { user } } = await sb.auth.getUser();
