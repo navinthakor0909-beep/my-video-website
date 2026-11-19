@@ -100,35 +100,33 @@
     .publish-big-btn:hover{background:#e0001a}
     .publish-big-btn:disabled{opacity:.65;cursor:not-allowed}
 
-    /* HEADER PROFILE VIEW (PHOTO 1) & EDIT VIEW (PHOTO 2) */
-    .qp-shell{max-width:560px;margin:0 auto;padding-top:12px}
-    .qp-top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
-    .qp-back-btn{background:#1c1c21;border:1px solid #2e2e36;color:#fff;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-    .qp-back-btn:hover{background:#26262e}
-    .qp-card-top{display:flex;align-items:center;gap:22px;margin-bottom:26px}
-    .qp-avatar-circle{width:108px;height:108px;border-radius:50%;background:#fff;color:#0f0f0f;font-size:38px;font-weight:800;display:grid;place-items:center;flex-shrink:0;overflow:hidden;background-size:cover;background-position:center;border:2px solid #2c2c34}
-    .qp-name-big{font-size:30px;font-weight:800;color:#fff;line-height:1.1;word-break:break-word}
-    .qp-handle-txt{font-size:18px;color:#e4e4e7;margin-top:4px;word-break:break-word}
-    .qp-subs-txt{font-size:18px;color:#e4e4e7;margin-top:3px}
-    .qp-action-row{display:flex;align-items:center;gap:28px;padding:6px 4px 18px}
-    .qp-action-btn{background:transparent;border:0;color:#fff;font-size:18px;font-weight:600;display:inline-flex;align-items:center;gap:10px;cursor:pointer;padding:6px 4px}
-    .qp-action-btn:hover{color:#ff4d5e}
-    .qp-logout-panel{background:#16161a;border:1px solid #2c2c34;border-radius:16px;padding:16px;margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    /* PROFILE VIEW (PHOTO 1) & EDIT CHANNEL VIEW (PHOTO 2) */
+    .pr1-shell{max-width:560px;margin:0 auto}
+    .pr1-top{display:flex;align-items:center;gap:22px;padding:12px 4px 18px}
+    .pr1-avatar{width:108px;height:108px;border-radius:50%;background:#ffffff;color:#0f0f0f;font-size:38px;font-weight:800;display:grid;place-items:center;flex-shrink:0;overflow:hidden;background-size:cover;background-position:center}
+    .pr1-name{font-size:30px;font-weight:800;color:#ffffff;line-height:1.12;word-break:break-word}
+    .pr1-handle{font-size:18px;color:#e4e4e7;margin-top:4px;word-break:break-word}
+    .pr1-subs{font-size:18px;color:#e4e4e7;margin-top:3px}
+    .pr1-actions{display:flex;align-items:center;gap:28px;padding:6px 4px 18px}
+    .pr1-act-btn{background:transparent;border:0;color:#ffffff;font-size:18px;font-weight:500;display:inline-flex;align-items:center;gap:10px;cursor:pointer;padding:6px 2px}
+    .pr1-act-btn:hover{color:#ff3347}
+    .pr1-logout-box{background:#16161a;border:1px solid #2b2b33;border-radius:14px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 
-    .qpe-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
-    .qpe-title{font-size:20px;font-weight:700;color:#fff;margin:0}
-    .qpe-logo-box{display:flex;justify-content:center;margin-bottom:32px}
-    .qpe-logo-btn{position:relative;width:112px;height:112px;border-radius:50%;background:#26262c;color:#fff;font-size:40px;font-weight:800;display:grid;place-items:center;cursor:pointer;overflow:hidden;border:2px solid #35353f;background-size:cover;background-position:center;padding:0}
-    .qpe-cam-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);display:grid;place-items:center;color:#fff;font-size:26px}
-    .qpe-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 4px;border-bottom:1px solid #232329}
-    .qpe-label{font-size:14px;color:#a1a1aa;margin-bottom:4px}
-    .qpe-val{font-size:18px;color:#fff;font-weight:500;word-break:break-word}
-    .qpe-pencil{background:transparent;border:0;color:#fff;font-size:20px;padding:8px;border-radius:10px;cursor:pointer;flex-shrink:0}
-    .qpe-pencil:hover{background:#222228}
-    .qpe-inline-edit{margin:10px 4px 16px;background:#16161a;border:1px solid #2f2f38;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
-    .qpe-inline-input{width:100%;background:#1e1e24;border:1px solid #34343f;border-radius:10px;padding:10px 12px;font-size:14px;color:#fff;outline:none}
-    .qpe-inline-input:focus{border-color:#ff0000}
-    .qpe-inline-btns{display:flex;justify-content:flex-end;gap:8px}
+    .pr2-top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .pr2-back{background:#1b1b20;border:1px solid #2e2e37;color:#fff;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+    .pr2-back:hover{background:#25252d}
+    .pr2-logo-wrap{display:flex;justify-content:center;margin-bottom:34px}
+    .pr2-logo-btn{position:relative;width:112px;height:112px;border-radius:50%;background:#26262c;color:#fff;font-size:38px;font-weight:800;display:grid;place-items:center;cursor:pointer;overflow:hidden;border:0;background-size:cover;background-position:center;padding:0}
+    .pr2-cam-btn{position:absolute;inset:0;width:100%;height:100%;background:rgba(0,0,0,.32);border:0;color:#ffffff;font-size:26px;display:grid;place-items:center;cursor:pointer}
+    .pr2-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 4px;border-bottom:1px solid #232329}
+    .pr2-lbl{font-size:14px;color:#a1a1aa;margin-bottom:4px}
+    .pr2-val{font-size:18px;color:#ffffff;font-weight:500;word-break:break-word}
+    .pr2-pencil{background:transparent;border:0;color:#ffffff;font-size:20px;padding:8px;border-radius:10px;cursor:pointer;flex-shrink:0}
+    .pr2-pencil:hover{background:#222228}
+    .pr2-edit-box{margin:10px 4px 16px;background:#16161a;border:1px solid #2e2e38;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+    .pr2-input{width:100%;background:#1e1e24;border:1px solid #353540;border-radius:10px;padding:10px 12px;font-size:14px;color:#fff;outline:none}
+    .pr2-input:focus{border-color:#ff0000}
+    .pr2-btns{display:flex;justify-content:flex-end;gap:8px}
   </style>
 </head>
 <body class="bg-ytDark text-gray-100 font-sans antialiased selection:bg-red-600 selection:text-white pb-16 md:pb-0">
@@ -143,16 +141,13 @@
       </button>
     </div>
 
-    <!-- Search, Upload (+) & Profile right beside Upload -->
+    <!-- Search icon only -->
     <div class="flex items-center gap-2">
       <button onclick="toggleSearchBox()" title="Search" class="w-9 h-9 rounded-full bg-ytDarkSec hover:bg-ytDarkHover flex items-center justify-center text-white transition-colors">
         <i class="fa-solid fa-magnifying-glass text-sm"></i>
       </button>
       <button onclick="handleUploadClick()" title="Upload Video" class="flex items-center justify-center bg-ytRed hover:bg-red-700 text-white w-9 h-9 rounded-full shadow-xs transition-all active:scale-95">
         <i class="fa-solid fa-plus text-base"></i>
-      </button>
-      <button id="top-header-profile-btn" onclick="handleHeaderProfileClick()" title="Profile" class="flex items-center justify-center bg-ytDarkSec hover:bg-ytDarkHover text-white w-9 h-9 rounded-full border border-zinc-700 text-xs font-bold overflow-hidden bg-cover bg-center transition-all active:scale-95">
-        <span id="top-header-profile-label"><i class="fa-solid fa-user text-sm"></i></span>
       </button>
     </div>
   </header>
@@ -278,140 +273,102 @@
 
           </div>
 
-          <!-- Logged-in Profile Panel -->
+          <!-- Logged-in Profile Panel (PHOTO 1 VIEW) -->
           <div id="profile-panel" hidden>
-            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 p-5 rounded-2xl bg-ytDarkSec/70 border border-zinc-800 mb-6 relative">
-              <div class="relative group shrink-0">
-                <div id="profile-logo-container" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden bg-cover bg-center">
+            <div id="profile-main-view" class="pr1-shell">
+              <div class="pr1-top">
+                <div id="profile-logo-container" class="pr1-avatar">
                   <span id="profile-logo-text">A</span>
                 </div>
-              </div>
-
-              <div class="text-center sm:text-left flex-1">
-                <div class="flex items-center justify-center sm:justify-between gap-2">
-                  <div>
-                    <h1 id="display-nickname" class="text-xl sm:text-2xl font-bold text-white">My Channel</h1>
-                    <p id="display-meta" class="text-xs sm:text-sm text-gray-400 mt-0.5">@username • 0 subscribers • 0 videos</p>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <button onclick="openEditModal()" class="px-4 py-2 rounded-full bg-zinc-700 hover:opacity-90 text-xs font-semibold flex items-center gap-1.5 text-white" title="Edit Profile">
-                      <i class="fa-solid fa-pen"></i> Edit Profile
-                    </button>
-                    <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-zinc-700 hover:opacity-90 flex items-center justify-center text-sm transition-opacity text-white" title="Settings">
-                      <i class="fa-solid fa-gear"></i>
-                    </button>
-                  </div>
+                <div class="min-w-0">
+                  <div id="display-nickname" class="pr1-name">My Channel</div>
+                  <div id="display-handle" class="pr1-handle">@username</div>
+                  <div id="display-subs" class="pr1-subs">0 subscribers</div>
                 </div>
               </div>
-            </div>
 
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <h2 class="text-base sm:text-lg font-bold flex items-center gap-2 text-white">
-                  <i class="fa-solid fa-film text-ytRed"></i> Your Uploaded Videos
-                </h2>
-              </div>
-              <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 7. HEADER PROFILE PAGE (PHOTO 1 DESIGN) -->
-        <section id="tab-header-profile" class="tab-section hidden">
-          <div class="qp-shell">
-            <div class="qp-top-bar">
-              <button type="button" onclick="closeHeaderProfilePage()" class="qp-back-btn">
-                <i class="fa-solid fa-arrow-left"></i> Back
-              </button>
-            </div>
-
-            <div class="qp-card-top">
-              <div id="qp-avatar" class="qp-avatar-circle">X</div>
-              <div>
-                <div id="qp-name" class="qp-name-big">Creator</div>
-                <div id="qp-handle" class="qp-handle-txt">@creator</div>
-                <div id="qp-subs" class="qp-subs-txt">0 subscribers</div>
-              </div>
-            </div>
-
-            <div class="qp-action-row">
-              <button type="button" onclick="openEditHeaderProfilePage()" class="qp-action-btn">
-                <i class="fa-solid fa-pen"></i>
-                <span>Edit channel</span>
-              </button>
-              <button type="button" onclick="toggleQuickLogoutBox()" class="qp-action-btn">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings</span>
-              </button>
-            </div>
-
-            <div id="qp-logout-box" class="qp-logout-panel hidden">
-              <span class="text-xs text-gray-300">Log out from your X Hub account</span>
-              <button type="button" onclick="handleHeaderQuickLogout()" class="px-4 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold">
-                Logout
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <!-- 8. EDIT HEADER PROFILE PAGE (PHOTO 2 DESIGN) -->
-        <section id="tab-edit-header-profile" class="tab-section hidden">
-          <div class="qp-shell">
-            <div class="qpe-head">
-              <div class="flex items-center gap-3">
-                <button type="button" onclick="switchTab('header-profile')" class="qp-back-btn">
-                  <i class="fa-solid fa-arrow-left"></i>
+              <div class="pr1-actions">
+                <button type="button" onclick="openEditChannelView()" class="pr1-act-btn">
+                  <i class="fa-solid fa-pen"></i>
+                  <span>Edit channel</span>
                 </button>
-                <h1 class="qpe-title">Channel profile</h1>
+                <button type="button" onclick="toggleProfileLogoutOption()" class="pr1-act-btn">
+                  <i class="fa-solid fa-gear"></i>
+                  <span>Settings</span>
+                </button>
               </div>
-            </div>
 
-            <input id="qpe-logo-file" type="file" accept="image/*" class="hidden" />
+              <div id="profile-logout-option" class="pr1-logout-box hidden">
+                <span class="text-sm font-medium text-gray-300">Account Settings</span>
+                <button type="button" onclick="handleLogout()" class="px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold">
+                  Logout
+                </button>
+              </div>
 
-            <!-- 1. Logo with Camera Overlay -->
-            <div class="qpe-logo-box">
-              <button type="button" id="qpe-logo-btn" title="Change Logo" class="qpe-logo-btn">
-                <span id="qpe-logo-letter">X</span>
-                <div class="qpe-cam-overlay">
-                  <i class="fa-solid fa-camera"></i>
+              <div class="mt-2">
+                <div class="flex items-center justify-between mb-3">
+                  <h2 class="text-base sm:text-lg font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-film text-ytRed"></i> Your Uploaded Videos
+                  </h2>
                 </div>
-              </button>
-            </div>
-
-            <!-- 2. Name + Pencil -->
-            <div class="qpe-row">
-              <div>
-                <div class="qpe-label">Name</div>
-                <div id="qpe-name-val" class="qpe-val">Creator</div>
-              </div>
-              <button type="button" onclick="toggleInlineFieldEdit('name')" title="Edit Name" class="qpe-pencil">
-                <i class="fa-solid fa-pen"></i>
-              </button>
-            </div>
-            <div id="qpe-name-edit-box" class="qpe-inline-edit hidden">
-              <input id="qpe-name-input" type="text" placeholder="Enter new name" class="qpe-inline-input" />
-              <div class="qpe-inline-btns">
-                <button type="button" onclick="toggleInlineFieldEdit('name')" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-xs font-semibold text-gray-300">Cancel</button>
-                <button type="button" onclick="saveQuickProfileField('name')" class="px-4 py-1.5 rounded-lg bg-ytRed hover:bg-red-700 text-xs font-semibold text-white">Save</button>
+                <div id="user-uploads-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
               </div>
             </div>
 
-            <!-- 3. Handle + Pencil -->
-            <div class="qpe-row">
-              <div>
-                <div class="qpe-label">Handle</div>
-                <div id="qpe-handle-val" class="qpe-val">@creator</div>
+            <!-- EDIT CHANNEL VIEW (PHOTO 2 VIEW) -->
+            <div id="profile-edit-view" class="pr1-shell hidden">
+              <div class="pr2-top-bar">
+                <button type="button" onclick="closeEditChannelView()" class="pr2-back">
+                  <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
               </div>
-              <button type="button" onclick="toggleInlineFieldEdit('handle')" title="Edit Handle" class="qpe-pencil">
-                <i class="fa-solid fa-pen"></i>
-              </button>
-            </div>
-            <div id="qpe-handle-edit-box" class="qpe-inline-edit hidden">
-              <input id="qpe-handle-input" type="text" placeholder="@username" class="qpe-inline-input" />
-              <div class="qpe-inline-btns">
-                <button type="button" onclick="toggleInlineFieldEdit('handle')" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-xs font-semibold text-gray-300">Cancel</button>
-                <button type="button" onclick="saveQuickProfileField('handle')" class="px-4 py-1.5 rounded-lg bg-ytRed hover:bg-red-700 text-xs font-semibold text-white">Save</button>
+
+              <input id="edit-logo-file" type="file" accept="image/*" class="hidden" />
+
+              <div class="pr2-logo-wrap">
+                <div id="edit-logo-preview" class="pr2-logo-btn">
+                  <span id="edit-logo-letter">A</span>
+                  <button type="button" onclick="document.getElementById('edit-logo-file').click()" title="Change Logo" class="pr2-cam-btn">
+                    <i class="fa-solid fa-camera"></i>
+                  </button>
+                </div>
               </div>
+
+              <div class="pr2-row">
+                <div>
+                  <div class="pr2-lbl">Name</div>
+                  <div id="edit-name-display" class="pr2-val">My Channel</div>
+                </div>
+                <button type="button" onclick="toggleEditField('name')" title="Edit Name" class="pr2-pencil">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+              </div>
+              <div id="edit-name-box" class="pr2-edit-box hidden">
+                <input id="edit-nickname" type="text" placeholder="Enter channel name" class="pr2-input" />
+                <div class="pr2-btns">
+                  <button type="button" onclick="toggleEditField('name')" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-xs font-semibold text-gray-300">Cancel</button>
+                  <button type="button" onclick="saveRealProfile('name')" class="px-4 py-1.5 rounded-lg bg-ytRed hover:bg-red-700 text-xs font-semibold text-white">Save</button>
+                </div>
+              </div>
+
+              <div class="pr2-row">
+                <div>
+                  <div class="pr2-lbl">Handle</div>
+                  <div id="edit-handle-display" class="pr2-val">@username</div>
+                </div>
+                <button type="button" onclick="toggleEditField('handle')" title="Edit Handle" class="pr2-pencil">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+              </div>
+              <div id="edit-handle-box" class="pr2-edit-box hidden">
+                <input id="edit-username" type="text" placeholder="@username" class="pr2-input" />
+                <div class="pr2-btns">
+                  <button type="button" onclick="toggleEditField('handle')" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-xs font-semibold text-gray-300">Cancel</button>
+                  <button type="button" onclick="saveRealProfile('handle')" class="px-4 py-1.5 rounded-lg bg-ytRed hover:bg-red-700 text-xs font-semibold text-white">Save</button>
+                </div>
+              </div>
+
+              <p id="edit-msg" class="text-xs text-center text-gray-400 mt-3"></p>
             </div>
           </div>
         </section>
@@ -652,21 +609,21 @@
       <div class="p-5 space-y-3">
         <div>
           <label class="block text-xs font-medium text-gray-400 mb-1">Channel Logo / Avatar Image</label>
-          <input id="edit-logo-file" type="file" accept="image/*" class="w-full text-xs text-gray-400" />
+          <input id="edit-logo-file-modal" type="file" accept="image/*" class="w-full text-xs text-gray-400" />
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-400 mb-1">Nickname (Channel Name)</label>
-          <input id="edit-nickname" type="text" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+          <input id="edit-nickname-modal" type="text" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-400 mb-1">Username (e.g., @mychannel)</label>
-          <input id="edit-username" type="text" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
+          <input id="edit-username-modal" type="text" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
         </div>
         <div class="pt-3 flex justify-end gap-2">
           <button onclick="closeEditModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-zinc-800">Cancel</button>
           <button onclick="saveRealProfile()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Save Changes</button>
         </div>
-        <p id="edit-msg" class="text-xs text-center text-gray-400 mt-2"></p>
+        <p id="edit-msg-modal" class="text-xs text-center text-gray-400 mt-2"></p>
       </div>
     </div>
   </div>
@@ -706,10 +663,8 @@
     let currentUser = null;
     let currentTab = 'home';
     let previousTabBeforeUpload = 'home';
-    let prevTabBeforeHeaderProfile = 'home';
     let currentActiveVideo = null;
     let currentActiveChannelId = null;
-    let quickProfileCache = { channel_name: '', username: '', logo_url: '', subs: 0 };
 
     let analyticsWatchSeconds = 0;
     let analyticsLastMediaTime = null;
@@ -784,9 +739,7 @@
 
     async function switchTab(tabName, resetSearch = false) {
       currentTab = tabName;
-      if (tabName !== 'header-profile' && tabName !== 'edit-header-profile') {
-        try { sessionStorage.setItem('X Hub_active_tab', tabName); } catch(e) {}
-      }
+      try { sessionStorage.setItem('X Hub_active_tab', tabName); } catch(e) {}
 
       document.querySelectorAll('.nav-btn').forEach(btn => {
         const isTarget = btn.getAttribute('data-tab') === tabName;
@@ -807,207 +760,11 @@
 
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
-      updateTopHeaderProfileBadge(user);
 
       if (tabName === 'home') await loadHomeVideos();
       else if (tabName === 'subscribed') await loadSubscribedVideos();
       else if (tabName === 'profile') checkUserSession();
     }
-
-    function updateTopHeaderProfileBadge(user) {
-      const btn = document.getElementById('top-header-profile-btn');
-      const lbl = document.getElementById('top-header-profile-label');
-      if (!user) {
-        btn.style.backgroundImage = 'none';
-        lbl.innerHTML = '<i class="fa-solid fa-user text-sm"></i>';
-        lbl.classList.remove('hidden');
-        return;
-      }
-      const name = quickProfileCache.channel_name || user.email?.split('@')[0] || 'X';
-      if (quickProfileCache.logo_url) {
-        btn.style.backgroundImage = `url('${quickProfileCache.logo_url}')`;
-        lbl.classList.add('hidden');
-      } else {
-        btn.style.backgroundImage = 'none';
-        lbl.textContent = name.charAt(0).toUpperCase();
-        lbl.classList.remove('hidden');
-      }
-    }
-
-    function applyQuickProfileUI() {
-      const name = quickProfileCache.channel_name || 'Creator';
-      const handle = quickProfileCache.username || '@creator';
-      const subs = quickProfileCache.subs || 0;
-      const initial = name.charAt(0).toUpperCase();
-
-      document.getElementById('qp-name').textContent = name;
-      document.getElementById('qp-handle').textContent = handle;
-      document.getElementById('qp-subs').textContent = `${subs} subscribers`;
-      document.getElementById('qpe-name-val').textContent = name;
-      document.getElementById('qpe-handle-val').textContent = handle;
-
-      const qpAvatar = document.getElementById('qp-avatar');
-      const qpeLogoBtn = document.getElementById('qpe-logo-btn');
-      const qpeLetter = document.getElementById('qpe-logo-letter');
-
-      if (quickProfileCache.logo_url) {
-        qpAvatar.style.backgroundImage = `url('${quickProfileCache.logo_url}')`;
-        qpAvatar.textContent = '';
-        qpeLogoBtn.style.backgroundImage = `url('${quickProfileCache.logo_url}')`;
-        qpeLetter.classList.add('hidden');
-      } else {
-        qpAvatar.style.backgroundImage = 'none';
-        qpAvatar.textContent = initial;
-        qpeLogoBtn.style.backgroundImage = 'none';
-        qpeLetter.textContent = initial;
-        qpeLetter.classList.remove('hidden');
-      }
-      updateTopHeaderProfileBadge(currentUser);
-    }
-
-    async function loadQuickProfileData() {
-      if (!currentUser) return;
-      const fallbackName = currentUser.email?.split('@')[0] || 'Creator';
-      const fallbackHandle = '@' + fallbackName.toLowerCase().replace(/[^a-z0-9_]/g, '_');
-
-      const [{ data: profile }, { count: subCount }] = await Promise.all([
-        sb.from('profiles').select('*').eq('user_id', currentUser.id).maybeSingle(),
-        sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', currentUser.id)
-      ]);
-
-      let handle = profile?.username || fallbackHandle;
-      if (handle && !handle.startsWith('@')) handle = '@' + handle;
-
-      quickProfileCache = {
-        channel_name: profile?.channel_name || fallbackName,
-        username: handle,
-        logo_url: profile?.logo_url || '',
-        subs: subCount || 0
-      };
-      applyQuickProfileUI();
-    }
-
-    async function handleHeaderProfileClick() {
-      const { data: { user } } = await sb.auth.getUser();
-      currentUser = user;
-      if (!currentUser) {
-        showToast('Please login or sign up first.');
-        switchTab('profile');
-        return;
-      }
-      if (currentTab !== 'header-profile' && currentTab !== 'edit-header-profile') {
-        prevTabBeforeHeaderProfile = currentTab || 'home';
-      }
-      document.getElementById('qp-logout-box').classList.add('hidden');
-      await loadQuickProfileData();
-      switchTab('header-profile');
-    }
-
-    function closeHeaderProfilePage() {
-      switchTab(prevTabBeforeHeaderProfile || 'home');
-    }
-
-    function toggleQuickLogoutBox() {
-      document.getElementById('qp-logout-box').classList.toggle('hidden');
-    }
-
-    async function handleHeaderQuickLogout() {
-      await sb.auth.signOut();
-      currentUser = null;
-      quickProfileCache = { channel_name: '', username: '', logo_url: '', subs: 0 };
-      updateTopHeaderProfileBadge(null);
-      switchTab('home');
-      showToast('Logged out successfully');
-    }
-
-    function openEditHeaderProfilePage() {
-      document.getElementById('qpe-name-edit-box').classList.add('hidden');
-      document.getElementById('qpe-handle-edit-box').classList.add('hidden');
-      document.getElementById('qpe-name-input').value = quickProfileCache.channel_name || '';
-      document.getElementById('qpe-handle-input').value = quickProfileCache.username || '';
-      applyQuickProfileUI();
-      switchTab('edit-header-profile');
-    }
-
-    function toggleInlineFieldEdit(field) {
-      if (field === 'name') {
-        document.getElementById('qpe-handle-edit-box').classList.add('hidden');
-        const box = document.getElementById('qpe-name-edit-box');
-        document.getElementById('qpe-name-input').value = quickProfileCache.channel_name || '';
-        box.classList.toggle('hidden');
-        if (!box.classList.contains('hidden')) document.getElementById('qpe-name-input').focus();
-      } else {
-        document.getElementById('qpe-name-edit-box').classList.add('hidden');
-        const box = document.getElementById('qpe-handle-edit-box');
-        document.getElementById('qpe-handle-input').value = quickProfileCache.username || '';
-        box.classList.toggle('hidden');
-        if (!box.classList.contains('hidden')) document.getElementById('qpe-handle-input').focus();
-      }
-    }
-
-    async function saveQuickProfileField(field) {
-      if (!currentUser) return;
-      if (field === 'name') {
-        const nextName = document.getElementById('qpe-name-input').value.trim();
-        if (!nextName) { showToast('Name cannot be empty'); return; }
-        const payload = {
-          user_id: currentUser.id,
-          channel_name: nextName,
-          username: quickProfileCache.username || '@creator',
-          ...(quickProfileCache.logo_url ? { logo_url: quickProfileCache.logo_url } : {})
-        };
-        const { error } = await sb.from('profiles').upsert(payload, { onConflict: 'user_id' });
-        if (error) { showToast('Error: ' + error.message); return; }
-        quickProfileCache.channel_name = nextName;
-        document.getElementById('qpe-name-edit-box').classList.add('hidden');
-        applyQuickProfileUI();
-        showToast('Name updated!');
-      } else {
-        let nextHandle = document.getElementById('qpe-handle-input').value.trim();
-        if (!nextHandle) { showToast('Handle cannot be empty'); return; }
-        if (!nextHandle.startsWith('@')) nextHandle = '@' + nextHandle;
-        const payload = {
-          user_id: currentUser.id,
-          channel_name: quickProfileCache.channel_name || 'Creator',
-          username: nextHandle,
-          ...(quickProfileCache.logo_url ? { logo_url: quickProfileCache.logo_url } : {})
-        };
-        const { error } = await sb.from('profiles').upsert(payload, { onConflict: 'user_id' });
-        if (error) { showToast('Error: ' + error.message); return; }
-        quickProfileCache.username = nextHandle;
-        document.getElementById('qpe-handle-edit-box').classList.add('hidden');
-        applyQuickProfileUI();
-        showToast('Handle updated!');
-      }
-    }
-
-    (function initQuickProfileLogoGallery() {
-      const logoBtn = document.getElementById('qpe-logo-btn');
-      const fileInp = document.getElementById('qpe-logo-file');
-      logoBtn.addEventListener('click', () => fileInp.click());
-      fileInp.addEventListener('change', async () => {
-        const file = fileInp.files && fileInp.files[0];
-        if (!file || !currentUser) return;
-        showToast('Uploading logo...');
-        const logoPath = `${currentUser.id}/logo_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-        const { error: upErr } = await sb.storage.from('Videos').upload(logoPath, file);
-        if (upErr) { showToast('Logo upload failed'); return; }
-        const { data: pub } = sb.storage.from('Videos').getPublicUrl(logoPath);
-        const logoUrl = pub?.publicUrl || '';
-        const payload = {
-          user_id: currentUser.id,
-          channel_name: quickProfileCache.channel_name || 'Creator',
-          username: quickProfileCache.username || '@creator',
-          logo_url: logoUrl
-        };
-        const { error: dbErr } = await sb.from('profiles').upsert(payload, { onConflict: 'user_id' });
-        if (dbErr) { showToast('Could not save logo'); return; }
-        quickProfileCache.logo_url = logoUrl;
-        fileInp.value = '';
-        applyQuickProfileUI();
-        showToast('Profile logo updated!');
-      });
-    })();
 
     async function checkUserSession() {
       const authContainer = document.getElementById('auth-container');
@@ -1023,9 +780,101 @@
       } else {
         authContainer.hidden = true;
         profilePanel.hidden = false;
+        document.getElementById('profile-main-view').classList.remove('hidden');
+        document.getElementById('profile-edit-view').classList.add('hidden');
+        document.getElementById('profile-logout-option').classList.add('hidden');
         await loadUserProfileAndUploads(currentUser);
       }
     }
+
+    function toggleProfileLogoutOption() {
+      document.getElementById('profile-logout-option').classList.toggle('hidden');
+    }
+
+    function openEditChannelView() {
+      document.getElementById('profile-main-view').classList.add('hidden');
+      document.getElementById('profile-edit-view').classList.remove('hidden');
+      document.getElementById('edit-name-box').classList.add('hidden');
+      document.getElementById('edit-handle-box').classList.add('hidden');
+      document.getElementById('edit-msg').textContent = '';
+
+      const nick = document.getElementById('display-nickname').textContent || 'My Channel';
+      const handle = document.getElementById('display-handle').textContent || '@username';
+      document.getElementById('edit-name-display').textContent = nick;
+      document.getElementById('edit-handle-display').textContent = handle;
+      document.getElementById('edit-nickname').value = nick;
+      document.getElementById('edit-username').value = handle;
+
+      const mainAvatar = document.getElementById('profile-logo-container');
+      const editLogo = document.getElementById('edit-logo-preview');
+      const editLetter = document.getElementById('edit-logo-letter');
+      if (mainAvatar.style.backgroundImage && mainAvatar.style.backgroundImage !== 'none') {
+        editLogo.style.backgroundImage = mainAvatar.style.backgroundImage;
+        editLetter.classList.add('hidden');
+      } else {
+        editLogo.style.backgroundImage = 'none';
+        editLetter.textContent = nick.charAt(0).toUpperCase();
+        editLetter.classList.remove('hidden');
+      }
+    }
+
+    function closeEditChannelView() {
+      document.getElementById('profile-edit-view').classList.add('hidden');
+      document.getElementById('profile-main-view').classList.remove('hidden');
+    }
+
+    function toggleEditField(field) {
+      if (field === 'name') {
+        document.getElementById('edit-handle-box').classList.add('hidden');
+        const box = document.getElementById('edit-name-box');
+        document.getElementById('edit-nickname').value = document.getElementById('edit-name-display').textContent;
+        box.classList.toggle('hidden');
+        if (!box.classList.contains('hidden')) document.getElementById('edit-nickname').focus();
+      } else {
+        document.getElementById('edit-name-box').classList.add('hidden');
+        const box = document.getElementById('edit-handle-box');
+        document.getElementById('edit-username').value = document.getElementById('edit-handle-display').textContent;
+        box.classList.toggle('hidden');
+        if (!box.classList.contains('hidden')) document.getElementById('edit-username').focus();
+      }
+    }
+
+    (function bindGalleryLogoPicker() {
+      const fileInp = document.getElementById('edit-logo-file');
+      fileInp.addEventListener('change', async () => {
+        const logoFile = fileInp.files && fileInp.files[0];
+        if (!logoFile || !currentUser) return;
+        const msg = document.getElementById('edit-msg');
+        msg.textContent = 'Uploading logo...';
+
+        const logoPath = `${currentUser.id}/logo_${Date.now()}_${logoFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        const { error: logoErr } = await sb.storage.from('Videos').upload(logoPath, logoFile);
+        if (logoErr) {
+          msg.textContent = 'Logo upload failed: ' + logoErr.message;
+          return;
+        }
+        const { data: logoData } = sb.storage.from('Videos').getPublicUrl(logoPath);
+        const logoUrl = logoData?.publicUrl;
+
+        const nick = document.getElementById('edit-name-display').textContent.trim() || 'My Channel';
+        const handle = document.getElementById('edit-handle-display').textContent.trim() || '@username';
+        const { error: upErr } = await sb.from('profiles').upsert(
+          { user_id: currentUser.id, channel_name: nick, username: handle, logo_url: logoUrl },
+          { onConflict: 'user_id' }
+        );
+        if (upErr) {
+          msg.textContent = 'Error saving logo: ' + upErr.message;
+          return;
+        }
+
+        fileInp.value = '';
+        msg.textContent = '';
+        document.getElementById('edit-logo-preview').style.backgroundImage = `url('${logoUrl}')`;
+        document.getElementById('edit-logo-letter').classList.add('hidden');
+        await loadUserProfileAndUploads(currentUser);
+        showToast('Logo updated!');
+      });
+    })();
 
     function switchAuthMode(mode) {
       document.getElementById('form-register').classList.add('hidden');
@@ -1370,21 +1219,33 @@
       let { data: profile } = await sb.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
       let nickname = profile?.channel_name || 'My Channel';
       let username = profile?.username || '@' + user.email.split('@')[0];
+      if (username && !username.startsWith('@')) username = '@' + username;
 
       let { count: subCount } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', user.id);
       let { data: videos } = await sb.from('videos').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-      let videoCount = videos ? videos.length : 0;
 
       document.getElementById('display-nickname').textContent = nickname;
-      document.getElementById('display-meta').textContent = `${username} • ${subCount || 0} subscribers • ${videoCount} videos`;
+      document.getElementById('display-handle').textContent = username;
+      document.getElementById('display-subs').textContent = `${subCount || 0} subscribers`;
+      document.getElementById('edit-name-display').textContent = nickname;
+      document.getElementById('edit-handle-display').textContent = username;
 
       if (profile?.logo_url) {
         const logoDiv = document.getElementById('profile-logo-container');
         logoDiv.style.backgroundImage = `url('${profile.logo_url}')`;
         document.getElementById('profile-logo-text').classList.add('hidden');
+        const editLogo = document.getElementById('edit-logo-preview');
+        editLogo.style.backgroundImage = `url('${profile.logo_url}')`;
+        document.getElementById('edit-logo-letter').classList.add('hidden');
       } else {
+        const logoDiv = document.getElementById('profile-logo-container');
+        logoDiv.style.backgroundImage = 'none';
         document.getElementById('profile-logo-text').textContent = nickname.charAt(0).toUpperCase();
         document.getElementById('profile-logo-text').classList.remove('hidden');
+        const editLogo = document.getElementById('edit-logo-preview');
+        editLogo.style.backgroundImage = 'none';
+        document.getElementById('edit-logo-letter').textContent = nickname.charAt(0).toUpperCase();
+        document.getElementById('edit-logo-letter').classList.remove('hidden');
       }
 
       const grid = document.getElementById('user-uploads-grid');
@@ -1926,14 +1787,11 @@
     }
 
     async function openEditModal() {
-      let { data: profile } = await sb.from('profiles').select('*').eq('user_id', currentUser.id).maybeSingle();
-      document.getElementById('edit-nickname').value = profile?.channel_name || document.getElementById('display-nickname').textContent;
-      document.getElementById('edit-username').value = profile?.username || '';
-      document.getElementById('edit-profile-modal').classList.remove('hidden');
+      openEditChannelView();
     }
     function closeEditModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
 
-    async function saveRealProfile() {
+    async function saveRealProfile(specificField = null) {
       const nick = document.getElementById('edit-nickname').value.trim();
       let userHandle = document.getElementById('edit-username').value.trim();
       const logoFile = document.getElementById('edit-logo-file').files[0];
@@ -1963,8 +1821,10 @@
         return;
       }
 
-      closeEditModal();
-      checkUserSession();
+      msg.textContent = '';
+      if (specificField === 'name') document.getElementById('edit-name-box').classList.add('hidden');
+      if (specificField === 'handle') document.getElementById('edit-handle-box').classList.add('hidden');
+      await loadUserProfileAndUploads(currentUser);
       showToast('Profile updated successfully!');
     }
 
@@ -2010,7 +1870,6 @@
       
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
-      if (currentUser) await loadQuickProfileData();
 
       switchTab(savedTab);
     });
