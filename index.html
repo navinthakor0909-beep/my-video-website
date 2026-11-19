@@ -47,6 +47,58 @@
       pointer-events: none;
       transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
+
+    /* UPLOAD PAGE DESIGN MATCHING REFERENCE IMAGE */
+    .up-shell{max-width:560px;margin:0 auto}
+    .up-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .up-brand{display:flex;align-items:center;gap:14px}
+    .up-cloud-badge{width:54px;height:42px;display:grid;place-items:center;flex-shrink:0}
+    .up-head-title{font-size:24px;font-weight:800;margin:0;line-height:1.15;color:#fff}
+    .up-head-sub{font-size:13px;color:#a1a1aa;margin-top:3px;line-height:1.35}
+    .up-back-btn{background:#232328;border:1px solid #32323a;color:#f5f5f6;border-radius:14px;padding:10px 16px;font-size:13px;font-weight:700;display:inline-flex;flex-direction:column;align-items:center;line-height:1.15;cursor:pointer;flex-shrink:0}
+    .up-back-btn:hover{background:#2c2c33}
+
+    .drop-zone{background:#16161a;border:2px dashed #4a4a52;border-radius:18px;padding:34px 20px;text-align:center;transition:border-color .2s,background .2s;cursor:pointer;margin-bottom:20px}
+    .drop-zone.dragover{border-color:#ff001e;background:#1e171a}
+    .drop-cloud-ico{width:54px;height:54px;margin:0 auto 12px;display:grid;place-items:center}
+    .drop-main-txt{font-size:17px;font-weight:700;color:#fff;margin-bottom:6px}
+    .drop-or{font-size:12px;color:#a1a1aa;margin-bottom:14px}
+    .choose-vid-btn{display:inline-flex;align-items:center;gap:8px;background:#ff001e;color:#fff;padding:11px 22px;border-radius:999px;font-size:14px;font-weight:700;box-shadow:0 4px 16px rgba(255,0,30,.28);border:0;cursor:pointer}
+    .choose-vid-btn:hover{background:#e0001a}
+    .selected-vid-box{margin-top:12px;display:inline-flex;align-items:center;gap:10px;background:#232329;border:1px solid #3a3a44;padding:8px 14px;border-radius:999px;font-size:13px;color:#4ade80;max-width:100%}
+    .selected-vid-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+    .remove-vid-x{background:#32323a;color:#f5f5f6;width:24px;height:24px;border-radius:50%;padding:0;display:inline-grid;place-items:center;font-size:13px;font-weight:800;flex-shrink:0;border:0;cursor:pointer}
+    .remove-vid-x:hover{background:#ef233c;color:#fff}
+
+    .thumb-card{background:#141417;border:1px solid #26262c;border-radius:18px;padding:18px;margin-bottom:18px}
+    .thumb-hdr{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;margin-bottom:14px;color:#fff}
+    .info-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid #a1a1aa;color:#a1a1aa;display:inline-grid;place-items:center;font-size:11px;font-weight:700}
+    .thumb-preview-box{width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;position:relative;background:linear-gradient(135deg,#1d263b 0%,#3a2c4d 45%,#b5583c 80%,#f0a868 100%);display:grid;place-items:center;border:1px solid #2e2e36}
+    .thumb-preview-box img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .thumb-center-icon{width:64px;height:52px;border-radius:12px;border:3px solid #fff;background:rgba(0,0,0,.22);display:grid;place-items:center;z-index:1}
+    .change-thumb-btn{width:100%;margin-top:14px;background:#1e1e23;border:1px solid #32323a;color:#fff;padding:13px;border-radius:12px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+    .change-thumb-btn:hover{background:#27272e}
+
+    .title-card{background:#141417;border:1px solid #26262c;border-radius:16px;padding:16px;margin-bottom:18px}
+    .title-lbl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#e4e4e7;margin-bottom:10px}
+    .title-card input{width:100%;background:#1b1b20;border:1px solid #2f2f37;border-radius:10px;padding:12px 14px;font-size:14px;color:#fff;outline:none}
+    .title-card input:focus{border-color:#ff001e}
+
+    .proc-card{background:#141417;border:1px solid #26262c;border-radius:16px;padding:16px 18px;margin-bottom:22px;display:flex;align-items:center;gap:16px}
+    .ring-wrap{width:54px;height:54px;position:relative;flex-shrink:0;display:grid;place-items:center}
+    .ring-svg{width:54px;height:54px;transform:rotate(-90deg)}
+    .ring-bg{fill:none;stroke:#2d2d35;stroke-width:4.5}
+    .ring-fg{fill:none;stroke:#ff001e;stroke-width:4.5;stroke-linecap:round;stroke-dasharray:138.23;stroke-dashoffset:138.23;transition:stroke-dashoffset .15s linear}
+    .ring-pct{position:absolute;font-size:12px;font-weight:800;color:#fff}
+    .proc-info{flex:1;min-width:0}
+    .proc-title{font-size:14px;font-weight:700;color:#fff}
+    .proc-sub{font-size:12px;color:#a1a1aa;margin-top:3px;margin-bottom:10px}
+    .proc-bar-track{width:100%;height:5px;background:#2b2b33;border-radius:999px;overflow:hidden}
+    .proc-bar-fill{height:100%;width:0%;background:#ff001e;border-radius:999px;transition:width .15s linear}
+
+    .publish-big-btn{width:100%;background:#ff001e;color:#fff;padding:17px 24px;border-radius:18px;font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 6px 24px rgba(255,0,30,.32);border:0;cursor:pointer}
+    .publish-big-btn:hover{background:#e0001a}
+    .publish-big-btn:disabled{opacity:.65;cursor:not-allowed}
   </style>
 </head>
 <body class="bg-ytDark text-gray-100 font-sans antialiased selection:bg-red-600 selection:text-white pb-16 md:pb-0">
@@ -120,7 +172,6 @@
             <button onclick="switchTab('profile')" class="px-5 py-2 rounded-full bg-ytRed text-white text-xs font-semibold">Login / Sign Up</button>
           </div>
           <div id="subscribed-content" class="hidden">
-            <!-- Channel List Strip (YouTube style) -->
             <h3 class="text-sm font-semibold text-gray-400 mb-2">Subscribed Channels</h3>
             <div id="subs-channel-strip" class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-3 mb-5 border-b border-zinc-800"></div>
 
@@ -133,10 +184,10 @@
           </div>
         </section>
 
-        <!-- 3. PROFILE TAB (Register, Login, Forgot Password, Profile Mgmt) -->
+        <!-- 3. PROFILE TAB -->
         <section id="tab-profile" class="tab-section hidden max-w-6xl mx-auto">
           
-          <!-- AUTH CONTAINER (Register, Login, Forgot Password switchers) -->
+          <!-- AUTH CONTAINER -->
           <div id="auth-container" class="max-w-md mx-auto p-6 rounded-2xl bg-ytDarkSec border border-zinc-800 mt-6">
             
             <!-- 3.1 REGISTER FORM -->
@@ -157,7 +208,7 @@
               <p id="reg-msg" class="text-xs text-center text-red-500 mt-2"></p>
             </div>
 
-            <!-- 3.2 LOGIN FORM (Default view under Register/Login hierarchy) -->
+            <!-- 3.2 LOGIN FORM -->
             <div id="form-login" class="hidden">
               <h3 class="text-lg font-bold mb-4 text-center text-white">Login to X Hub</h3>
               <div class="space-y-3">
@@ -207,7 +258,6 @@
                 <div class="flex items-center justify-center sm:justify-between gap-2">
                   <div>
                     <h1 id="display-nickname" class="text-xl sm:text-2xl font-bold text-white">My Channel</h1>
-                    <!-- Real subscriber count & total video uploads count -->
                     <p id="display-meta" class="text-xs sm:text-sm text-gray-400 mt-0.5">@username • 0 subscribers • 0 videos</p>
                   </div>
                   <div class="flex items-center gap-2">
@@ -260,7 +310,6 @@
           </button>
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Main Player Section -->
             <div class="lg:col-span-2 space-y-4">
               <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl">
                 <video id="watch-page-player" controls autoplay class="w-full h-full object-contain"></video>
@@ -293,11 +342,121 @@
               </div>
             </div>
 
-            <!-- Right Related Videos Sidebar -->
             <div class="space-y-4">
               <h3 class="text-base font-bold text-white">Related Videos</h3>
               <div id="related-videos-container" class="space-y-3"></div>
             </div>
+          </div>
+        </section>
+
+        <!-- 6. UPLOAD PAGE TAB (MATCHING REFERENCE PHOTO) -->
+        <section id="tab-upload" class="tab-section hidden">
+          <div class="up-shell">
+            <div class="up-head">
+              <div class="up-brand">
+                <div class="up-cloud-badge">
+                  <svg width="52" height="38" viewBox="0 0 64 46" fill="none">
+                    <path d="M51.5 19.2C50.4 10.6 43.1 4 34.2 4C26.7 4 20.3 8.7 17.8 15.4C11.1 16.3 6 22 6 29C6 36.7 12.3 43 20 43H50C56.6 43 62 37.6 62 31C62 24.8 57.3 19.8 51.5 19.2Z" fill="#ff001e"/>
+                    <path d="M32 16L24 25H29.5V34H34.5V25H40L32 16Z" fill="#0f0f0f"/>
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="up-head-title">Upload Video</h1>
+                  <div class="up-head-sub">Share your creativity with the world</div>
+                </div>
+              </div>
+              <button type="button" onclick="closeUploadPage()" class="up-back-btn">
+                <span>&lt;</span>
+                <span>Back</span>
+              </button>
+            </div>
+
+            <form id="page-upload-form" onsubmit="uploadRealVideo(event)">
+              <input id="upload-file" type="file" accept="video/*" class="hidden" />
+              <input id="upload-thumbnail" type="file" accept="image/*" class="hidden" />
+
+              <!-- Drag & Drop Zone -->
+              <div class="drop-zone" id="video-drop-zone">
+                <div class="drop-cloud-ico">
+                  <svg width="48" height="36" viewBox="0 0 64 46" fill="none">
+                    <path d="M51.5 19.2C50.4 10.6 43.1 4 34.2 4C26.7 4 20.3 8.7 17.8 15.4C11.1 16.3 6 22 6 29C6 36.7 12.3 43 20 43H50C56.6 43 62 37.6 62 31C62 24.8 57.3 19.8 51.5 19.2Z" fill="#ffffff"/>
+                    <path d="M32 16L24 25H29.5V34H34.5V25H40L32 16Z" fill="#16161a"/>
+                  </svg>
+                </div>
+
+                <div id="choose-video-prompt">
+                  <div class="drop-main-txt">Drag &amp; Drop your video here</div>
+                  <div class="drop-or">or</div>
+                  <button type="button" class="choose-vid-btn" id="choose-video-btn">
+                    <svg width="16" height="14" viewBox="0 0 20 16" fill="none"><path d="M2 2C0.9 2 0 2.9 0 4V14C0 15.1 0.9 16 2 16H18C19.1 16 20 15.1 20 14V5C20 3.9 19.1 3 18 3H10L8 1H2V2Z" fill="#fff"/></svg>
+                    Choose Video
+                  </button>
+                </div>
+
+                <div id="selected-video-box" class="selected-vid-box hidden">
+                  <span id="selected-video-name" class="selected-vid-name"></span>
+                  <button type="button" id="remove-video-btn" class="remove-vid-x" title="Remove video">✕</button>
+                </div>
+              </div>
+
+              <!-- Thumbnail Card -->
+              <div class="thumb-card">
+                <div class="thumb-hdr">
+                  <span>Thumbnail</span>
+                  <span class="info-dot" title="Upload a custom thumbnail image">i</span>
+                </div>
+                <div class="thumb-preview-box" id="thumb-preview-box">
+                  <img id="thumb-preview-img" class="hidden" alt="Thumbnail preview" />
+                  <div class="thumb-center-icon" id="thumb-default-icon">
+                    <svg width="34" height="28" viewBox="0 0 24 20" fill="none">
+                      <circle cx="7.5" cy="6.5" r="2.2" fill="#fff"/>
+                      <path d="M2 17L8.5 10L13 14.5L16.5 11L22 17H2Z" fill="#fff"/>
+                    </svg>
+                  </div>
+                </div>
+                <button type="button" class="change-thumb-btn" id="change-thumb-btn">
+                  <svg width="18" height="16" viewBox="0 0 24 20" fill="none">
+                    <path d="M9 1L7.17 3H3C1.9 3 1 3.9 1 5V17C1 18.1 1.9 19 3 19H21C22.1 19 23 18.1 23 17V5C23 3.9 22.1 3 21 3H16.83L15 1H9ZM12 16C9.24 16 7 13.76 7 11C7 8.24 9.24 6 12 6C14.76 6 17 8.24 17 11C17 13.76 14.76 16 12 16Z" fill="#fff"/>
+                    <circle cx="12" cy="11" r="3" fill="#fff"/>
+                  </svg>
+                  Change Thumbnail
+                </button>
+              </div>
+
+              <!-- Video Title Input -->
+              <div class="title-card">
+                <div class="title-lbl">
+                  <span>Video Title *</span>
+                </div>
+                <input id="upload-title" type="text" maxlength="150" placeholder="Enter video title..." />
+              </div>
+
+              <!-- Circular + Linear Progress Card (Empty round ring until Publish Video clicked) -->
+              <div class="proc-card" id="upload-progress-card">
+                <div class="ring-wrap">
+                  <svg class="ring-svg" viewBox="0 0 52 52">
+                    <circle class="ring-bg" cx="26" cy="26" r="22"></circle>
+                    <circle class="ring-fg" id="upload-ring-circle" cx="26" cy="26" r="22"></circle>
+                  </svg>
+                  <span class="ring-pct" id="upload-ring-pct"></span>
+                </div>
+                <div class="proc-info">
+                  <div class="proc-title" id="upload-proc-title">Ready to upload</div>
+                  <div class="proc-sub" id="upload-proc-sub">Click Publish Video to start</div>
+                  <div class="proc-bar-track">
+                    <div class="proc-bar-fill" id="upload-progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Publish Video Button -->
+              <button type="submit" class="publish-big-btn" id="upload-publish-btn">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3L5 10H9.5V16H14.5V10H19L12 3ZM5 19V21H19V19H5Z" fill="#fff"/>
+                </svg>
+                <span id="upload-publish-label">Publish Video</span>
+              </button>
+            </form>
           </div>
         </section>
 
@@ -321,40 +480,7 @@
     </button>
   </nav>
 
-  <!-- UPLOAD VIDEO MODAL -->
-  <div id="upload-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-video text-ytRed"></i> Upload Video
-        </h3>
-        <button onclick="closeUploadModal()" class="w-8 h-8 rounded-full hover:bg-zinc-800 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="p-5 space-y-3">
-        <div>
-          <label class="block text-xs font-medium text-gray-400 mb-1">Video Title</label>
-          <input id="upload-title" type="text" placeholder="Video title" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-sm focus:outline-none focus:border-ytRed text-white" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-gray-400 mb-1">Video File (MP4)</label>
-          <input id="upload-file" type="file" accept="video/*" class="w-full text-xs text-gray-400" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-gray-400 mb-1">Custom Thumbnail Image (Optional)</label>
-          <input id="upload-thumbnail" type="file" accept="image/*" class="w-full text-xs text-gray-400" />
-        </div>
-        <div class="pt-3 flex justify-end gap-2">
-          <button onclick="closeUploadModal()" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-zinc-800">Cancel</button>
-          <button onclick="uploadRealVideo()" class="px-5 py-2 rounded-full bg-ytRed hover:bg-red-700 text-white text-xs font-semibold shadow-sm">Upload</button>
-        </div>
-        <p id="upload-msg" class="text-xs text-center text-gray-400 mt-2"></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- EDIT VIDEO MODAL (Only Delete Video is on the 3-dot menu, but this supports title editing if triggered) -->
+  <!-- EDIT VIDEO MODAL -->
   <div id="edit-video-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
       <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
@@ -379,7 +505,7 @@
     </div>
   </div>
 
-  <!-- EDIT PROFILE MODAL (Fixes Logo, Nickname, Username saving) -->
+  <!-- EDIT PROFILE MODAL -->
   <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#1f1f1f] w-full max-w-md rounded-2xl border border-zinc-700 shadow-2xl overflow-hidden text-white">
       <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
@@ -446,9 +572,10 @@
 
     let currentUser = null;
     let currentTab = 'home';
+    let previousTabBeforeUpload = 'home';
     let currentActiveVideo = null;
     let currentActiveChannelId = null;
-    // Analytics session state: watch time is counted only while the video is playing.
+
     let analyticsWatchSeconds = 0;
     let analyticsLastMediaTime = null;
     let analyticsFlushTimer = null;
@@ -559,7 +686,7 @@
       if (!currentUser) {
         authContainer.hidden = false;
         profilePanel.hidden = true;
-        switchAuthMode('register'); // Default to register as requested
+        switchAuthMode('register');
       } else {
         authContainer.hidden = true;
         profilePanel.hidden = false;
@@ -567,7 +694,6 @@
       }
     }
 
-    // Switch between Register, Login, and Forgot Password forms
     function switchAuthMode(mode) {
       document.getElementById('form-register').classList.add('hidden');
       document.getElementById('form-login').classList.add('hidden');
@@ -589,157 +715,316 @@
         showToast('Please login or sign up first.');
         switchTab('profile');
       } else {
-        openUploadModal();
+        openUploadPage();
       }
+    }
+
+    // --- UPLOAD PAGE STATE & PROGRESS CONTROLS ---
+    const RING_CIRCUMFERENCE = 2 * Math.PI * 22;
+
+    function resetUploadProgressUI() {
+      const circle = document.getElementById('upload-ring-circle');
+      circle.style.strokeDasharray = RING_CIRCUMFERENCE;
+      circle.style.strokeDashoffset = RING_CIRCUMFERENCE;
+      document.getElementById('upload-ring-pct').textContent = '';
+      document.getElementById('upload-progress-fill').style.width = '0%';
+      document.getElementById('upload-proc-title').textContent = 'Ready to upload';
+      document.getElementById('upload-proc-sub').textContent = 'Click Publish Video to start';
+    }
+
+    function setUploadProgressUI(pct, subText) {
+      const safePct = Math.min(100, Math.max(1, pct));
+      const circle = document.getElementById('upload-ring-circle');
+      const offset = RING_CIRCUMFERENCE - (safePct / 100) * RING_CIRCUMFERENCE;
+      circle.style.strokeDashoffset = offset;
+      document.getElementById('upload-ring-pct').textContent = safePct + '%';
+      document.getElementById('upload-progress-fill').style.width = safePct + '%';
+      document.getElementById('upload-proc-title').textContent = 'Uploading your video...';
+      if (subText) document.getElementById('upload-proc-sub').textContent = subText;
+    }
+
+    function resetVideoSelectionUI() {
+      document.getElementById('upload-file').value = '';
+      document.getElementById('selected-video-box').classList.add('hidden');
+      document.getElementById('selected-video-name').textContent = '';
+      document.getElementById('choose-video-prompt').classList.remove('hidden');
+    }
+
+    function openUploadPage() {
+      if (currentTab !== 'upload') {
+        previousTabBeforeUpload = currentTab;
+      }
+      document.getElementById('page-upload-form').reset();
+      resetVideoSelectionUI();
+      document.getElementById('thumb-preview-img').classList.add('hidden');
+      document.getElementById('thumb-preview-img').src = '';
+      document.getElementById('thumb-default-icon').classList.remove('hidden');
+      resetUploadProgressUI();
+      switchTab('upload');
+    }
+
+    function closeUploadPage() {
+      switchTab(previousTabBeforeUpload || 'home');
+    }
+
+    (function initUploadPageListeners() {
+      const dropZone = document.getElementById('video-drop-zone');
+      const videoInput = document.getElementById('upload-file');
+      const thumbInput = document.getElementById('upload-thumbnail');
+
+      document.getElementById('choose-video-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        videoInput.click();
+      });
+
+      dropZone.addEventListener('click', () => {
+        if (!videoInput.files || !videoInput.files[0]) {
+          videoInput.click();
+        }
+      });
+
+      document.getElementById('remove-video-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        resetVideoSelectionUI();
+      });
+
+      dropZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+      dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          videoInput.files = e.dataTransfer.files;
+          handleVideoSelected(e.dataTransfer.files[0]);
+        }
+      });
+
+      videoInput.addEventListener('change', () => {
+        if (videoInput.files && videoInput.files[0]) {
+          handleVideoSelected(videoInput.files[0]);
+        }
+      });
+
+      document.getElementById('change-thumb-btn').addEventListener('click', () => thumbInput.click());
+
+      thumbInput.addEventListener('change', () => {
+        const f = thumbInput.files && thumbInput.files[0];
+        if (!f) return;
+        const url = URL.createObjectURL(f);
+        document.getElementById('thumb-preview-img').src = url;
+        document.getElementById('thumb-preview-img').classList.remove('hidden');
+        document.getElementById('thumb-default-icon').classList.add('hidden');
+      });
+    })();
+
+    function handleVideoSelected(file) {
+      document.getElementById('choose-video-prompt').classList.add('hidden');
+      document.getElementById('selected-video-name').textContent = file.name;
+      document.getElementById('selected-video-box').classList.remove('hidden');
+      const titleInput = document.getElementById('upload-title');
+      if (!titleInput.value.trim()) {
+        titleInput.value = file.name.replace(/\.[^/.]+$/, '');
+      }
+    }
+
+    function uploadFileWithProgress(path, file, accessToken, onProgress) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const encodedPath = path.split('/').map(encodeURIComponent).join('/');
+        xhr.open('POST', `${SUPABASE_URL}/storage/v1/object/Videos/${encodedPath}`);
+        xhr.setRequestHeader('apikey', SUPABASE_KEY);
+        xhr.setRequestHeader('Authorization', `Bearer ${accessToken || SUPABASE_KEY}`);
+        xhr.setRequestHeader('x-upsert', 'false');
+        xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
+
+        const startTime = Date.now();
+        xhr.upload.onprogress = e => {
+          if (e.lengthComputable && typeof onProgress === 'function') {
+            const pct = Math.min(100, Math.max(1, Math.round((e.loaded / e.total) * 100)));
+            const elapsedSec = (Date.now() - startTime) / 1000;
+            let remText = 'Uploading to X Hub...';
+            if (elapsedSec > 1 && e.loaded > 0 && pct < 100) {
+              const rate = e.loaded / elapsedSec;
+              const remSec = Math.max(1, Math.round((e.total - e.loaded) / rate));
+              remText = remSec >= 60 ? `About ${Math.ceil(remSec / 60)} min remaining` : `About ${remSec} sec remaining`;
+            } else if (pct === 100) {
+              remText = 'Finalizing video...';
+            }
+            onProgress(pct, remText);
+          }
+        };
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            if (typeof onProgress === 'function') onProgress(100, 'Upload complete!');
+            resolve();
+          } else {
+            let msg = `Upload failed (${xhr.status})`;
+            try {
+              const res = JSON.parse(xhr.responseText);
+              if (res.message || res.error) msg = res.message || res.error;
+            } catch (_) {}
+            reject(new Error(msg));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error during upload.'));
+        xhr.send(file);
+      });
     }
 
     // REAL SUPABASE EMAIL OTP
-async function sendOtp(type) {
-  const isReg = type === 'reg';
-  const email = document.getElementById(
-    isReg ? 'reg-email' : 'forgot-email'
-  ).value.trim().toLowerCase();
+    async function sendOtp(type) {
+      const isReg = type === 'reg';
+      const email = document.getElementById(
+        isReg ? 'reg-email' : 'forgot-email'
+      ).value.trim().toLowerCase();
 
-  const msg = document.getElementById(
-    isReg ? 'reg-msg' : 'forgot-msg'
-  );
+      const msg = document.getElementById(
+        isReg ? 'reg-msg' : 'forgot-msg'
+      );
 
-  if (!email) {
-    msg.textContent = 'Please enter your email.';
-    return;
-  }
-
-  msg.textContent = 'Sending OTP...';
-
-  if (isReg) {
-    const password = document.getElementById('reg-password').value.trim();
-
-    if (!password) {
-      msg.textContent = 'Enter password first.';
-      return;
-    }
-
-    const { error } = await sb.auth.signUp({
-      email,
-      password
-    });
-
-    if (error) {
-      msg.textContent = error.message;
-      return;
-    }
-  } else {
-    const { error } = await sb.auth.resetPasswordForEmail(email);
-
-    if (error) {
-      msg.textContent = error.message;
-      return;
-    }
-  }
-
-  msg.textContent = 'OTP email requested. Check your Gmail Inbox and Spam.';
-}
-
-// REGISTER WITH REAL OTP
-async function handleRegister() {
-  const email = document.getElementById('reg-email').value.trim().toLowerCase();
-  const otp = document.getElementById('reg-otp-input').value.trim();
-  const msg = document.getElementById('reg-msg');
-
-  if (!email || !otp) {
-    msg.textContent = 'Enter email and OTP.';
-    return;
-  }
-
-  const { data, error } = await sb.auth.verifyOtp({
-    email,
-    token: otp,
-    type: 'signup'
-  });
-
-  if (error) {
-    msg.textContent = error.message;
-    return;
-  }
-
-  currentUser = data.user;
-
-  if (currentUser) {
-    const handle = '@' + email.split('@')[0];
-
-    await sb.from('profiles').upsert({
-      user_id: currentUser.id,
-      channel_name: email.split('@')[0],
-      username: handle
-    }, { onConflict: 'user_id' });
-  }
-
-  showToast('Registration successful!');
-  checkUserSession();
-}
-
-// FORGOT PASSWORD WITH REAL OTP
-async function handleForgotPassword() {
-  const email = document.getElementById('forgot-email').value.trim().toLowerCase();
-  const otp = document.getElementById('forgot-otp-input').value.trim();
-  const newPassword = document.getElementById('forgot-new-password').value.trim();
-  const msg = document.getElementById('forgot-msg');
-
-  if (!email || !otp || !newPassword) {
-    msg.textContent = 'All fields are required.';
-    return;
-  }
-
-  const { error: verifyError } = await sb.auth.verifyOtp({
-    email,
-    token: otp,
-    type: 'recovery'
-  });
-
-  if (verifyError) {
-    msg.textContent = verifyError.message;
-    return;
-  }
-
-  const { error } = await sb.auth.updateUser({
-    password: newPassword
-  });
-
-  if (error) {
-    msg.textContent = error.message;
-    return;
-  }
-
-  showToast('Password updated successfully!');
-  switchAuthMode('login');
-}
-      async function handleLogin() {
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const password = document.getElementById('login-password').value;
-  const msg = document.getElementById('login-msg');
-
-  if (!email || !password) {
-    msg.textContent = 'Enter Gmail and password.';
-    return;
-  }
-
-  msg.textContent = 'Logging in...';
-
-  const { data, error } = await sb.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    msg.textContent = error.message;
-    return;
-  }
-
-  currentUser = data.user;
-  showToast('Login successful!');
-
-  await checkUserSession();
+      if (!email) {
+        msg.textContent = 'Please enter your email.';
+        return;
       }
+
+      msg.textContent = 'Sending OTP...';
+
+      if (isReg) {
+        const password = document.getElementById('reg-password').value.trim();
+
+        if (!password) {
+          msg.textContent = 'Enter password first.';
+          return;
+        }
+
+        const { error } = await sb.auth.signUp({
+          email,
+          password
+        });
+
+        if (error) {
+          msg.textContent = error.message;
+          return;
+        }
+      } else {
+        const { error } = await sb.auth.resetPasswordForEmail(email);
+
+        if (error) {
+          msg.textContent = error.message;
+          return;
+        }
+      }
+
+      msg.textContent = 'OTP email requested. Check your Gmail Inbox and Spam.';
+    }
+
+    async function handleRegister() {
+      const email = document.getElementById('reg-email').value.trim().toLowerCase();
+      const otp = document.getElementById('reg-otp-input').value.trim();
+      const msg = document.getElementById('reg-msg');
+
+      if (!email || !otp) {
+        msg.textContent = 'Enter email and OTP.';
+        return;
+      }
+
+      const { data, error } = await sb.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'signup'
+      });
+
+      if (error) {
+        msg.textContent = error.message;
+        return;
+      }
+
+      currentUser = data.user;
+
+      if (currentUser) {
+        const handle = '@' + email.split('@')[0];
+
+        await sb.from('profiles').upsert({
+          user_id: currentUser.id,
+          channel_name: email.split('@')[0],
+          username: handle
+        }, { onConflict: 'user_id' });
+      }
+
+      showToast('Registration successful!');
+      checkUserSession();
+    }
+
+    async function handleForgotPassword() {
+      const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+      const otp = document.getElementById('forgot-otp-input').value.trim();
+      const newPassword = document.getElementById('forgot-new-password').value.trim();
+      const msg = document.getElementById('forgot-msg');
+
+      if (!email || !otp || !newPassword) {
+        msg.textContent = 'All fields are required.';
+        return;
+      }
+
+      const { error: verifyError } = await sb.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'recovery'
+      });
+
+      if (verifyError) {
+        msg.textContent = verifyError.message;
+        return;
+      }
+
+      const { error } = await sb.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        msg.textContent = error.message;
+        return;
+      }
+
+      showToast('Password updated successfully!');
+      switchAuthMode('login');
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+      const msg = document.getElementById('login-msg');
+
+      if (!email || !password) {
+        msg.textContent = 'Enter Gmail and password.';
+        return;
+      }
+
+      msg.textContent = 'Logging in...';
+
+      const { data, error } = await sb.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        msg.textContent = error.message;
+        return;
+      }
+
+      currentUser = data.user;
+      showToast('Login successful!');
+
+      await checkUserSession();
+    }
+
     async function handleLogout() {
       await sb.auth.signOut();
       currentUser = null;
@@ -748,16 +1033,12 @@ async function handleForgotPassword() {
       showToast('Logged out successfully');
     }
 
-    // --- PROFILE UPLOADS WITH REAL STATS & DELETE VIDEO OPTION ---
     async function loadUserProfileAndUploads(user) {
       let { data: profile } = await sb.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
       let nickname = profile?.channel_name || 'My Channel';
       let username = profile?.username || '@' + user.email.split('@')[0];
 
-      // Fetch real subscriber count
       let { count: subCount } = await sb.from('subscriptions').select('*', { count: 'exact', head: true }).eq('channel_id', user.id);
-      
-      // Fetch real uploaded videos count
       let { data: videos } = await sb.from('videos').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       let videoCount = videos ? videos.length : 0;
 
@@ -795,7 +1076,6 @@ async function handleForgotPassword() {
                 <h4 class="text-sm font-semibold truncate text-white">${v.title}</h4>
                 <p class="text-xs text-gray-400">${v.views || 0} views • ${timeAgo(v.created_at)}</p>
               </div>
-              <!-- 3-Dot Menu: Edit removed, only Delete Video kept -->
               <div class="relative">
                 <button onclick="toggleVideoMenu(event, '${v.id}')" class="p-1.5 rounded-full hover:bg-zinc-800 text-gray-400 hover:text-white">
                   <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
@@ -867,7 +1147,6 @@ async function handleForgotPassword() {
               ${thumbHtml}
             </div>
             <div class="flex gap-3 items-start">
-              <!-- Channel Logo or Name click goes directly to channel -->
               <div onclick="openChannel('${v.user_id}')" class="cursor-pointer shrink-0 hover:scale-105 transition-transform">
                 ${avatarHtml}
               </div>
@@ -882,7 +1161,6 @@ async function handleForgotPassword() {
       }
     }
 
-    // --- SUBSCRIBED TAB (Channel Strip + Subscribed Videos Feed) ---
     async function loadSubscribedVideos() {
       const authPrompt = document.getElementById('subscribed-auth-prompt');
       const contentDiv = document.getElementById('subscribed-content');
@@ -915,7 +1193,6 @@ async function handleForgotPassword() {
 
       const channelIds = subs.map(s => s.channel_id);
 
-      // Populate Channel Strip
       for (let chId of channelIds) {
         let { data: prof } = await sb.from('profiles').select('*').eq('user_id', chId).maybeSingle();
         if (prof) {
@@ -933,7 +1210,6 @@ async function handleForgotPassword() {
         }
       }
 
-      // Load videos from subscribed channels
       const { data: videos } = await sb.from('videos').select('*').in('user_id', channelIds).order('created_at', { ascending: false });
 
       if (!videos || videos.length === 0) {
@@ -1015,11 +1291,12 @@ async function handleForgotPassword() {
       }
 
       const { data: count, error: countError } = await sb.rpc('get_channel_subscriber_count', {
-  channel_uuid: userId
-});
+        channel_uuid: userId
+      });
 
-document.getElementById('channel-view-subs').textContent =
-  `${countError ? 0 : count || 0} subscribers`;
+      document.getElementById('channel-view-subs').textContent =
+        `${countError ? 0 : count || 0} subscribers`;
+
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
       const subBtn = document.getElementById('channel-view-sub-btn');
@@ -1092,7 +1369,6 @@ document.getElementById('channel-view-subs').textContent =
       document.getElementById('channel-view-subs').textContent = `${count || 0} subscribers`;
     }
 
-    // --- WATCH PAGE (YouTube style with related videos) ---
     async function openWatchPage(video, channelName) {
       stopAnalyticsWatchTracking();
       currentActiveVideo = video;
@@ -1101,7 +1377,6 @@ document.getElementById('channel-view-subs').textContent =
 
       const newViews = (video.views || 0) + 1;
       await sb.from('videos').update({ views: newViews }).eq('id', video.id);
-      // One analytics view event per visit to the watch page.
       await recordVideoAnalytics(video.id, video.user_id, 'view', 0);
 
       const { data } = await sb.storage.from('Videos').createSignedUrl(video.file_path, 3600);
@@ -1229,46 +1504,92 @@ document.getElementById('channel-view-subs').textContent =
     });
     window.addEventListener('pagehide', flushAnalyticsWatchTime);
 
-    async function uploadRealVideo() {
+    async function uploadRealVideo(e) {
+      if (e && e.preventDefault) e.preventDefault();
+
       const { data: { user } } = await sb.auth.getUser();
       currentUser = user;
-      if (!currentUser) { alert('Please login!'); return; }
+      if (!currentUser) {
+        showToast('Please login or sign up first.');
+        switchTab('profile');
+        return;
+      }
 
       const title = document.getElementById('upload-title').value.trim();
       const fileInput = document.getElementById('upload-file').files[0];
       const thumbInput = document.getElementById('upload-thumbnail').files[0];
-      const msg = document.getElementById('upload-msg');
 
-      if (!title || !fileInput) { msg.textContent = 'Please enter title and select a video file.'; return; }
-      msg.textContent = 'Uploading...';
-
-      let thumbnailUrl = null;
-      if (thumbInput) {
-        const thumbPath = `${currentUser.id}/thumb_${Date.now()}_${thumbInput.name}`;
-        const { error: thumbErr } = await sb.storage.from('Videos').upload(thumbPath, thumbInput);
-        if (!thumbErr) {
-          const { data: thumbData } = sb.storage.from('Videos').getPublicUrl(thumbPath);
-          thumbnailUrl = thumbData.publicUrl;
-        }
+      if (!fileInput) {
+        showToast('Please choose a video file first.');
+        return;
+      }
+      if (!title) {
+        showToast('Please enter a video title.');
+        return;
       }
 
-      const filePath = `${currentUser.id}/${Date.now()}_${fileInput.name}`;
-      const { error: uploadErr } = await sb.storage.from('Videos').upload(filePath, fileInput);
-      if (uploadErr) { msg.textContent = uploadErr.message; return; }
+      const btn = document.getElementById('upload-publish-btn');
+      const btnLbl = document.getElementById('upload-publish-label');
+      btn.disabled = true;
+      btnLbl.textContent = 'Publishing...';
+      setUploadProgressUI(1, 'Starting upload...');
 
-      const { error: dbErr } = await sb.from('videos').insert({ 
-        title, 
-        file_path: filePath, 
-        user_id: currentUser.id, 
-        thumbnail_url: thumbnailUrl,
-        views: 0,
-        likes: 0 
-      });
+      const safeName = fileInput.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const filePath = `${currentUser.id}/${Date.now()}_${safeName}`;
+      let thumbPath = null;
 
-      if (dbErr) { msg.textContent = dbErr.message; return; }
+      try {
+        const { data: sessionData } = await sb.auth.getSession();
+        const token = sessionData?.session?.access_token;
 
-      msg.textContent = 'Upload complete!';
-      setTimeout(() => { closeUploadModal(); switchTab('home'); }, 1000);
+        await uploadFileWithProgress(filePath, fileInput, token, (pct, remText) => {
+          setUploadProgressUI(pct, remText);
+        });
+
+        let thumbnailUrl = null;
+        if (thumbInput) {
+          const safeThumb = thumbInput.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          thumbPath = `${currentUser.id}/thumb_${Date.now()}_${safeThumb}`;
+          const { error: thumbErr } = await sb.storage.from('Videos').upload(thumbPath, thumbInput, {
+            upsert: false,
+            contentType: thumbInput.type || 'image/jpeg'
+          });
+          if (!thumbErr) {
+            const { data: thumbData } = sb.storage.from('Videos').getPublicUrl(thumbPath);
+            thumbnailUrl = thumbData?.publicUrl || null;
+          }
+        }
+
+        const { error: dbErr } = await sb.from('videos').insert({
+          title,
+          file_path: filePath,
+          user_id: currentUser.id,
+          thumbnail_url: thumbnailUrl,
+          views: 0,
+          likes: 0
+        });
+
+        if (dbErr) {
+          await sb.storage.from('Videos').remove([filePath]);
+          if (thumbPath) await sb.storage.from('Videos').remove([thumbPath]);
+          throw new Error(dbErr.message);
+        }
+
+        document.getElementById('page-upload-form').reset();
+        resetVideoSelectionUI();
+        document.getElementById('thumb-preview-img').classList.add('hidden');
+        document.getElementById('thumb-preview-img').src = '';
+        document.getElementById('thumb-default-icon').classList.remove('hidden');
+        resetUploadProgressUI();
+        showToast('Video published successfully!');
+        switchTab('home');
+      } catch (err) {
+        showToast(err.message || 'Upload failed.');
+        resetUploadProgressUI();
+      } finally {
+        btn.disabled = false;
+        btnLbl.textContent = 'Publish Video';
+      }
     }
 
     async function openEditModal() {
@@ -1279,7 +1600,6 @@ document.getElementById('channel-view-subs').textContent =
     }
     function closeEditModal() { document.getElementById('edit-profile-modal').classList.add('hidden'); }
 
-    // Fixed Profile Edit & Save function
     async function saveRealProfile() {
       const nick = document.getElementById('edit-nickname').value.trim();
       let userHandle = document.getElementById('edit-username').value.trim();
@@ -1338,8 +1658,6 @@ document.getElementById('channel-view-subs').textContent =
       return "just now";
     }
 
-    function openUploadModal() { document.getElementById('upload-modal').classList.remove('hidden'); }
-    function closeUploadModal() { document.getElementById('upload-modal').classList.add('hidden'); }
     function openSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
     function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
 
